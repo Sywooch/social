@@ -6,26 +6,13 @@
  */
 namespace app\controllers;
 
-use app\models\Customer;
 use app\models\InfoPage;
-use app\models\News;
-use app\models\NewsLetterSubscriber;
-use app\models\OrderProduct;
-use app\models\PaymentMethod;
-use app\models\Product;
-use app\models\ProductCategoryRelation;
-use app\models\ProductSpecificationRelation;
-use app\models\QuickOrderForm;
-use app\models\ShippingMethod;
-use app\models\WaitForm;
-use app\models\WaitingList;
-use app\models\WishList;
+
 use Yii;
 use app\models\Banner;
-use app\models\Category;
+
 use \BW\Vkontakte as Vk;
 use yii\data\Pagination;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\Comment;
@@ -34,10 +21,25 @@ use yii\widgets\ActiveForm;
 
 class SiteController extends AbstractController
 {
+    /**
+     * Шаблон по умолчанию.
+     *
+     * @var string
+     */
     public $layout = 'main';
 
+    /**
+     * Авторизации facebook.
+     *
+     * @var
+     */
     public $facebook;
 
+    /**
+     * Авторизация ВК.
+     *
+     * @var
+     */
     public $vk;
 
     public function behaviors()
@@ -58,6 +60,9 @@ class SiteController extends AbstractController
         ];
     }
 
+    /**
+     * Базовая инициализация.
+     */
     public function init()
     {
         parent::init();
@@ -78,12 +83,6 @@ class SiteController extends AbstractController
         Yii::$app->view->params['facebook'] = $this->facebook;
         Yii::$app->view->params['user'] = $this->user;
 
-        Yii::$app->view->params['categories'] = Category::find()
-            ->where(['isActive' => 1])
-            ->andWhere(['level' => 0])
-            ->orderBy('sortOrder', SORT_DESC)
-            ->all();
-
         Yii::$app->view->params['login'] = new LoginForm();
     }
 
@@ -94,64 +93,12 @@ class SiteController extends AbstractController
      */
     public function actionIndex()
     {
-        $slides = Banner::find()
-            ->where(['isActive' => 1])
-            ->andWhere('startTime <= :time AND endTime >= :time', [':time' => date('Y-m-d H:i:s', time())])
-            ->all();
-        $news = News::find()->where(['isActive' => 1])->limit(4)->orderBy('publishTime desc')->all();
-
-        $newProducts = Product::find()
-            ->joinWith('discount')
-            ->joinWith('marker')
-            ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1')
-            ->orderBy('id desc')
-            ->limit(10)
-            ->all();
-
-        $popularProducts = OrderProduct::find()
-            ->select('orderproduct.`productId`, COUNT(orderproduct.`productId`) as `count`')
-            ->joinWith('product')
-            ->joinWith('product.discount')
-            ->joinWith('product.marker')
-            ->groupBy('orderproduct.productId')
-            ->orderBy('count desc')
-            ->limit(10)
-            ->all();
-
-        $overstock = Product::find()
-            ->joinWith('discount')
-            ->joinWith('marker')
-            ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productdiscount.value > 0')
-            ->orderBy('id desc')
-            ->limit(10)
-            ->all();
-
-        $quick = Category::find()->where([
-                'isActive' => 1,
-                'isInQuickLink' => 1
-            ])->all();
-        return $this->render(Yii::$app->controller->action->id, [
-            'slides' => $slides,
-            'news' => $news,
-            'quick' => $quick,
-            'newProducts' => $newProducts,
-            'popularProducts' => $popularProducts,
-            'overstock' => $overstock,
-            'viewProductList' => $this->getLastViewListProduct(),
-        ]);
+        return $this->render(Yii::$app->controller->action->id, []);
     }
 
     public function actionSearch()
     {
         $search = \Yii::$app->request->get('s');
-        $products = Product::find()
-            ->joinWith('specificationRelations')
-            ->joinWith('discount')
-            ->joinWith('marker')
-            ->filterWhere(['like', 'product.name', $search])
-            ->orFilterWhere(['=', 'product.sku', $search])
-            ->orFilterWhere(['like', 'product.description', $search])
-            ->all();
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
@@ -160,250 +107,7 @@ class SiteController extends AbstractController
         ];
 
         return $this->render(Yii::$app->controller->action->id, [
-            'searchCount' => count($products),
-            'productBlocks' => array_chunk($products, 5),
             'value' => " Поиск по \"{$search}\"",
-        ]);
-    }
-
-    public function actionSpecification($id)
-    {
-        $productSpecificationRelation = ProductSpecificationRelation::findOne($id);
-
-        $query = Product::find()
-            ->joinWith('specificationRelations')
-            ->joinWith('discount')
-            ->joinWith('marker')
-            ->where(['productproductspecificationrelation.value' => $productSpecificationRelation->value]);
-
-        if (!empty($_GET['time']))
-            $query->orderBy('updateTime desc');
-
-        if (!empty($_GET['price_d']))
-            $query->orderBy('price desc');
-
-        if (!empty($_GET['price_a']))
-            $query->orderBy('price asc');
-
-        if (!empty($_GET['name_a']))
-            $query->orderBy('name asc');
-
-        if (!empty($_GET['name_d']))
-            $query->orderBy('name desc');
-
-        if (!empty($_GET['stock']))
-            $query->orderBy('quantityInStock desc');
-
-        if (!empty($_GET['sold']))
-            $query->orderBy('quantityOfSold desc');
-
-        $products = $query->all();
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " Поиск по параметрам",
-            'url' => false
-        ];
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " {$productSpecificationRelation->specification->name} {$productSpecificationRelation->value}",
-            'url' => false
-        ];
-
-        return $this->render(Yii::$app->controller->action->id, [
-            'searchCount' => count($products),
-            'productBlocks' => array_chunk($products, 5),
-            'value' => $productSpecificationRelation->specification->name . ' ' . $productSpecificationRelation->value,
-            'id' => $id,
-        ]);
-    }
-
-    public function actionLoadProducts($id)
-    {
-        $category = Category::findOne($id);
-
-        $categoriesForSearch = [$id];
-        if (!empty($category->categories)) {
-            foreach ($category->categories as $categoryChild) {
-                $categoriesForSearch[] = $categoryChild->id;
-            }
-        }
-
-        $query = Product::find();
-        $query->joinWith('categoryRelation');
-        $query->joinWith('marker');
-        $query->joinWith('discount');
-        $query->where(['productcategoryrelation.productCategoryId' => $categoriesForSearch]);
-        $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
-
-        if (!empty($_GET['time']))
-            $query->orderBy('updateTime desc');
-
-        if (!empty($_GET['price_d']))
-            $query->orderBy('price desc');
-
-        if (!empty($_GET['price_a']))
-            $query->orderBy('price asc');
-
-        if (!empty($_GET['name_a']))
-            $query->orderBy('name asc');
-
-        if (!empty($_GET['name_d']))
-            $query->orderBy('name desc');
-
-        if (!empty($_GET['stock']))
-            $query->orderBy('quantityInStock desc');
-
-        if (!empty($_GET['sold']))
-            $query->orderBy('quantityOfSold desc');
-
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['categoryPageSize']]);
-
-        $pages->pageSizeParam = false;
-        $products = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
-        return $this->renderPartial(Yii::$app->controller->action->id,
-            ['productBlocks' => array_chunk($products, 5)]
-        );
-    }
-
-    public function actionCategory($id)
-    {
-        //Yii::$app->cache
-        $category = Category::findOne($id);
-        if (empty($category))
-            throw new \yii\web\NotFoundHttpException();
-
-        $categoriesForSearch = [$id];
-        if (!empty($category->categories)) {
-            foreach ($category->categories as $categoryChild) {
-                $categoriesForSearch[] = $categoryChild->id;
-            }
-        }
-
-        $query = Product::find();
-        $query->joinWith('categoryRelation');
-        $query->joinWith('marker');
-        $query->joinWith('discount');
-        $query->where(['productcategoryrelation.productCategoryId' => $categoriesForSearch]);
-        $query->andWhere('productmarker.isActive = 1 AND productmarker.isSale = 1');
-
-        if (!empty($_GET['time']))
-            $query->orderBy('updateTime desc');
-
-        if (!empty($_GET['price_d']))
-            $query->orderBy('price desc');
-
-        if (!empty($_GET['price_a']))
-            $query->orderBy('price asc');
-
-        if (!empty($_GET['name_a']))
-            $query->orderBy('name asc');
-
-        if (!empty($_GET['name_d']))
-            $query->orderBy('name desc');
-
-        if (!empty($_GET['stock']))
-            $query->orderBy('quantityInStock desc');
-
-        if (!empty($_GET['sold']))
-            $query->orderBy('quantityOfSold desc');
-
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => \Yii::$app->params['categoryPageSize']]);
-        $pages->pageSizeParam = false;
-        $products = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
-        $availableSpecifications = [];
-        if (!empty($category->parent) && !empty($category->parent->specifications)) {
-            Yii::$app->view->params['breadcrumbs'][] = [
-                'template' => "<li>{link}</li>\n",
-                'label' => " {$category->parent->name}",
-                'url' => ['/category/' . $category->parent->id]
-            ];
-            foreach ($category->parent->specifications as $specification) {
-                $specification->findProducts($categoriesForSearch);
-                $availableSpecifications[$specification->id] = $specification;
-            }
-        }
-
-        if (!empty($category->specifications)) {
-            foreach ($category->specifications as $specification) {
-                $specification->findProducts($categoriesForSearch);
-                $availableSpecifications[$specification->id] = $specification;
-            }
-        }
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " {$category->name}",
-            'url' => false
-        ];
-
-        return $this->render(Yii::$app->controller->action->id, [
-            'category' => $category,
-            'availableSpecifications' => $availableSpecifications,
-            'productBlocks' => array_chunk($products, 5),
-            'pages' => $pages,
-        ]);
-    }
-
-    public function actionProduct($id)
-    {
-        $comment = new Comment();
-        if (Yii::$app->request->isAjax && $comment->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($comment);
-        }
-
-        if ($comment->load(Yii::$app->request->post()) && $comment->validate()) {
-            $comment->save();
-            return $this->redirect(['product', 'id' => $id]);
-        }
-
-        $product = Product::findOne($id);
-        if (empty($product))
-            throw new \yii\web\NotFoundHttpException();
-
-        $this->setLastViewProduct($id);
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " {$product->categories[0]->name}",
-            'url' => ['/category/' . $product->categories[0]->id]
-        ];
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " {$product->name}",
-            'url' => false
-        ];
-
-        $shippingMethods = ShippingMethod::find()->all();
-
-        $paymentMethods = PaymentMethod::find()->all();
-
-        $isWish = false;
-        if (!empty($this->user->id)) {
-            $isWish = WishList::find()->where([
-                'productId' => $product->id,
-                'customerId' => $this->user->id,
-            ])->count();
-        }
-
-        return $this->render(Yii::$app->controller->action->id, [
-            'product' => $product,
-            'isWish' => $isWish,
-            'viewProductList' => $this->getLastViewListProduct(),
-            'shippingMethods' => $shippingMethods,
-            'paymentMethods' => $paymentMethods,
-            'quickOrder' => new QuickOrderForm(),
         ]);
     }
 
@@ -427,173 +131,16 @@ class SiteController extends AbstractController
 
     public function actionSubscribe()
     {
-        $model = new NewsLetterSubscriber();
 
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->customerId = !empty($this->user->id) ? $this->user->id : 0;
-            $model->code = uniqid();
-            $model->save();
-
-            $this->sendEmail(
-                $model->email,
-                Yii::$app->params['NewsLetterSubscriberSubject'],
-                $this->renderPartial('emailTemplates/subscribe', ['model' => $model])
-            );
-
-            return $this->render(Yii::$app->controller->action->id, [
-                'model' => $model
-            ]);
-        }
     }
 
     public function actionSubscribeApprove($code)
     {
-        $model = NewsLetterSubscriber::find()->where(['code' => $code])->one();
-        if (empty($model))
-            throw new \yii\web\NotFoundHttpException();
 
-        $model->code = null;
-        $model->isActive = 1;
-
-        $model->save();
-
-        return $this->render(Yii::$app->controller->action->id, []);
     }
 
     public function actionDeactivationSubscribe($id)
     {
-        $model = NewsLetterSubscriber::findOne($id);
-        if (empty($model))
-            throw new \yii\web\NotFoundHttpException();
 
-        $model->delete();
-
-        return $this->render(Yii::$app->controller->action->id, []);
-    }
-
-    public function actionAllProducts()
-    {
-        $filter = Yii::$app->request->get('filter');
-
-        if (empty($filter) || !in_array($filter, ['new', 'popular', 'sale'])) {
-
-        }
-            $query = Product::find();
-
-            if ($filter == 'new') {
-                $page = 'Новинки';
-                $query->joinWith('discount')
-                    ->joinWith('marker')
-                    ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productmarker.isNew = 1');
-            }
-
-            if ($filter == 'popular') {
-                $page = 'Популярные товары';
-                $query->joinWith('discount')
-                    ->joinWith('marker')
-                    ->where('productmarker.isActive = 1 AND productmarker.isSale = 1');
-            }
-
-            if ($filter == 'sale') {
-                $page = 'Распродажи';
-                $query->joinWith('discount')
-                    ->joinWith('marker')
-                    ->where('productmarker.isActive = 1 AND productmarker.isSale = 1 AND productdiscount.value > 0');
-            }
-
-            if (!empty($_GET['time']))
-                $query->orderBy('product.updateTime desc');
-
-            if (!empty($_GET['price_d']))
-                $query->orderBy('product.price desc');
-
-            if (!empty($_GET['price_a']))
-                $query->orderBy('product.price asc');
-
-            if (!empty($_GET['name_a']))
-                $query->orderBy('product.name asc');
-
-            if (!empty($_GET['name_d']))
-                $query->orderBy('product.name desc');
-
-            if (!empty($_GET['stock']))
-                $query->orderBy('product.quantityInStock desc');
-
-            if (!empty($_GET['sold']))
-                $query->orderBy('product.quantityOfSold desc');
-
-            $countQuery = clone $query;
-            $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 20]);
-            $pages->pageSizeParam = false;
-            $products = $query->offset($pages->offset)
-                ->limit($pages->limit)
-                ->all();
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " " . $page,
-            'url' => false
-        ];
-
-        return $this->render(Yii::$app->controller->action->id, [
-            'productBlocks' => array_chunk($products, 5),
-            'pages' => $pages,
-            'page' => $page,
-        ]);
-    }
-
-    public function actionWaitGuest()
-    {
-        $model = new WaitForm();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && empty($_POST['save'])) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
-
-        if (!$model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['error' => true];
-        }
-
-        $waitListItem = new WaitingList();
-        $waitListItem->customerId = Customer::DEFAULT_CUSTOMER_ID;
-        $waitListItem->productId = $model->productId;
-        $waitListItem->email = $model->email;
-        $waitListItem->save();
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['success' => true];
-    }
-
-    public function actionWait()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $waitListItem = WaitingList::find()
-            ->where([
-                'customerId' => $this->user->id,
-                'productId' => Yii::$app->request->post('productId'),
-            ])->one();
-
-        if (!empty($waitListItem)) {
-            return ['already' => true];
-        }
-
-        $waitListItem = new WaitingList();
-        $waitListItem->customerId = $this->user->id;
-        $waitListItem->productId = Yii::$app->request->post('productId');
-        $waitListItem->email = $this->user->email;
-
-        if (!$waitListItem->validate())
-        {
-            return $waitListItem->errors;
-        }
-        $waitListItem->save();
-
-        return ['success' => true];
     }
 }

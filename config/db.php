@@ -2,15 +2,15 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=193.111.140.87;dbname=orion',
-    'username' => 'orion',
-    'password' => 'W6x1F4i1',
+    'dsn' => 'mysql:host=193.111.140.87;dbname=amigator_db',
+    'username' => 'amigator',
+    'password' => '4S4y4Z9s',
     'charset' => 'utf8',
-    'enableSchemaCache' => true,
+    //'enableSchemaCache' => true,
 
     // Продолжительность кеширования схемы.
-    'schemaCacheDuration' => 3600,
+    //'schemaCacheDuration' => 3600,
 
     // Название компонента кеша, используемого для хранения информации о схеме
-    'schemaCache' => 'cache',
+    //'schemaCache' => 'cache',
 ];
