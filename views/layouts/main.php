@@ -13,31 +13,34 @@ use app\assets\AppAsset;
 
 AppAsset::register($this);
 ?>
+
 <?php $this->beginPage() ?>
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-    <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,700italic,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
     <?= Html::csrfMetaTags() ?>
     <title><?= \Yii::$app->params['seo']['title']?></title>
     <meta name="keywords" content="<?= \Yii::$app->params['seo']['keywords']?>">
     <meta name="description" content="<?= \Yii::$app->params['seo']['description']?>">
     <?php $this->head() ?>
 </head>
+
 <body>
-<?php $this->beginBody() ?>
-<?= $this->render('//site/block/up-header'); ?>
-<div class="container">
-    <div class="row">
+<div class="wrapper">
 
-        <?= $this->render('//site/block/header'); ?>
+    <?php if(Yii::$app->controller->action->id == 'index') {
+        echo $this->render('//site/block/header');
+    } else {
+        echo $this->render('//site/block/header-small');
+    }
+    ?>
 
-        <?= $content ?>
+    <?= $content ?>
 
-        <?= $this->render('//site/block/footer'); ?>
-    </div>
+    <?= $this->render('//site/block/footer'); ?>
 </div>
 
 <?= $this->render('//site/block/modals'); ?>

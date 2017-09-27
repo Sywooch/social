@@ -70,8 +70,6 @@ class AbstractController extends Controller
 
         }
 
-        Yii::$app->view->params['basket'] = $this->_basket;
-
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
             'label' => 'Главная',

@@ -1,9 +1,4 @@
 <?php
-/**
- * Слайдер.
- *
- * @version 1.0
- */
 use yii\helpers\Html;
 ?>
 <?php if (!empty($slides)):?>

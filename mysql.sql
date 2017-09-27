@@ -587,7 +587,7 @@ CREATE TABLE IF NOT EXISTS `infopage` (
   `updateTime` timestamp NULL DEFAULT NULL,
   `createUserId` int(10) unsigned NOT NULL,
   `updateUserId` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `infopage`

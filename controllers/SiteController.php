@@ -96,6 +96,16 @@ class SiteController extends AbstractController
         return $this->render(Yii::$app->controller->action->id, []);
     }
 
+    /**
+     * Страничка авторизации/регистрации.
+     *
+     * @return string
+     */
+    public function actionEnter()
+    {
+        return $this->render(Yii::$app->controller->action->id, []);
+    }
+
     public function actionSearch()
     {
         $search = \Yii::$app->request->get('s');
