@@ -29,8 +29,10 @@ return [
             'link' => 'https://www.instagram.com',
         ],
         'twitter' => [
-            'twitterKey' => '',
-            'twitterSecret' => '',
+            'CONSUMER_KEY' => '',
+            'CONSUMER_SECRET' => '',
+            'access_token' => '',
+            'access_token_secret' => '',
             'link' => 'https://twitter.com',
         ],
         'vk' => [

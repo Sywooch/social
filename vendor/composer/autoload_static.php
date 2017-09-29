@@ -64,6 +64,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
             'Faker\\' => 6,
             'Facebook\\' => 9,
         ),
+        'A' => 
+        array (
+            'Abraham\\TwitterOAuth\\' => 21,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -158,6 +162,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'Facebook\\' => 
         array (
             0 => __DIR__ . '/..' . '/facebook/php-sdk-v4/src/Facebook',
+        ),
+        'Abraham\\TwitterOAuth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/abraham/twitteroauth/src',
         ),
     );
 

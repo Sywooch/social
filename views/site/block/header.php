@@ -1,9 +1,4 @@
 <?php
-/**
- * Хедер с меню.
- *
- * @version 1.0
- */
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
@@ -87,6 +82,7 @@ use yii\helpers\Html;
         </div>
         <?php else:?>
         Привет, <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
+            <a href="<?= Url::to('logout')?>"><?= \Yii::t('app', 'Выйти')?></a>
         <?php endif;?>
         <div class="languages_head">
             <ul class="language-select">

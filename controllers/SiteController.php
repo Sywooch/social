@@ -9,15 +9,11 @@ namespace app\controllers;
 use app\models\InfoPage;
 
 use Yii;
-use app\models\Banner;
 
 use \BW\Vkontakte as Vk;
-use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\Comment;
-use yii\web\Response;
-use yii\widgets\ActiveForm;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class SiteController extends AbstractController
 {
@@ -34,6 +30,13 @@ class SiteController extends AbstractController
      * @var
      */
     public $facebook;
+
+    /**
+     * Авторизации Twitter.
+     *
+     * @var
+     */
+    public $twitter;
 
     /**
      * Авторизация ВК.
@@ -67,6 +70,13 @@ class SiteController extends AbstractController
     {
         parent::init();
 
+        $this->twitter = new TwitterOAuth(
+            Yii::$app->params['social']['twitter']['CONSUMER_KEY'],
+            Yii::$app->params['social']['twitter']['CONSUMER_SECRET'],
+            Yii::$app->params['social']['twitter']['access_token'],
+            Yii::$app->params['social']['twitter']['access_token_secret']
+        );
+
         $this->facebook = new \Facebook\Facebook([
             'app_id' => Yii::$app->params['social']['facebook']['id'],
             'app_secret' => Yii::$app->params['social']['facebook']['secret'],
@@ -81,6 +91,7 @@ class SiteController extends AbstractController
 
         Yii::$app->view->params['vk'] = $this->vk;
         Yii::$app->view->params['facebook'] = $this->facebook;
+        Yii::$app->view->params['twitter'] = $this->twitter;
         Yii::$app->view->params['user'] = $this->user;
 
         Yii::$app->view->params['login'] = new LoginForm();

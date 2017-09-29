@@ -10,6 +10,7 @@ use app\models\User;
 use Yii;
 use Facebook;
 use \BW\Vkontakte as Vk;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class SocialController extends AbstractController
 {
@@ -31,6 +32,19 @@ class SocialController extends AbstractController
             'client_secret' => Yii::$app->params['social']['vk']['secret'],
             'redirect_uri' => 'http://' . Yii::$app->getRequest()->serverName . '/social/vk',
         ]);
+
+        $this->twitter = new TwitterOAuth(
+            Yii::$app->params['social']['twitter']['CONSUMER_KEY'],
+            Yii::$app->params['social']['twitter']['CONSUMER_SECRET'],
+            Yii::$app->params['social']['twitter']['access_token'],
+            Yii::$app->params['social']['twitter']['access_token_secret']
+        );
+
+    }
+
+    public function actionTwitter()
+    {
+
     }
 
     public function actionVk()
