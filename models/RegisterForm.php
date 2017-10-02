@@ -13,11 +13,44 @@ class RegisterForm extends Customer
      *
      * @var
      */
+    public $name;
+
+    /**
+     * Почта.
+     *
+     * @var
+     */
     public $email;
 
-    public $passwordConfirm;
+//    public $passwordConfirm;
 
+    /**
+     * Пароль
+     *
+     * @var
+     */
     public $password;
+
+    /**
+     * Город.
+     *
+     * @var
+     */
+    public $city;
+
+    /**
+     * Пол
+     *
+     * @var
+     */
+    public $sex;
+
+    /**
+     * Дата рождения.
+     *
+     * @var
+     */
+    public $birthday;
 
     /**
      * @return array the validation rules.
@@ -25,9 +58,10 @@ class RegisterForm extends Customer
     public function rules()
     {
         return [
-            [['email', 'password', 'passwordConfirm'], 'required'],
-            ['password', 'string', 'min' => 6, 'max' => 32, 'message' => 'Парольдолжен быть от 6 до 16 символов'],
-            ['passwordConfirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
+            [['email', 'password', 'birthday', 'city'], 'required'],
+            ['password', 'string', 'min' => 6, 'max' => 32, 'message' => \Yii::t('app', 'Парольдолжен быть от 6 до 16 символов')],
+//            ['passwordConfirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
+            ['name', 'string', 'min' => 2, 'max' => 16, 'message' => \Yii::t('app', 'Имя должно быть от 2 до 16 символов')],
             ['email', 'email', 'message' => 'Поле должно содержать корректный E-mail'],
             ['email', 'unique', 'message' => 'Пользователь с таким E-mail уже зарегистрирован в системе'],
         ];
@@ -39,12 +73,20 @@ class RegisterForm extends Customer
     public function attributeLabels()
     {
         return [
+            'name' => 'Имя',
             'email' => 'E-mail',
             'password' => 'Пароль',
+            'city' => 'Город',
+            'birthday' => \Yii::t('app', 'Дата рождения'),
             'passwordConfirm' => 'Подтвердите пароль',
         ];
     }
 
+    /**
+     * Проверяет на существование почты.
+     *
+     * @return bool
+     */
     public function check()
     {
         if ($this->validate()) {
@@ -56,31 +98,50 @@ class RegisterForm extends Customer
         }
     }
 
+    /**
+     * Выполняет регистрацию.
+     *
+     * @return Customer|bool
+     */
     public function register()
     {
         if ($this->validate()) {
-            $group = CustomerGroup::find()->where([
-                'isDefault' => 1
-            ])->one();
-
-            if (empty($group))
-                throw new ErrorException('Группа пользователей по умолчанию не назначена');
-
             $activationCode = uniqid();
             $customer = new Customer();
             $customer->email = $this->email;
+            $customer->fullName = $this->name;
             $customer->password = md5($this->password);
-            $customer->customerGroupId = $group->id;
             $customer->code = $activationCode;
+            $customer->birthday = $this->birthday;
+            $customer->cityID = $this->city;
             $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
             $customer->save();
-
-            $customerAddress = new CustomerAddress();
-            $customerAddress->customerId = $customer->id;
-            $customerAddress->save(false);
 
             return $customer;
         }
         return false;
+    }
+
+    /**
+     * Преводы месяцев.
+     *
+     * @return array
+     */
+    public static function getMonthTranslation()
+    {
+        return [
+            1 => \Yii::t('app', 'Январь'),
+            2 => \Yii::t('app', 'Февраль'),
+            3 => \Yii::t('app', 'Март'),
+            4 => \Yii::t('app', 'Апрель'),
+            5 => \Yii::t('app', 'Май'),
+            6 => \Yii::t('app', 'Июнь'),
+            7 => \Yii::t('app', 'Июль'),
+            8 => \Yii::t('app', 'Август'),
+            9 => \Yii::t('app', 'Сентябрь'),
+            10 => \Yii::t('app', 'Октябрь'),
+            11 => \Yii::t('app', 'Ноябрь'),
+            12 => \Yii::t('app', 'Декабрь'),
+        ];
     }
 }

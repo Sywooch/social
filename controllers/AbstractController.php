@@ -20,6 +20,10 @@ require_once($phpMailer);
 
 class AbstractController extends Controller
 {
+    /**
+     * Пользователь в регистрацие.
+     */
+    public $registration = false;
 
     /**
      * Сессия
@@ -56,6 +60,10 @@ class AbstractController extends Controller
     {
         if (\Yii::$app->session->get('user')) {
             $this->user = \Yii::$app->session->get('user');
+        }
+
+        if (\Yii::$app->session->get('registration')) {
+            $this->registration = \Yii::$app->session->get('registration');
         }
 
         foreach (InfoPage::find()->all() as $page) {

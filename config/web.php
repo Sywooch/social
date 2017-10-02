@@ -5,7 +5,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-	'defaultRoute' => 'site/index',
+    'defaultRoute' => 'site/index',
     'language' => 'ru', // <- здесь!
     'vendorPath' => realpath(__DIR__ . '/../vendor'),
     'modules' => [
@@ -14,46 +14,46 @@ $config = [
         ],
     ],
     'components' => [
-		'assetManager' => [
-			'bundles' => [
-				'yii\web\JqueryAsset' => [
-					'sourcePath' => null,   // не опубликовывать комплект
-					'js' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,   // не опубликовывать комплект
+                    'js' => [
                         '/web/admin/js/jquery-2.1.1.js',
-					]
-				],
-			],
-		],
+                    ]
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'g65uerden',
         ],
 
-		'urlManager' => [
-               'enablePrettyUrl' => true,
-			   'enableStrictParsing' => true,
-               'showScriptName' => false,
-			   'rules' => [
-                    'page/<url:\\w+>' => 'site/static',
-                    'category/<id:\d+>' => 'site/category',
-                    'product/<id:\d+>' => 'site/product',
-                    'specification/<id:\d+>' => 'site/specification',
-                    'all-products' => 'site/all-products',
-                    'search' => 'site/search',
-                    'subscribe' => 'site/subscribe',
-                    'registration' => 'site/registration',
-                    'subscribe-approve/<code:\\w+>' => 'site/subscribe-approve',
-                    'registration-confirm/<code:\\w+>' => 'site/registration-confirm',
-                    'deactivation-subscribe/<id:\d+>' => 'site/deactivation-subscribe',
-                    '<controller>' => '<controller>/index',
-                    '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
-					'<controller>/<action>' => '<controller>/<action>',
-					'<module>/<controller>/<action>' => '<module>/<controller>/<action>',
-					'<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
-					'<module>' => '<module>/default/index',
-					'/' => 'site/index',
-			    ]
-		],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
+            'showScriptName' => false,
+            'rules' => [
+                'page/<url:\\w+>' => 'site/static',
+                'category/<id:\d+>' => 'site/category',
+                'product/<id:\d+>' => 'site/product',
+                'specification/<id:\d+>' => 'site/specification',
+                'all-products' => 'site/all-products',
+                'search' => 'site/search',
+                'subscribe' => 'site/subscribe',
+                'registration' => 'site/registration',
+                'subscribe-approve/<code:\\w+>' => 'site/subscribe-approve',
+                'registration-confirm/<code:\\w+>' => 'site/registration-confirm',
+                'deactivation-subscribe/<id:\d+>' => 'site/deactivation-subscribe',
+                '<controller>' => '<controller>/index',
+                '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
+                '<controller>/<action>' => '<controller>/<action>',
+                '<module>/<controller>/<action>' => '<module>/<controller>/<action>',
+                '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
+                '<module>' => '<module>/default/index',
+                '/' => 'site/index',
+            ]
+        ],
 
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -92,7 +92,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
     ];
-	//http://XXX/index.php?r=gii
+    //http://XXX/index.php?r=gii
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',

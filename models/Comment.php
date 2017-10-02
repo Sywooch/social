@@ -15,8 +15,6 @@ use Yii;
  * @property string $message
  * @property string $date
  * @property string $isActive
- *
- * @property Product $product
  */
 class Comment extends \yii\db\ActiveRecord
 {
@@ -59,14 +57,6 @@ class Comment extends \yii\db\ActiveRecord
             'date' => 'Время',
             'isActive' => 'Активность',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'productId']);
     }
 
     /**

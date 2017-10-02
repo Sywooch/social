@@ -6,14 +6,19 @@
  */
 namespace app\controllers;
 
+use app\models\Country;
 use app\models\InfoPage;
 
+use app\models\RegisterForm;
 use Yii;
 
 use \BW\Vkontakte as Vk;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use Abraham\TwitterOAuth\TwitterOAuth;
+
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 class SiteController extends AbstractController
 {
@@ -114,7 +119,63 @@ class SiteController extends AbstractController
      */
     public function actionEnter()
     {
-        return $this->render(Yii::$app->controller->action->id, []);
+        $countries = Country::find()
+            ->select('country.id, country_translation.name')
+            ->joinWith('translation', false)
+            ->joinWith('cities', false)
+            ->joinWith('cities.translation')
+            ->asArray()->all();
+
+
+        $countriesGroup = [];
+        foreach ($countries as $country) {
+            foreach ($country['cities'] as $city) {
+                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
+            }
+        }
+
+        return $this->render(Yii::$app->controller->action->id, compact('countriesGroup'));
+    }
+
+    /**
+     * Первый шаг регистрации.
+     */
+    public function actionRegisterStepTwo()
+    {
+        $model = new RegisterForm();
+
+        $birthday =  Yii::$app->request->post('b_year') . '-' . Yii::$app->request->post('b_month') . '-' . Yii::$app->request->post('b_day');
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            if (
+                !empty(Yii::$app->request->post('b_day')) &&
+                !empty(Yii::$app->request->post('b_month')) &&
+                !empty(Yii::$app->request->post('b_year'))
+            ) {
+                $model->birthday = $birthday;
+            }
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->birthday = $birthday;
+            $customer = $model->register();
+
+            \Yii::$app->session->set('registration', [
+                'customerID' => $customer->id,
+                'step' => 'register-step-two'
+            ]);
+        }
+
+        if (\Yii::$app->session->get('registration')) {
+            return $this->render(
+                Yii::$app->controller->action->id,
+                [
+                ]
+            );
+        }
+
     }
 
     public function actionSearch()

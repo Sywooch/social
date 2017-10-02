@@ -62,12 +62,13 @@
         });
         
         $('.birth_date_hidden input.styler').change(function(){
-            if (($('input[name=b_day]:checked').val()=='on')&&($('input[name=b_month]:checked').val()=='on')&&($('input[name=b_year]:checked').val()=='on')) {
+            if (($('input[name=b_day]:checked').val() != null)&&($('input[name=b_month]:checked').val() != null)&&($('input[name=b_year]:checked').val() != null)) {
                 var txt = '';
                 $(".birth_date_hidden .checked").each(function(){
                     txt += $(this).parent().find('span').text() + ' ';
                 });
                 $('.birth_date_pull').text(txt);
+                $('[name="RegisterForm[birthday]"]').val(txt);
 
                 $('.birth_date_hidden').fadeToggle(400);  
                 
