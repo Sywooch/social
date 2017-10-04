@@ -6,7 +6,7 @@
 <ul class="nav metismenu" id="side-menu">
 <li class="nav-header">
     <div class="profile-element"> <span>
-                            <img alt="image" class="img-circle" src="/img/logo.png"/>
+                            <img alt="image" class="img-circle" src="/img/logo.png" style="width: 150px;"/>
                              </span>
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong
