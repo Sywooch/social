@@ -41,8 +41,8 @@ abstract class AdminController extends Controller {
 
     public function beforeAction($event)
     {
-        if (!in_array(Yii::$app->controller->id, $this->_user->group->availableActions) && Yii::$app->controller->id != 'index')
-            throw new \yii\web\NotFoundHttpException('Доступ запрещен.');
+//        if (!in_array(Yii::$app->controller->id, $this->_user->group->availableActions) && Yii::$app->controller->id != 'index')
+//            throw new \yii\web\NotFoundHttpException('Доступ запрещен.');
 
         Yii::$app->view->params['breadcrumbs'][] = [
             'template' => "<li>{link}</li>\n",
