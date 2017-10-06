@@ -15,7 +15,7 @@ use yii\helpers\Html;
     <div class="main_page_top">
         <div class="full_width_container">
             <div class="main_page_top_wrap clearfix">
-                <a href="#" class="logo"><img src="img/logo.png" alt=""></a>
+                <a href="#" class="logo"><img src="/img/logo.png" alt=""></a>
                 <div class="main_page_txt">
                     <p>Найди друзей по интересам и присоединяйся к компаниям!</p>
                 </div>
@@ -592,7 +592,7 @@ use yii\helpers\Html;
                 <a href="#" class="title_link">Посмотреть футбол</a>
                 <span class="item_hint">Россия, Москва</span>
                 <a href="#" class="recent_search_img">
-                    <img src="img/recent_search_prof/1.jpg" alt="">
+                    <img src="/img/recent_search_prof/1.jpg" alt="">
                     <span class="photos_number_link">8</span>
                 </a>
                 <div class="recent_search_txt">
@@ -615,7 +615,7 @@ use yii\helpers\Html;
                 <a href="#" class="title_link">Сходить в театр</a>
                 <span class="item_hint">Россия, Москва</span>
                 <a href="#" class="recent_search_img">
-                    <img src="img/recent_search_prof/2.jpg" alt="">
+                    <img src="/img/recent_search_prof/2.jpg" alt="">
                     <span class="photos_number_link">3</span>
                 </a>
                 <div class="recent_search_txt">
@@ -637,7 +637,7 @@ use yii\helpers\Html;
                 <a href="#" class="title_link">Съездить на рыбалку</a>
                 <span class="item_hint">Россия, Москва</span>
                 <a href="#" class="recent_search_img">
-                    <img src="img/recent_search_prof/3.jpg" alt="">
+                    <img src="/img/recent_search_prof/3.jpg" alt="">
                     <span class="photos_number_link">12</span>
                 </a>
                 <div class="recent_search_txt">
@@ -658,7 +658,7 @@ use yii\helpers\Html;
                 <a href="#" class="title_link">Поиграть в Playstation</a>
                 <span class="item_hint">Россия, Москва</span>
                 <a href="#" class="recent_search_img">
-                    <img src="img/recent_search_prof/4.jpg" alt="">
+                    <img src="/img/recent_search_prof/4.jpg" alt="">
                     <span class="photos_number_link">1</span>
                 </a>
                 <div class="recent_search_txt">
@@ -699,7 +699,7 @@ use yii\helpers\Html;
             <div class="companies_recomandations_item">
                 <a href="#" class="title_link">Реальные рыбаки</a>
                 <a href="#" class="companies_recomandations_img">
-                    <img src="img/companies_rec/1.jpg" alt="">
+                    <img src="/img/companies_rec/1.jpg" alt="">
                     <span class="view_ic"></span>
                 </a>
                 <div class="companies_recomandations_item_tags">
@@ -717,7 +717,7 @@ use yii\helpers\Html;
             <div class="companies_recomandations_item">
                 <a href="#" class="title_link">Мы - Толкинисты!!!</a>
                 <a href="#" class="companies_recomandations_img">
-                    <img src="img/companies_rec/2.jpg" alt="">
+                    <img src="/img/companies_rec/2.jpg" alt="">
                     <span class="view_ic"></span>
                 </a>
                 <div class="companies_recomandations_item_tags">
@@ -737,7 +737,7 @@ use yii\helpers\Html;
             <div class="companies_recomandations_item">
                 <a href="#" class="title_link">Пейте Пиво Пацаны :)</a>
                 <a href="#" class="companies_recomandations_img">
-                    <img src="img/companies_rec/3.jpg" alt="">
+                    <img src="/img/companies_rec/3.jpg" alt="">
                     <span class="view_ic"></span>
                 </a>
                 <div class="companies_recomandations_item_tags">
@@ -753,7 +753,7 @@ use yii\helpers\Html;
             <div class="companies_recomandations_item">
                 <a href="#" class="title_link">Мы любим сиськи!</a>
                 <a href="#" class="companies_recomandations_img">
-                    <img src="img/companies_rec/4.jpg" alt="">
+                    <img src="/img/companies_rec/4.jpg" alt="">
                     <span class="view_ic"></span>
                 </a>
                 <div class="companies_recomandations_item_tags">
@@ -771,7 +771,7 @@ use yii\helpers\Html;
             <div class="companies_recomandations_item">
                 <a href="#" class="title_link">НЕ здоровое питание</a>
                 <a href="#" class="companies_recomandations_img">
-                    <img src="img/companies_rec/5.jpg" alt="">
+                    <img src="/img/companies_rec/5.jpg" alt="">
                     <span class="view_ic"></span>
                 </a>
                 <div class="companies_recomandations_item_tags">
@@ -800,7 +800,7 @@ use yii\helpers\Html;
             <div class="companies_recomandations_item">
                 <a href="#" class="title_link">Выгуливатели собак</a>
                 <a href="#" class="companies_recomandations_img">
-                    <img src="img/companies_rec/6.jpg" alt="">
+                    <img src="/img/companies_rec/6.jpg" alt="">
                     <span class="view_ic"></span>
                 </a>
                 <div class="companies_recomandations_item_tags">

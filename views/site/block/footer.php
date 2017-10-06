@@ -3,11 +3,11 @@
         <div class="wrap_social_foot">
             <h3>Поддержи нас!</h3>
             <div class="social_foot">
-                <a href="#"><img src="img/soc_foot/1.png" alt=""></a>
-                <a href="#"><img src="img/soc_foot/2.png" alt=""></a>
-                <a href="#"><img src="img/soc_foot/3.png" alt=""></a>
-                <a href="#"><img src="img/soc_foot/4.png" alt=""></a>
-                <a href="#"><img src="img/soc_foot/5.png" alt=""></a>
+                <a href="#"><img src="/img/soc_foot/1.png" alt=""></a>
+                <a href="#"><img src="/img/soc_foot/2.png" alt=""></a>
+                <a href="#"><img src="/img/soc_foot/3.png" alt=""></a>
+                <a href="#"><img src="/img/soc_foot/4.png" alt=""></a>
+                <a href="#"><img src="/img/soc_foot/5.png" alt=""></a>
             </div>
         </div>
         <div class="form_foot">
@@ -17,7 +17,7 @@
                 <div class="foot_capcha">
                     <div class="capcha_line">
                                     <span class="capcha_img">
-                                        <img src="img/capcha.jpg" alt="">
+                                        <img src="/img/capcha.jpg" alt="">
                                     </span>
                         <input type="text" class="white_input" />
                     </div>

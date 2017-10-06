@@ -49,7 +49,7 @@ use yii\helpers\Html;
                         </div>
                         <div class="capcha_line">
                                      <span class="capcha_img">
-                                         <img src="img/capcha.jpg" alt="">
+                                         <img src="/img/capcha.jpg" alt="">
                                      </span>
                             <input type="text" class="typical_input_bordered" />
                         </div>
@@ -65,7 +65,7 @@ use yii\helpers\Html;
                         </div>
                         <div class="capcha_line">
                                      <span class="capcha_img">
-                                         <img src="img/capcha.jpg" alt="">
+                                         <img src="/img/capcha.jpg" alt="">
                                      </span>
                             <input type="text" class="typical_input_bordered" />
                         </div>
@@ -87,15 +87,15 @@ use yii\helpers\Html;
         <div class="languages_head">
             <ul class="language-select">
                 <li class="active" data-lang="ru">
-                    <img src="img/flags/ru.svg"  class="lang_h_flag" alt="">
+                    <img src="/img/flags/ru.svg"  class="lang_h_flag" alt="">
                     Русский
                 </li>
                 <li data-lang="gb">
-                    <img src="img/flags/gb.svg"  class="lang_h_flag" alt="">
+                    <img src="/img/flags/gb.svg"  class="lang_h_flag" alt="">
                     English
                 </li>
                 <li data-lang="de">
-                    <img src="img/flags/de.svg"  class="lang_h_flag" alt="">
+                    <img src="/img/flags/de.svg"  class="lang_h_flag" alt="">
                     Deutsch
                 </li>
             </ul>

@@ -30,6 +30,7 @@ class AppAsset extends AssetBundle
 		'/web/js/masonry.pkgd.js',
 		'/web/js/cropper.min.js',
 		'/web/js/main.js',
+		'/web/js/imageUploader.js',
    ];
     public $depends = [
         'yii\web\YiiAsset',

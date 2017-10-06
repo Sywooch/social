@@ -9,6 +9,8 @@ namespace app\controllers;
 use app\models\Country;
 use app\models\InfoPage;
 
+use app\models\InterestCategory;
+use app\models\Languages;
 use app\models\RegisterForm;
 use Yii;
 
@@ -169,13 +171,25 @@ class SiteController extends AbstractController
         }
 
         if (\Yii::$app->session->get('registration')) {
+            $interestCategories = InterestCategory::find()
+                ->joinWith('translation')
+                ->joinWith('interests')
+                ->joinWith('interests.translation')
+                ->asArray()->all();
+
+            $languages = Languages::find()
+                ->joinWith('translation')
+                ->asArray()->all();
             return $this->render(
                 Yii::$app->controller->action->id,
-                [
-                ]
+                compact('interestCategories', 'languages')
             );
         }
+    }
 
+    public function actionRegisterComplete()
+    {
+        var_dump(Yii::$app->request->post());
     }
 
     public function actionSearch()
