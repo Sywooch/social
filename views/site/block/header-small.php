@@ -4,8 +4,8 @@ use yii\helpers\Url;
 <header>
     <div class="full_width_container clearfix">
         <div class="login_head">
-            <a href="<?= Url::to('enter')?>" class="login_head_link"><?= \Yii::t('app', 'Вход')?></a>
-            <a href="<?= Url::to('enter')?>" class="login_head_link"><?= \Yii::t('app', 'Регистрация')?></a>
+            <a href="<?= Url::to('site/enter')?>" class="login_head_link"><?= \Yii::t('app', 'Вход')?></a>
+            <a href="<?= Url::to('site/enter')?>" class="login_head_link"><?= \Yii::t('app', 'Регистрация')?></a>
         </div>
         <div class="languages_head">
             <ul class="language-select">

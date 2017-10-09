@@ -5,32 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "customer_image".
+ * This is the model class for table "customer_languages".
  *
  * @property string $id
  * @property string $customerID
- * @property string $file
- * @property string $isMain
- * @property string $likePoint
- * @property string $date
+ * @property string $languageID
  *
  * @property Customer $customer
+ * @property Languages $language
  */
-class CustomerImage extends \yii\db\ActiveRecord
+class CustomerLanguages extends \yii\db\ActiveRecord
 {
-    /**
-     * Загружаемый файл.
-     *
-     * @var
-     */
-    public $image;
-
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'customer_image';
+        return 'customer_languages';
     }
 
     /**
@@ -39,12 +30,10 @@ class CustomerImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerID'], 'required'],
-            [['customerID'], 'integer'],
-            [['date', 'isMain', 'likePoint'], 'safe'],
-            [['image'], 'file', 'extensions' => 'gif, jpg, png'],
-            [['file'], 'string', 'max' => 255],
+            [['customerID', 'languageID'], 'required'],
+            [['customerID', 'languageID'], 'integer'],
             [['customerID'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customerID' => 'id']],
+            [['languageID'], 'exist', 'skipOnError' => true, 'targetClass' => Languages::className(), 'targetAttribute' => ['languageID' => 'id']],
         ];
     }
 
@@ -56,10 +45,7 @@ class CustomerImage extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'customerID' => Yii::t('app', 'Customer ID'),
-            'file' => Yii::t('app', 'File'),
-            'isMain' => Yii::t('app', 'isMain'),
-            'isMain' => Yii::t('app', 'likePoint'),
-            'date' => Yii::t('app', 'Date'),
+            'languageID' => Yii::t('app', 'Language ID'),
         ];
     }
 
@@ -69,5 +55,13 @@ class CustomerImage extends \yii\db\ActiveRecord
     public function getCustomer()
     {
         return $this->hasOne(Customer::className(), ['id' => 'customerID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLanguage()
+    {
+        return $this->hasOne(Languages::className(), ['id' => 'languageID']);
     }
 }

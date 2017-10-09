@@ -6,6 +6,7 @@
 var ImageUploader = {
     params: {
         uploaderUrl: '/ajax/image-upload',
+        inputName: 'image',
         formData: [],
         uploadQueue: [],
         uploadItemsCount: 0,
@@ -65,6 +66,8 @@ var ImageUploader = {
      * @param object
      */
     load: function (object) {
+        this.params.inputName = $(object).data('name');
+
         $.each($(object)[0].files, function (i, file) {
             ImageUploader.params.uploadItemsCount++;
             const reader = new FileReader();
@@ -117,7 +120,7 @@ var ImageUploader = {
         reader.readAsDataURL(file);
         reader.onload = function (evt) {
 
-        data.append('CustomerImage[image]', file, file.name);
+        data.append(ImageUploader.params.inputName, file, file.name);
 
             $.ajax({
                 url: ImageUploader.params.uploaderUrl,
@@ -137,7 +140,8 @@ var ImageUploader = {
     /**
      * Стартует загрузку очереди.
      */
-    uploadQueueStart: function () {
+    uploadQueueStart: function (callback) {
+        //console.log(callback);
         for (let file of this.params.formData) {
             this.params.uploadQueue.push(file);
         }
@@ -146,7 +150,7 @@ var ImageUploader = {
             function () {
                 if (ImageUploader.params.uploadQueue.length == 0) {
                     clearInterval(uploadInterval);
-                    console.log('complete');
+                    callback();
                 }
 
                 if (ImageUploader.params.uploaded === true)
@@ -162,3 +166,13 @@ var ImageUploader = {
         );
     }
 };
+
+$('#step-two-form').on('beforeSubmit', function() {
+    if ($(this).data('presave') == false) {
+        ImageUploader.uploadQueueStart(function ()
+        {
+            $('#step-two-form').data('presave', true).submit();
+        });
+        return false;
+    }
+});

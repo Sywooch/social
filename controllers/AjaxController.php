@@ -47,6 +47,7 @@ class AjaxController extends AbstractController
         $image = new CustomerImage();
         $image->customerID = $this->registration['customerID'];
         $image->date = date('Y-m-d H:i:s', time());
+        $image->isMain = 1;
 
         if ($image->validate()) {
             $image->save();
@@ -58,8 +59,8 @@ class AjaxController extends AbstractController
 
             if (!empty($uploadPhotos)) {
                 foreach ($uploadPhotos as $file) {
-                    $photo = $file->baseName . '.' . $file->extension;
-                    $file->saveAs($path . '/' . $file->baseName . '.' . $file->extension);
+                    $photo = md5($file->baseName) . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $photo);
                 }
             }
             $image->file = $photo;

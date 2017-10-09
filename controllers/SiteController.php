@@ -7,6 +7,9 @@
 namespace app\controllers;
 
 use app\models\Country;
+use app\models\Customer;
+use app\models\CustomerInterests;
+use app\models\CustomerLanguages;
 use app\models\InfoPage;
 
 use app\models\InterestCategory;
@@ -15,6 +18,7 @@ use app\models\RegisterForm;
 use Yii;
 
 use \BW\Vkontakte as Vk;
+use yii\base\Model;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -140,7 +144,7 @@ class SiteController extends AbstractController
     }
 
     /**
-     * Первый шаг регистрации.
+     * Второй шаг регистрации.
      */
     public function actionRegisterStepTwo()
     {
@@ -187,9 +191,41 @@ class SiteController extends AbstractController
         }
     }
 
+    /**
+     * Завершение регистрации.
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionRegisterComplete()
     {
-        var_dump(Yii::$app->request->post());
+        $customer = Customer::findOne($this->registration['customerID']);
+
+        if (empty($customer))
+            throw new \yii\web\NotFoundHttpException();
+
+        if ($customer->load(\Yii::$app->request->post()) && $customer->validate()) {
+            $customer->save();
+        }
+
+        if (\Yii::$app->request->post('interests')) {
+            foreach (\Yii::$app->request->post('interests') as $interest) {
+                $model = new CustomerInterests();
+                $model->customerID = $this->registration['customerID'];
+                $model->interestID = $interest;
+                $model->save();
+            }
+        }
+
+        if (\Yii::$app->request->post('language')) {
+                $model = new CustomerLanguages();
+                $model->customerID = $this->registration['customerID'];
+                $model->languageID = Yii::$app->request->post('language');
+                $model->save();
+        }
+
+        \Yii::$app->session->set('user', $customer);
+
+        \Yii::$app->response->redirect('/profile');
     }
 
     public function actionSearch()

@@ -5,32 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "customer_image".
+ * This is the model class for table "customer_interests".
  *
  * @property string $id
  * @property string $customerID
- * @property string $file
- * @property string $isMain
- * @property string $likePoint
- * @property string $date
+ * @property string $interestID
  *
+ * @property Interest $interest
  * @property Customer $customer
  */
-class CustomerImage extends \yii\db\ActiveRecord
+class CustomerInterests extends \yii\db\ActiveRecord
 {
-    /**
-     * Загружаемый файл.
-     *
-     * @var
-     */
-    public $image;
-
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'customer_image';
+        return 'customer_interests';
     }
 
     /**
@@ -39,11 +30,9 @@ class CustomerImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerID'], 'required'],
-            [['customerID'], 'integer'],
-            [['date', 'isMain', 'likePoint'], 'safe'],
-            [['image'], 'file', 'extensions' => 'gif, jpg, png'],
-            [['file'], 'string', 'max' => 255],
+            [['customerID', 'interestID'], 'required'],
+            [['customerID', 'interestID'], 'integer'],
+            [['interestID'], 'exist', 'skipOnError' => true, 'targetClass' => Interest::className(), 'targetAttribute' => ['interestID' => 'id']],
             [['customerID'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customerID' => 'id']],
         ];
     }
@@ -56,11 +45,16 @@ class CustomerImage extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'customerID' => Yii::t('app', 'Customer ID'),
-            'file' => Yii::t('app', 'File'),
-            'isMain' => Yii::t('app', 'isMain'),
-            'isMain' => Yii::t('app', 'likePoint'),
-            'date' => Yii::t('app', 'Date'),
+            'interestID' => Yii::t('app', 'Interest ID'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInterest()
+    {
+        return $this->hasOne(Interest::className(), ['id' => 'interestID']);
     }
 
     /**

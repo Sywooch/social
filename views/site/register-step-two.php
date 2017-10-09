@@ -2,12 +2,6 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
-$ajax = "$('form').on('beforeSubmit', function(){
-    ImageUploader.uploadQueueStart();
-    return false;
-});";
-
-$this->registerJs($ajax);
 ?>
 <?= $this->render('//site/block/search', []); ?>
 
@@ -26,14 +20,19 @@ $this->registerJs($ajax);
                         </div>
                     </div>
                     <div class="green_btn">
-                        <input type="file" class="styler" onchange="ImageUploader.load(this)" multiple="">
+                        <input type="file" class="styler" data-name="CustomerImage[image]" onchange="ImageUploader.load(this)" multiple="">
                     </div>
                 </div>
             </div>
             <?php $form = ActiveForm::begin([
                 'action' => '/site/register-complete',
-                'enableAjaxValidation' => true,
-                'options'=>['class'=>'row'],
+                'enableAjaxValidation' => false,
+                'options' =>
+                    [
+                        'id' => 'step-two-form',
+                        'class'=>'row',
+                        'data-presave' => 'false'
+                    ],
                 'fieldConfig' => [
                     'template' => '{input}{error}',
                     'errorOptions' => ['class' => 'error text-danger'],
@@ -90,7 +89,7 @@ $this->registerJs($ajax);
                 </ul>
                 <div class="typical_select_bordered">
                     <select name="language">
-                        <option><?= \Yii::t('app', 'Добавить язык')?></option>
+                        <option value=""><?= \Yii::t('app', 'Добавить язык')?></option>
                         <?php foreach ($languages as $language):?>
                             <option value="<?= $language['id']?>"><?= $language['translation']['name']?></option>
                         <?php endforeach;?>
@@ -101,7 +100,7 @@ $this->registerJs($ajax);
             <div class="step_info_btm step_info_btm_type_2">
                 <h3><?= \Yii::t('app', 'О себе')?></h3>
                 <div class="step_info_form clearfix">
-                    <textarea class="typical_input_bordered"></textarea>
+                    <?= $form->field(new \app\models\Customer(), 'about')->textArea(['class' => 'typical_input_bordered']) ?>
                     <div class="green_bg_hint">
                         <p><?= \Yii::t('app', 'Обязательно напишите о себе')?></p>
                         <p><?= \Yii::t('app', 'Это поможет другим лучше узнать вас')?>!</p>

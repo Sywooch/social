@@ -13,6 +13,7 @@ use Yii;
  * @property integer $isActive         Признак активности.
  * @property string  $fullName         Полное имя.
  * @property string  $birthday         День рождения.
+ * @property string  $about            О себе.
  * @property string  $code             Код активации.
  * @property string  $cityID           cityID.
  * @property string  $registrationIp   ИП адресс.
@@ -43,7 +44,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             [['email', 'password', 'registrationIp'], 'required'],
             [['isActive'], 'integer'],
-            [['registrationTime', 'authID', 'authMethod', 'birthday'], 'safe'],
+            [['registrationTime', 'authID', 'authMethod', 'birthday', 'about'], 'safe'],
             [['email', 'fullName'], 'string', 'max' => 255],
             [['password', 'code'], 'string', 'max' => 32],
             [['registrationIp'], 'string', 'max' => 16],
@@ -68,12 +69,76 @@ class Customer extends \yii\db\ActiveRecord
             'isActive' => 'Активность',
             'fullName' => 'Имя Фамилия',
             'birthday' => 'День рождения',
+            'about' => 'О себе',
             'code' => 'Code',
             'registrationIp' => 'Ip регистрации',
             'registrationTime' => 'Время',
             'authID' => 'authID',
             'authMethod' => 'authMethod',
         ];
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyParticipants()
+    {
+        return $this->hasMany(CompanyParticipant::className(), ['participantID' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(CustomerImage::className(), ['customerID' => 'id']);
+    }
+
+    public function getMainImage()
+    {
+        return $this->hasOne(CustomerImage::className(), ['customerID' => 'id'])
+            ->andOnCondition(['customer_image.isMain' => 1]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInterests()
+    {
+        return $this->hasMany(Interest::className(), ['id' => 'interestID'])
+            ->viaTable('customer_interests', ['customerID' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLanguages()
+    {
+        return $this->hasMany(Languages::className(), ['id' => 'languageID'])
+            ->viaTable('customer_languages', ['customerID' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['id' => 'cityID']);
+    }
+
+    public function getLanguagesList()
+    {
+        $list = [];
+
+        foreach ($this->getLanguages()->joinWith('translation')->asArray()->all() as $language) {
+            array_push($list, $language['translation']['name']);
+        }
+
+        return $list;
+    }
+
+    public function getAge()
+    {
+        return floor((time()-strtotime($this->birthday))/(60*60*24*365.25));
     }
 
     /**
