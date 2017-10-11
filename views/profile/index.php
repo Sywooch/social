@@ -12,8 +12,8 @@
                 <div class="profile_page clearfix">
                     <div class="profile_block">
                         <div class="profile_block_top">
-                            <div class="profile_quote profile_quote_w">
-                                <p>Хочу сама не знаю чего</p>
+                            <div class="profile_quote profile_quote_<?= $this->params['user']->sex == 1 ? 'm' : 'w'?>">
+                                <p><?= $this->params['user']->title?></p>
                             </div>
                             <table class="profile_info">
                                 <tbody>
@@ -31,7 +31,7 @@
                                 </tr>
                                 <tr>
                                     <td><?= \Yii::t('app', 'День рождения')?></td>
-                                    <td><?= date('d.m.Y', strtotime($this->params['user']->birthday))?> (<?= $this->params['user']->age?> лет)
+                                    <td><?= date('d.m.Y', strtotime($this->params['user']->birthday))?> (<?= $this->params['user']->age?> <?= \Yii::t('app', 'лет')?>)
                                         <div class="horoscope">
                                             <div class="typical_tooltip horoscope_tooltip">
                                                 <span class="tooltip-zodiac zodiac_pisces"></span>

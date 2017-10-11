@@ -1,6 +1,6 @@
 <section class="inner_header">
     <div class="full_width_container clearfix">
-        <a href="#" class="logo"><img src="/img/logo.png" alt=""></a>
+        <a href="/" class="logo"><img src="/img/logo.png" alt=""></a>
         <div class="inner_header_search">
             <div class="main_search">
                 <input type="text" class="white_input" placeholder="Волшебный поиск" />

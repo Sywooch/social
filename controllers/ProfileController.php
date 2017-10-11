@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\CommonImages;
+use app\models\Customer;
 use app\models\CustomerComment;
 use app\models\CustomerCommentAnswer;
 use app\models\CustomerCommentImage;
@@ -132,6 +133,15 @@ class ProfileController extends AbstractController
 
         return $this->render(Yii::$app->controller->action->id,
             compact('comments', 'pages'));
+    }
+
+    public function actionUser($id)
+    {
+        $customer = Customer::findOne($id);
+        if (empty($customer))
+            throw new \yii\web\NotFoundHttpException();
+
+        return $this->render(Yii::$app->controller->action->id, compact('customer'));
     }
 
     /**

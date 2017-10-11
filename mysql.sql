@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Окт 09 2017 г., 18:01
+-- Время создания: Окт 11 2017 г., 17:54
 -- Версия сервера: 5.6.16-1~exp1
 -- Версия PHP: 5.6.31-6+ubuntu16.04.1+deb.sury.org+1
 
@@ -84,6 +84,14 @@ CREATE TABLE `common_images` (
   `file` varchar(255) NOT NULL,
   `date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `common_images`
+--
+
+INSERT INTO `common_images` (`id`, `file`, `date`) VALUES
+(1, '/uploads/custom/49e7dd0bac6f0aefbc1b185ed83eee08/66fc0e2cad15520b60da4ff4e1aa8303.jpg', NULL),
+(2, '/uploads/custom/49e7dd0bac6f0aefbc1b185ed83eee08/574221ee9b1001d4da7ea0607b40ac00.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -184,7 +192,9 @@ CREATE TABLE `customer` (
   `password` char(32) NOT NULL,
   `isActive` tinyint(1) NOT NULL DEFAULT '0',
   `fullName` varchar(255) DEFAULT NULL,
-  `birthday` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `birthday` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sex` int(1) NOT NULL DEFAULT '1',
+  `title` varchar(1024) DEFAULT NULL,
   `about` text,
   `code` char(32) DEFAULT NULL,
   `registrationIp` varchar(16) DEFAULT NULL,
@@ -198,9 +208,9 @@ CREATE TABLE `customer` (
 -- Дамп данных таблицы `customer`
 --
 
-INSERT INTO `customer` (`id`, `email`, `password`, `isActive`, `fullName`, `birthday`, `about`, `code`, `registrationIp`, `registrationTime`, `cityID`, `authID`, `authMethod`) VALUES
-(1, 'kasp89s@gmail.com', '8349efb1b90fb33b41698cbe945769c4', 1, NULL, '1989-10-02 13:27:10', NULL, NULL, NULL, '2017-09-26 14:19:57', 1, NULL, NULL),
-(2, 'kasp89s@mail.com', '8349efb1b90fb33b41698cbe945769c4', 1, 'Сергей Максимович', '1989-10-09 12:47:02', 'Я простопоц!!!', '59d24c0e3d9bd', '127.0.0.1', '2017-10-02 14:24:14', 1, NULL, NULL);
+INSERT INTO `customer` (`id`, `email`, `password`, `isActive`, `fullName`, `birthday`, `sex`, `title`, `about`, `code`, `registrationIp`, `registrationTime`, `cityID`, `authID`, `authMethod`) VALUES
+(1, 'kasp89s@gmail.com', '8349efb1b90fb33b41698cbe945769c4', 1, 'Тестовый тип', '1977-10-11 09:06:23', 1, NULL, NULL, NULL, NULL, '2017-09-26 14:19:57', 1, NULL, NULL),
+(2, 'kasp89s@mail.com', '8349efb1b90fb33b41698cbe945769c4', 1, 'Даша Куесосович', '1989-10-09 12:47:02', 2, NULL, 'Я простопоц!!!', '59d24c0e3d9bd', '127.0.0.1', '2017-10-02 14:24:14', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -212,9 +222,19 @@ CREATE TABLE `customer_comment` (
   `id` int(10) UNSIGNED NOT NULL,
   `customerID` int(10) UNSIGNED NOT NULL,
   `text` text,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `likePoint` int(11) NOT NULL
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `likePoint` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Коментарии';
+
+--
+-- Дамп данных таблицы `customer_comment`
+--
+
+INSERT INTO `customer_comment` (`id`, `customerID`, `text`, `date`, `likePoint`) VALUES
+(2, 2, 'Комментик', '2017-10-10 09:01:40', 0),
+(4, 2, 'efkdpfksdofsf', '2017-10-10 09:06:17', 0),
+(5, 2, 'Мероприятие невиданного охвата и с колоссальной идеей. Для меня честь и удовольствие работать с такой замечательной и очень молодой командой. То, что мы сделали за эти несколько месяцев, — это настоящий подвиг. Коля , Мари , спасибо вам, что привлекли. Работать в коллективе людей, для которых нет невыполнимых задач, - это самый лучший опыт.', '2017-10-10 09:09:03', 0),
+(6, 2, 'Прямо сейчас трансляция Comic Con в San Diego! В 1080, между прочим, Marvel мочат) Ну-ка, покажите нам Quicksilver ^____^', '2017-10-10 09:09:53', 0);
 
 -- --------------------------------------------------------
 
@@ -230,6 +250,20 @@ CREATE TABLE `customer_comment_answer` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `likePoint` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ответы на Коментарии';
+
+--
+-- Дамп данных таблицы `customer_comment_answer`
+--
+
+INSERT INTO `customer_comment_answer` (`id`, `commentID`, `customerID`, `text`, `date`, `likePoint`) VALUES
+(1, 4, 2, 'бла-бла', '2017-10-10 09:53:11', 0),
+(2, 4, 2, 'ебучий хер!', '2017-10-10 09:56:30', 0),
+(3, 5, 2, 'Бальной ублюдок', '2017-10-10 09:56:59', 0),
+(4, 5, 2, 'Бальной ублюдок', '2017-10-10 10:01:15', 0),
+(5, 5, 2, 'Бальной ублюдок', '2017-10-10 10:05:55', 0),
+(6, 2, 2, '', '2017-10-10 11:33:19', 0),
+(7, 2, 2, '', '2017-10-10 11:34:21', 0),
+(8, 2, 2, '', '2017-10-10 11:34:27', 0);
 
 -- --------------------------------------------------------
 
@@ -252,6 +286,14 @@ CREATE TABLE `customer_comment_image` (
   `commentID` int(10) UNSIGNED NOT NULL,
   `imageID` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `customer_comment_image`
+--
+
+INSERT INTO `customer_comment_image` (`commentID`, `imageID`) VALUES
+(4, 1),
+(5, 2);
 
 -- --------------------------------------------------------
 
@@ -285,7 +327,8 @@ CREATE TABLE `customer_image` (
 --
 
 INSERT INTO `customer_image` (`id`, `customerID`, `file`, `isMain`, `likePoint`, `date`) VALUES
-(27, 2, '27b06d68793d9de1b9a9474865e87af9.jpg', 1, 1, '2017-10-09 08:57:11');
+(27, 2, '27b06d68793d9de1b9a9474865e87af9.jpg', 1, 1, '2017-10-09 08:57:11'),
+(28, 1, '66fc0e2cad15520b60da4ff4e1aa8303.jpg', 1, 0, '2017-10-11 07:36:18');
 
 -- --------------------------------------------------------
 
@@ -305,7 +348,9 @@ CREATE TABLE `customer_interests` (
 
 INSERT INTO `customer_interests` (`id`, `customerID`, `interestID`) VALUES
 (1, 2, 2),
-(2, 2, 3);
+(2, 2, 3),
+(3, 1, 6),
+(4, 1, 7);
 
 -- --------------------------------------------------------
 
@@ -324,7 +369,8 @@ CREATE TABLE `customer_languages` (
 --
 
 INSERT INTO `customer_languages` (`id`, `customerID`, `languageID`) VALUES
-(1, 2, 2);
+(1, 2, 2),
+(2, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -497,8 +543,21 @@ CREATE TABLE `messages` (
   `senderID` int(10) UNSIGNED NOT NULL,
   `receiverID` int(10) UNSIGNED NOT NULL,
   `text` text,
-  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `flag` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Сообщения';
+
+--
+-- Дамп данных таблицы `messages`
+--
+
+INSERT INTO `messages` (`id`, `senderID`, `receiverID`, `text`, `date`, `flag`) VALUES
+(1, 1, 2, 'Привет от первого второму', '2017-10-11 09:06:56', 1),
+(2, 1, 2, 'Привет от первого второму еще разок', '2017-10-11 09:20:14', 1),
+(3, 2, 1, 'Привет от второго первому', '2017-10-11 09:15:03', 1),
+(4, 2, 1, 'Ну здароф ебучий шакал', '2017-10-11 10:33:41', 1),
+(5, 1, 2, 'Ах ты сраная шлюха!!!!!!!!!!', '2017-10-11 10:37:36', 1),
+(6, 1, 2, 'Hoopmessenger: http://hoopmessenger.com/dl Меня зовут Паша Бумчик, мне 19 лет, у меня плохая дикция, но это не мешает мне быть', '2017-10-11 10:39:21', 1);
 
 -- --------------------------------------------------------
 
@@ -770,7 +829,7 @@ ALTER TABLE `city_translation`
 -- AUTO_INCREMENT для таблицы `common_images`
 --
 ALTER TABLE `common_images`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `company`
 --
@@ -810,12 +869,12 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT для таблицы `customer_comment`
 --
 ALTER TABLE `customer_comment`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT для таблицы `customer_comment_answer`
 --
 ALTER TABLE `customer_comment_answer`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `customer_friend`
 --
@@ -825,17 +884,17 @@ ALTER TABLE `customer_friend`
 -- AUTO_INCREMENT для таблицы `customer_image`
 --
 ALTER TABLE `customer_image`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT для таблицы `customer_interests`
 --
 ALTER TABLE `customer_interests`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `customer_languages`
 --
 ALTER TABLE `customer_languages`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `interest`
 --
@@ -870,7 +929,7 @@ ALTER TABLE `languages_translation`
 -- AUTO_INCREMENT для таблицы `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --

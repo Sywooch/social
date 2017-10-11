@@ -58,7 +58,7 @@ class RegisterForm extends Customer
     public function rules()
     {
         return [
-            [['email', 'password', 'birthday', 'city'], 'required'],
+            [['email', 'password', 'birthday', 'city', 'sex'], 'required'],
             ['password', 'string', 'min' => 6, 'max' => 32, 'message' => \Yii::t('app', 'Парольдолжен быть от 6 до 16 символов')],
 //            ['passwordConfirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
             ['name', 'string', 'min' => 2, 'max' => 16, 'message' => \Yii::t('app', 'Имя должно быть от 2 до 16 символов')],
@@ -114,6 +114,7 @@ class RegisterForm extends Customer
             $customer->code = $activationCode;
             $customer->birthday = $this->birthday;
             $customer->cityID = $this->city;
+            $customer->sex = $this->sex;
             $customer->registrationIp = $_SERVER['REMOTE_ADDR'];
             $customer->save();
 
