@@ -13,8 +13,9 @@ var ImageUploader = {
         uploaded: false
     },
 
-    init: function () {
-
+    init: function (object) {
+        this.params.inputName = $(object).data('name');
+        this.params.uploaderUrl = $(object).data('url');
     },
 
     /**
@@ -66,7 +67,7 @@ var ImageUploader = {
      * @param object
      */
     load: function (object) {
-        this.params.inputName = $(object).data('name');
+        this.init(object);
 
         $.each($(object)[0].files, function (i, file) {
             ImageUploader.params.uploadItemsCount++;

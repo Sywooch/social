@@ -21,6 +21,13 @@ use Yii;
 class CustomerCommentAnswer extends \yii\db\ActiveRecord
 {
     /**
+     * Картинка.
+     *
+     * @var
+     */
+    public $image;
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -34,9 +41,10 @@ class CustomerCommentAnswer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['commentID', 'customerID'], 'required'],
+            [['commentID', 'customerID', 'text'], 'required'],
             [['commentID', 'customerID', 'likePoint'], 'integer'],
-            [['text'], 'string'],
+            [['image'], 'file', 'extensions' => 'gif, jpg, png'],
+            [['text'], 'string', 'min' => 1],
             [['date'], 'safe'],
             [['customerID'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customerID' => 'id']],
             [['commentID'], 'exist', 'skipOnError' => true, 'targetClass' => CustomerComment::className(), 'targetAttribute' => ['commentID' => 'id']],

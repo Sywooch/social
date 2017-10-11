@@ -8,14 +8,7 @@
 return [
     'adminEmail' => 'admin@example.com',
     'serverName' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://" . $_SERVER['HTTP_HOST'],
-    'NewOrderSubject' => 'newOrderSubject',
-    'NewsLetterSubscriberSubject' => 'NewsLetterSubscriberSubject',
-    'RecoverSubject' => 'RecoverSubject',
-    'NewRegistrationSubject' => 'NewRegistrationSubject',
-    'newOrderSubject' => 'newOrderSubject',
-    'phone' => '+380 (99) 999–99–99',
-    'categoryPageSize' => 1,
-    'newsPageSize' => 1,
+    'commentsOnPage' => 3,
     'seo' => [
         'title' => '',
         'keywords' => '',

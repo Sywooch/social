@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-
 /**
  * This is the model class for table "customer_comment".
  *
  * @property string $id
  * @property string $customerID
  * @property string $text
+ * @property string $image
  * @property string $date
  * @property integer $likePoint
  *
@@ -19,6 +19,13 @@ use Yii;
  */
 class CustomerComment extends \yii\db\ActiveRecord
 {
+    /**
+     * Картинка.
+     *
+     * @var
+     */
+    public $image;
+
     /**
      * @inheritdoc
      */
@@ -33,10 +40,11 @@ class CustomerComment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerID', 'likePoint'], 'required'],
+            [['customerID', 'text'], 'required'],
             [['customerID', 'likePoint'], 'integer'],
-            [['text'], 'string'],
-            [['date'], 'safe'],
+            [['text'], 'string', 'min' => 1],
+            [['image'], 'file', 'extensions' => 'gif, jpg, png'],
+            [['date', 'likePoint'], 'safe'],
             [['customerID'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customerID' => 'id']],
         ];
     }
@@ -76,6 +84,7 @@ class CustomerComment extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(CustomerCommentImage::className(), ['commentID' => 'id']);
+        return $this->hasMany(CommonImages::className(), ['id' => 'imageID'])
+            ->viaTable('customer_comment_image', ['commentID' => 'id']);
     }
 }

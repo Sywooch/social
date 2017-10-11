@@ -81,7 +81,9 @@ use yii\helpers\Html;
             </div>
         </div>
         <?php else:?>
-        Привет, <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
+        Привет, <a href="<?= Url::to('/profile')?>">
+            <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
+            </a>
             <a href="<?= Url::to('site/logout')?>"><?= \Yii::t('app', 'Выйти')?></a>
         <?php endif;?>
         <div class="languages_head">

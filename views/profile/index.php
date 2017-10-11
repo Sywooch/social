@@ -93,7 +93,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <?= $this->render('//profile/block/index/comment', []); ?>
+                        <?= $this->render('//profile/block/index/comment', ['comments' => $comments, 'pages' => $pages]); ?>
                     </div>
                     <div class="profile_aside">
                         <a href="javascript:void(0)" class="announcement_img avatar_mod_link">
@@ -106,7 +106,7 @@
                                 <div class="box-modal_close arcticmodal-close"><i class="flaticon-close"></i></div>
                                 <div class="modal">
                                     <div class="wall_post">
-                                        <h3>Мой аватар</h3>
+                                        <h3><?= \Yii::t('app', 'Мой аватар')?></h3>
                                         <div class="wall_post_top clearfix">
                                             <div class="wall_post_txt">
                                                             <span class="wall_post_img">
@@ -196,7 +196,7 @@
             </div>
             <div class="decorations_settings">
                             <span class="dec_set_right_1">
-                                <img src="img/decor/decor_prof_r_1.png" alt="">
+                                <img src="/img/decor/decor_prof_r_1.png" alt="">
                             </span>
             </div>
         </div>

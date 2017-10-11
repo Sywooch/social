@@ -48,17 +48,53 @@
     
     
     $(document).ready(function(){
-        
+        let mainInLoad = false;
+        $('.wall_comments_more').click(function () {
+            if (mainInLoad === true || typeof(enable_scroll_loading) === 'undefined')
+                return;
+
+            var currentPage = $('#currentPage').val();
+            var lastPage = $('#lastPage').val();
+            if (parseInt(currentPage) >= parseInt(lastPage)) {
+                return;
+            }
+            var loadPage = parseInt(currentPage) + 1;
+            $('#currentPage').val(loadPage);
+            mainInLoad = true;
+            $('.wall_comments_more').hide();
+            $.get(
+                '/profile/load-comment',
+                {
+                    page: loadPage,
+                    _csrf: $('[name="_csrf"]').val()
+                },
+                function (response) {
+                    mainInLoad = false;
+                    if (parseInt(loadPage) < parseInt(lastPage)) {
+                        $('.wall_comments_more').show();
+                    }
+
+                    $('.comments-pull').append(response);
+                }
+            ).fail(function () {
+                mainInLoad = false;
+                $('.wall_comments_more').show();
+            });
+        });
+
+        $(document).on('click', '.typical_link.answer', function () {
+            $(this).hide().parent().find('.wall_comment_item.answer').toggle();
+        });
         // pull
         $('.birth_date_pull').click(function(){
-            $(this).parents('.typical_birth_date').find('.birth_date_hidden').fadeToggle(400);  
+            $(this).parents('.typical_birth_date').find('.birth_date_hidden').fadeToggle(400);
             $(this).parents('.typical_birth_date').find('.birth_date_pull').toggleClass('birth_date_pull_is_open');
             $('.typical_birth_date').toggleClass('typical_birth_date_is_open');
             $(".typical_scroll").mCustomScrollbar({
                 scrollInertia:400
             });
-            
-            
+
+
         });
         
         $('.birth_date_hidden input.styler').change(function(){
@@ -286,6 +322,7 @@
             hide_on_select : true,
             mode : 'range',
             locale : 'ru',
+            default_date : false,
             locales : {
                 ru : {
                     days        : ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
@@ -326,7 +363,6 @@
                                                             toggleDragModeOnDblclick: false,
                                                             viewMode: 3,
                 ready: function () {
-
                     // Strict mode: set crop box data first
                     cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
                 }

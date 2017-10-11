@@ -1,12 +1,25 @@
+<?php
+    use yii\helpers\Url;
+?>
 <aside>
     <div class="aside_nav">
-        <li class="aside_nav_active"><a href="#" class="aside_nav_1">Моя страница</a></li>
-        <li><a href="#" class="aside_nav_2">Мои сообщения</a></li>
-        <li><a href="#" class="aside_nav_3">Мои объявления</a></li>
-        <li><a href="#" class="aside_nav_4">Мои друзья</a></li>
-        <li><a href="#" class="aside_nav_5">Мои компании</a></li>
-        <li><a href="#" class="aside_nav_6">Мои фотографии</a></li>
-        <li><a href="#" class="aside_nav_7">Мои видеозаписи</a></li>
-        <li><a href="#" class="aside_nav_8">Мои настройки</a></li>
+        <li class="<?= (\Yii::$app->controller->action->id == 'index') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile')?>" class="aside_nav_1"><?= \Yii::t('app', 'Моя страница');?></a>
+        </li>
+        <li class="<?= (\Yii::$app->controller->action->id == 'messages') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile/messages')?>" class="aside_nav_2"><?= \Yii::t('app', 'Мои сообщения');?></a>
+        </li>
+        <li class="<?= (\Yii::$app->controller->action->id == 'ads') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile/ads')?>" class="aside_nav_3"><?= \Yii::t('app', 'Мои объявления');?></a>
+        </li>
+        <li class="<?= (\Yii::$app->controller->action->id == 'friends') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile/friends')?>" class="aside_nav_4"><?= \Yii::t('app', 'Мои друзья');?></a>
+        </li>
+        <li class="<?= (\Yii::$app->controller->action->id == 'companies') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile/companies')?>" class="aside_nav_5"><?= \Yii::t('app', 'Мои компании');?></a>
+        </li>
+        <li><a href="#" class="aside_nav_6"><?= \Yii::t('app', 'Мои фотографии');?></a></li>
+        <li><a href="#" class="aside_nav_7"><?= \Yii::t('app', 'Мои видеозаписи');?></a></li>
+        <li><a href="#" class="aside_nav_8"><?= \Yii::t('app', 'Мои настройки');?></a></li>
     </div>
 </aside>

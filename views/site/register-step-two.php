@@ -20,7 +20,7 @@ use yii\helpers\Html;
                         </div>
                     </div>
                     <div class="green_btn">
-                        <input type="file" class="styler" data-name="CustomerImage[image]" onchange="ImageUploader.load(this)" multiple="">
+                        <input type="file" class="styler" data-name="CustomerImage[image]" data-url="/ajax/image-upload" onchange="ImageUploader.load(this)" multiple="">
                     </div>
                 </div>
             </div>
