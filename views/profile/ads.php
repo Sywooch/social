@@ -1,3 +1,6 @@
+<?php
+use yii\helpers\Url;
+?>
 <?= $this->render('//site/block/search', []); ?>
 <section class="main_container light_bg">
     <div class="container">
@@ -6,9 +9,8 @@
 
 <div class="content">
     <div class="title_block clearfix">
-        <h1>Мои объявления</h1>
-        <a href="#" class="add_button">Создать новое
-        </a>
+        <h1><?= \Yii::t('app', 'Мои объявления');?></h1>
+        <a href="<?= Url::to('/profile/create-ads')?>" class="add_button"><?= \Yii::t('app', 'Создать новое');?></a>
     </div>
     <div class="companies_content">
         <div class="announcement_inner_block">

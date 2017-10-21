@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Ads;
 use app\models\CommonImages;
 use app\models\Customer;
 use app\models\CustomerComment;
 use app\models\CustomerCommentAnswer;
 use app\models\CustomerCommentImage;
+use app\models\InterestCategory;
 use app\models\Messages;
 use Yii;
 use yii\data\Pagination;
@@ -276,6 +278,24 @@ class ProfileController extends AbstractController
     public function actionAds()
     {
         return $this->render(Yii::$app->controller->action->id, []);
+    }
+
+    /**
+     * Кабинет, Мои объявления создаие обьявления.
+     *
+     * @return string
+     */
+    public function actionCreateAds()
+    {
+        $createModel = new Ads();
+
+        $interestCategories = InterestCategory::find()
+            ->joinWith('translation')
+            ->joinWith('interests')
+            ->joinWith('interests.translation')
+            ->asArray()->all();
+
+        return $this->render(Yii::$app->controller->action->id, compact('createModel', 'interestCategories'));
     }
 
     /**
