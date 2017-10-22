@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\models\Ads;
+use app\models\AdsInterests;
 use app\models\CommonImages;
+use app\models\Country;
 use app\models\Customer;
 use app\models\CustomerComment;
 use app\models\CustomerCommentAnswer;
@@ -275,7 +277,7 @@ class ProfileController extends AbstractController
      *
      * @return string
      */
-    public function actionAds()
+    public function actionAds($id)
     {
         return $this->render(Yii::$app->controller->action->id, []);
     }
@@ -289,13 +291,59 @@ class ProfileController extends AbstractController
     {
         $createModel = new Ads();
 
+        if ($createModel->load(\Yii::$app->request->post()) && $createModel->validate()) {
+            $createModel->save();
+
+            foreach ($createModel->interestsArray as $interest) {
+                $interestModel = new AdsInterests();
+                $interestModel->interestID = $interest;
+                $interestModel->adsID = $createModel->id;
+                $interestModel->save();
+            }
+
+            switch (\Yii::$app->request->post('location')) {
+                case 'null':
+                    $createModel->city = null;
+                    break;
+                default:
+                    break;
+            }
+
+            $date =  \Yii::$app->request->post('date_year') . '-' . Yii::$app->request->post('date_month') . '-' . Yii::$app->request->post('date_day');
+            switch (\Yii::$app->request->post('date')) {
+                case '1':
+                    $createModel->date = $date;
+                    break;
+                default:
+                    $createModel->date = null;
+                    break;
+            }
+            $createModel->save();
+
+            \Yii::$app->response->redirect('/profile/ads/' . $createModel->id);
+        }
+
         $interestCategories = InterestCategory::find()
             ->joinWith('translation')
             ->joinWith('interests')
             ->joinWith('interests.translation')
             ->asArray()->all();
 
-        return $this->render(Yii::$app->controller->action->id, compact('createModel', 'interestCategories'));
+        $countries = Country::find()
+            ->select('country.id, country_translation.name')
+            ->joinWith('translation', false)
+            ->joinWith('cities', false)
+            ->joinWith('cities.translation')
+            ->asArray()->all();
+
+        $countriesGroup = [];
+        foreach ($countries as $country) {
+            foreach ($country['cities'] as $city) {
+                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
+            }
+        }
+
+        return $this->render(Yii::$app->controller->action->id, compact('createModel', 'interestCategories', 'countriesGroup'));
     }
 
     /**

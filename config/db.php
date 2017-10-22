@@ -5,7 +5,7 @@ return [
 //    'dsn' => 'mysql:host=193.111.140.87;dbname=amigator_db',
 //    'username' => 'amigator',
 //    'password' => '4S4y4Z9s',
-    'dsn' => 'mysql:host=localhost;dbname=amigator_db',
+    'dsn' => 'mysql:host=localhost:3307;dbname=amigator_db',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

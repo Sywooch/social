@@ -1,6 +1,18 @@
 <?php
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+
+$js = "
+                                    $('.categories_list_pull').on('click', function () {
+                                        $('.wrap_filter_chbx_orange').hide();
+                                        $('.categories_item_' + $(this).data('key')).show();
+
+                                    });
+
+";
+$this->registerJs($js);
+
+$postAds = \Yii::$app->request->post('Ads');
 ?>
 <?= $this->render('//site/block/search', []); ?>
     <section class="main_container light_bg">
@@ -30,7 +42,7 @@ use yii\helpers\Html;
                         ]); ?>
                         <div class="new_company_title">
                             <h4><?= \Yii::t('app', 'Заголовок');?></h4>
-                            <input type="text" class="typical_input_bordered" />
+                            <?= $form->field($createModel, 'title')->textInput(['class' => 'typical_input_bordered']) ?>
                         </div>
                         <div class="new_company_top">
 
@@ -40,7 +52,7 @@ use yii\helpers\Html;
                                     <?php if (!empty($interestCategories)):?>
                                     <ul class="filter_chbx_green">
                                         <?php foreach ($interestCategories as $key => $category):?>
-                                        <li class="categories_list_pull categories_list_pull_<?= $key + 1?>">
+                                        <li class="categories_list_pull categories_list_pull" data-key="<?= $key + 1?>">
                                             <label>
                                                 <input type="checkbox" class="styler">
                                                 <span><?= $category['translation']['name']?> (x)</span>
@@ -73,40 +85,21 @@ use yii\helpers\Html;
 <!--                                        </li>-->
 <!--                                    </ul>-->
                                 </div>
-                                <div class="wrap_filter_chbx_orange">
+
+                                <?php foreach ($interestCategories as $key => $category):?>
+                                <div class="wrap_filter_chbx_orange categories_item_<?= $key + 1?>" style="display: none;">
                                     <ul class="filter_chbx_orange">
+                                        <?php foreach ($category['interests'] as $interest):?>
                                         <li>
                                             <label>
-                                                <input type="checkbox" class="styler">
-                                                <span>Скалолазание (12)</span>
+                                                <input type="checkbox" class="styler" name="Ads[interestsArray][]" value="<?= $interest['id']?>">
+                                                <span><?= $interest['translation']['name']?> (x)</span>
                                             </label>
                                         </li>
-                                        <li>
-                                            <label>
-                                                <input type="checkbox" class="styler">
-                                                <span>Волейбол (41)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label>
-                                                <input type="checkbox" class="styler">
-                                                <span>Футбол (3)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label>
-                                                <input type="checkbox" class="styler">
-                                                <span>Бокс (12)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label>
-                                                <input type="checkbox" class="styler">
-                                                <span>Рыбалка (142)</span>
-                                            </label>
-                                        </li>
+                                        <?php endforeach;?>
                                     </ul>
                                 </div>
+                                <?php endforeach;?>
                                 <p class="new_company_blue_line_btm">
                                     <?= \Yii::t('app', 'Нет подходящей цели');?>?
                                     <a  onclick="$('.self_goal_mod').arcticmodal()"><?= \Yii::t('app', 'Добавьте свою')?></a>
@@ -248,474 +241,112 @@ use yii\helpers\Html;
                                         </div>
                                     </div>
                                 </div>
+                                <?= Html::error($createModel, 'interestsArray', ['class' => 'error text-danger']); ?>
                             </div>
                             <div class="new_company_line">
-                                <h4>Мои данные</h4>
-                                <ul class="typical_chbx_orange">
-                                    <li>
-                                        <span class="form_line_title">Мой вес</span>
-                                        <div class="typical_select_bordered">
-                                            <select>
-                                                <option> </option>
-                                                <option>100</option>
-                                                <option>200</option>
-                                                <option>300</option>
-                                                <option>400</option>
-                                            </select>
-                                        </div>
-                                        <span class="form_line_title">кг</span>
-                                    </li>
-                                    <li>
-                                        <span class="form_line_title">Мой уровень</span>
-                                        <div class="typical_select_bordered">
-                                            <select>
-                                                <option> </option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                            </select>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <input type="checkbox" class="styler">
-                                            <span>Не Скалодром</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <input type="checkbox" class="styler">
-                                            <span>Поездка на скалы</span>
-                                        </label>
-                                    </li>
-                                </ul>
+                                <h4><?= \Yii::t('app', 'Мои данные')?></h4>
+                                <?= $form->field($createModel, 'data')
+                                    ->textArea(
+                                        [
+                                            'class' => 'typical_input_bordered',
+                                        ]
+                                    ) ?>
                             </div>
                             <div class="new_company_line">
-                                <h4>Расположение</h4>
+                                <h4><?= \Yii::t('app', 'Расположение')?></h4>
                                 <ul class="typical_chbx_orange">
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="new_loc" >
-                                            <span>В моем городе (Днепропетровск)</span>
+                                            <input type="radio" class="styler" name="location" value="<?= $this->params['user']->city->id?>">
+                                            <span>
+                                                <?= \Yii::t('app', 'В моем городе')?>
+                                                (<?= $this->params['user']->city->translation->name?>)
+                                            </span>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="new_loc" >
+                                            <input type="radio" class="styler" name="location" value="dropDown">
                                         </label>
                                         <div class="inner_search_select">
-                                            <select>
-                                                <option>Другой город</option>
-                                                <option>Россия, Москва</option>
-                                                <option>Другая страна...</option>
-                                                <option>Россия, Московская область</option>
-                                                <option>Россия, Санкт-Петербург</option>
-                                                <option>Россия. Ленинградская область</option>
-                                                <option>Другой город...</option>
-                                            </select>
+                                            <?= $form->field($createModel, 'city')->dropDownList($countriesGroup, ['class' => false])->label(false);?>
                                         </div>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="new_loc" >
-                                            <span>Не важно</span>
+                                            <input type="radio" class="styler" name="location" value="null" checked>
+                                            <span><?= \Yii::t('app', 'Не важно')?></span>
                                         </label>
                                     </li>
                                 </ul>
+                                <?= Html::error($createModel, 'city', ['class' => 'error text-danger']); ?>
                                 <span class="new_c_line_ic">
-                                            <img src="img/loc_ic.png" alt="">
-                                        </span>
+                                      <img src="/img/loc_ic.png" alt="">
+                                </span>
                             </div>
                             <div class="new_company_line">
-                                <h4>С кем</h4>
+                                <h4><?= \Yii::t('app', 'С кем')?></h4>
                                 <ul class="typical_chbx_orange">
+                                    <?php foreach ($createModel->sexTypes as $key => $type):?>
                                     <li>
                                         <label>
-                                            <input type="checkbox" class="styler">
-                                            <span>Женщина</span>
-                                        </label>
-
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <input type="checkbox" class="styler">
-                                            <span>Мужчина</span>
-                                        </label>
-
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <input type="checkbox" class="styler">
-                                            <span>Компания</span>
+                                            <input type="radio" class="styler" name="Ads[sex]" value="<?= $key?>"
+                                            <?= (isset($postAds['sex']) && $postAds['sex'] == $key) ? 'checked' : ''?> />
+                                            <span><?= $type?></span>
                                         </label>
                                     </li>
+                                    <?php endforeach;?>
                                 </ul>
+                                <?= Html::error($createModel, 'sex', ['class' => 'error text-danger']); ?>
                                 <span class="new_c_line_ic">
-                                            <img src="img/sex_ic.png" alt="">
-                                        </span>
+                                      <img src="/img/sex_ic.png" alt="">
+                                </span>
                             </div>
                             <div class="new_company_line">
-                                <h4>Когда</h4>
+                                <h4><?= \Yii::t('app', 'Когда')?></h4>
                                 <ul class="typical_chbx_orange birth_date_chosen_wrap">
                                     <li>
                                         <label class="birth_date_chosen">
-                                            <input type="radio" class="styler" name="new_date">
-                                            <span>Точная дата</span>
+                                            <input type="radio" class="styler" name="date" value="1">
+                                            <span><?= \Yii::t('app', 'Точная дата')?></span>
                                         </label>
                                         <div class="typical_birth_date">
-                                            <button class="birth_date_pull">Выбрать дату</button>
+                                            <button class="birth_date_pull"><?= \Yii::t('app', 'Выбрать дату')?></button>
                                             <div class="birth_date_hidden">
                                                 <div class="birth_date_coll birth_date_day typical_scroll">
                                                     <ul class="birht_date_chbx">
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>1</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>2</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>3</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>4</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>5</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>6</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>7</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>8</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>9</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>10</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>11</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>12</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>13</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>14</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>15</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>16</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>17</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>18</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>19</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>20</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>21</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>22</span>
-                                                            </label></li>
-                                                        <li> <label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>23</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>24</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>25</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>26</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>27</span>
-                                                            </label></li>
-                                                        <l><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>28</span>
-                                                            </label></l>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>29</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>30</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_day">
-                                                                <span>31</span>
-                                                            </label></li>
+                                                        <?php for ($i = 1; $i <= 31; $i++):?>
+                                                            <li>
+                                                                <label>
+                                                                    <input type="radio" class="styler" name="date_day" value="<?= $i?>">
+                                                                    <span data-numeric="<?= $i?>" ><?= $i?></span>
+                                                                </label>
+                                                            </li>
+                                                        <?php endfor;?>
                                                     </ul>
                                                 </div>
                                                 <div class="birth_date_coll birth_date_coll_month typical_scroll">
                                                     <ul class="birht_date_chbx">
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Январь</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Февраль</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Март</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Апрель</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Май</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Июнь</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Июль</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Август</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Сентябрь</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Октябрь</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Ноябрь</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_month">
-                                                                <span>Декабрь</span>
-                                                            </label></li>
+                                                        <?php foreach (\app\models\RegisterForm::getMonthTranslation() as $numeric => $translation):?>
+                                                            <li>
+                                                                <label>
+                                                                    <input type="radio" class="styler" name="date_month" value="<?= $numeric?>">
+                                                                    <span data-numeric="<?= $numeric?>"><?= $translation?></span>
+                                                                </label>
+                                                            </li>
+                                                        <?php endforeach;?>
                                                     </ul>
                                                 </div>
                                                 <div class="birth_date_coll birth_date_coll_year typical_scroll">
                                                     <ul class="birht_date_chbx">
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1980</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1981</span>
-                                                            </label></li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1982</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1983</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1984</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1985</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1986</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1987</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1988</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1989</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1990</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1991</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1992</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1993</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1994</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1995</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1996</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1997</span>
-                                                            </label>
-                                                        </li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1998</span>
-                                                            </label></li>
-                                                        <li> <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>1999</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2000</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2001</span>
-                                                            </label></li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2002</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2003</span>
-                                                            </label>
-                                                        </li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2004</span>
-                                                            </label></li>
-                                                        <li> <label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2005</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2006</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2007</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2008</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2009</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2010</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2011</span>
-                                                            </label></li>
-                                                        <li><label>
-                                                                <input type="radio" class="styler" name="b_year">
-                                                                <span>2012</span>
-                                                            </label></li>
+                                                        <?php for ($i = 1980; $i <= 2012; $i++):?>
+                                                            <li>
+                                                                <label>
+                                                                    <input type="radio" class="styler" name="date_year" value="<?= $i?>">
+                                                                    <span data-numeric="<?= $i?>" ><?= $i?></span>
+                                                                </label>
+                                                            </li>
+                                                        <?php endfor;?>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -723,14 +354,15 @@ use yii\helpers\Html;
                                     </li>
                                     <li>
                                         <label class="birth_date_chosen2">
-                                            <input type="radio" class="styler" name="new_date">
-                                            <span>Решим вместе</span>
+                                            <input type="radio" class="styler" name="date" value="0" checked>
+                                            <span><?= \Yii::t('app', 'Решим вместе')?></span>
                                         </label>
                                     </li>
                                 </ul>
+                                <?= Html::error($createModel, 'date', ['class' => 'error text-danger']); ?>
                                 <span class="new_c_line_ic">
-                                            <img src="img/date_ic.png" alt="">
-                                        </span>
+                                      <img src="/img/date_ic.png" alt="">
+                                </span>
                             </div>
                         </div>
                         <div class="new_company_btm">
@@ -744,8 +376,7 @@ use yii\helpers\Html;
                                 ) ?>
                             <div class="hidden_filter_btns">
                                 <div class="green_btn">
-                                    <input type="submit" class="green_btn_txt" value="Опубликовать" />
-                                    <?= Html::submitButton(\Yii::t('app', 'Отправить'), ['class' => 'green_btn_txt']) ?>
+                                    <?= Html::submitButton(\Yii::t('app', 'Опубликовать'), ['class' => 'green_btn_txt']) ?>
                                 </div>
                                 <input type="reset" class="bordered_btn" value="Отмена" />
                             </div>
