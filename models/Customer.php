@@ -77,6 +77,15 @@ class Customer extends \yii\db\ActiveRecord
             'authMethod' => 'authMethod',
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAds()
+    {
+        return $this->hasMany(Ads::className(), ['customerID' => 'id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

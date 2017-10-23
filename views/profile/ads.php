@@ -7,48 +7,53 @@ use yii\helpers\Url;
             <div class="wrap_content clearfix">
 <?= $this->render('//profile/block/menu', []); ?>
                 <div class="content">
+                    <?php if (\Yii::$app->request->get('new')):?>
                     <div class="announcement_topline">
                         <h3><?= \Yii::t('app', 'Все готово');?>!</h3>
                         <p><?= \Yii::t('app', 'Расскажите о своем объявлении');?>:</p>
                         <div class="announcement_topline_icons">
-                            <a href="#"><img src="/img/social/twitter.svg" alt=""></a>
-                            <a href="#"><img src="/img/social/facebook.svg" alt=""></a>
-                            <a href="#"><img src="/img/social/vk.svg" alt=""></a>
-                            <a href="#"><img src="/img/social/google-plus.svg" alt=""></a>
-                            <a href="#"><img src="/img/social/odnoklassniki-logo.svg" alt=""></a>
-                            <a href="#"><img src="/img/social/youtube.svg" alt=""></a>
+                            <a href="https://twitter.com/home?status=<?= Yii::$app->getRequest()->serverName?>/public/ads/<?= $item->id?>">
+                                <img src="/img/social/twitter.svg" alt="">
+                            </a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?sdk=joey&u=<?= Yii::$app->getRequest()->serverName?>/public/ads/<?= $item->id?>">
+                                <img src="/img/social/facebook.svg" alt="">
+                            </a>
+                            <a href="http://vk.com/share.php?url=http://<?= Yii::$app->getRequest()->serverName?>/public/ads/<?= $item->id?>">
+                                <img src="/img/social/vk.svg" alt="">
+                            </a>
+                            <a href="https://plus.google.com/share?url=<?= Yii::$app->getRequest()->serverName?>/public/ads/<?= $item->id?>">
+                                <img src="/img/social/google-plus.svg" alt="">
+                            </a>
+                            <a href="#">
+                                <img src="/img/social/odnoklassniki-logo.svg" alt="">
+                            </a>
+                            <a href="#">
+                                <img src="/img/social/youtube.svg" alt="">
+                            </a>
                         </div>
                     </div>
+                    <?php endif;?>
                     <div class="title_block clearfix">
-                        <h1>Ищу напарника для поездки в горы или на скалодром
-                            объявление минимум в две строки</h1>
+                        <h1><?= $item->title?></h1>
                     </div>
                     <div class="announcement_content">
                         <div class="announcement_block clearfix">
                             <div class="announcement_info">
                                 <div class="announcement_descr announcement_descr_without_ic">
-                                    <p>Очевидно, что выразительное аккумулирует глубокий модернизм. Типическое, в первом приближении, диссонирует ритм. Калокагатия дает синтез искусств. Возрождение, следовательно, образует сокращенный экспрессионизм. Переходное состояние просветляет диахронический подход. Структурализм начинает психологический параллелизм. Биографический метод, в том числе, заканчивает непосредственный диахронический подход.</p>
+                                    <p><?= $item->content?></p>
                                 </div>
 
                                 <div class="user_data">
                                     <table class="user_data_table">
                                         <thead>
                                         <tr>
-                                            <th colspan="2">Мои данные</th>
+                                            <th colspan="2"><?= \Yii::t('app', 'Мои данные')?></th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td>Мой вес:</td>
-                                            <td>75 кг</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Мой уровень:</td>
-                                            <td>7А</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Мои занятия:</td>
-                                            <td>Скалодром, Поездка на скалы</td>
+                                            <td></td>
+                                            <td><?= $item->data?></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -57,21 +62,24 @@ use yii\helpers\Url;
                                     <table class="user_data_table">
                                         <thead>
                                         <tr>
-                                            <th colspan="2">Мои предпочтения</th>
+                                            <th colspan="2"><?= \Yii::t('app', 'Мои предпочтения')?></th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td>Город:</td>
-                                            <td>Санкт-Петербург</td>
+                                            <td><?= \Yii::t('app', 'Город')?>:</td>
+                                            <td><?= $item->city->translation->name?></td>
                                         </tr>
                                         <tr>
-                                            <td>Пол:</td>
-                                            <td>Женский</td>
+                                            <td><?= \Yii::t('app', 'Пол')?>:</td>
+                                            <td><?= $item->sexTypes[$item->sex]?></td>
                                         </tr>
                                         <tr>
-                                            <td>Дата встречи:</td>
-                                            <td>21 ноября 2015</td>
+                                            <td><?= \Yii::t('app', 'Дата встречи')?>:</td>
+                                            <td>
+                                                <?= \Yii::$app->formatter->asDate($item->date, 'd MMMM yyyy') ?>
+                                                <?= date('d F Y', strtotime($item->date))?>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -84,13 +92,13 @@ use yii\helpers\Url;
                                 </div>
                             </div>
                             <div class="announcement_photo">
-                                <a href="#" class="title_link">Светлана Недавалкина</a>
-                                <span class="item_hint">Россия, Санкт-Петербург</span>
-                                <a href="#" class="announcement_img">
-                                    <img src="/img/announcement2.jpg" alt="">
+                                <a href="<?= Url::to('/public/profile/' . $item->customer->id)?>" class="title_link"><?= $item->customer->fullName?></a>
+                                <span class="item_hint"><?= $item->customer->city->country->translation->name?>, <?= $item->customer->city->translation->name?></span>
+                                <a href="javascript:void(0)" class="announcement_img">
+                                    <img src="/uploads/<?= $item->customer->id?>/<?= $item->customer->mainImage->file?>" alt="">
                                 </a>
-                                <a href="#" class="green_btn">
-                                    <span class="green_btn_txt">Смотреть профиль</span>
+                                <a href="<?= Url::to('/public/profile/' . $item->customer->id)?>" class="green_btn">
+                                    <span class="green_btn_txt"><?= \Yii::t('app', 'Смотреть профиль')?></span>
                                 </a>
                             </div>
                         </div>

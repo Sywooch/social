@@ -19,6 +19,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         '/web/css/style.css',
+        '/web/css/dev.css',
     ];
     public $js = [
 		'/web/js/jquery.formstyler.min.js',

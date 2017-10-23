@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Окт 21 2017 г., 17:19
+-- Время создания: Окт 23 2017 г., 17:36
 -- Версия сервера: 5.6.16-1~exp1
 -- Версия PHP: 5.6.31-6+ubuntu16.04.1+deb.sury.org+1
 
@@ -21,6 +21,52 @@ SET time_zone = "+00:00";
 --
 -- База данных: `amigator_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `ads`
+--
+
+CREATE TABLE `ads` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `customerID` int(10) UNSIGNED NOT NULL,
+  `title` varchar(255) DEFAULT NULL COMMENT 'Заголовок',
+  `data` text,
+  `cityID` int(10) UNSIGNED DEFAULT NULL COMMENT 'Расположение',
+  `sex` enum('M','F','C') NOT NULL DEFAULT 'M' COMMENT 'С кем',
+  `date` timestamp NULL DEFAULT NULL COMMENT 'Когда',
+  `content` text COMMENT 'Текст объявления',
+  `timeCreate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Создан',
+  `active` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Обьявления';
+
+--
+-- Дамп данных таблицы `ads`
+--
+
+INSERT INTO `ads` (`id`, `customerID`, `title`, `data`, `cityID`, `sex`, `date`, `content`, `timeCreate`, `active`) VALUES
+(1, 1, 'Супер тестовое мего обявление', 'Всякие дебильные данные', 1, 'F', '1982-02-01 21:00:00', 'Привет, мир! Я текст этого обьявления', '2017-10-23 13:10:29', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `ads_interests`
+--
+
+CREATE TABLE `ads_interests` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `adsID` int(10) UNSIGNED NOT NULL,
+  `interestID` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Интересы пользователей';
+
+--
+-- Дамп данных таблицы `ads_interests`
+--
+
+INSERT INTO `ads_interests` (`id`, `adsID`, `interestID`) VALUES
+(1, 1, 1),
+(2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -535,6 +581,328 @@ INSERT INTO `languages_translation` (`id`, `sourceID`, `language`, `name`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `main_i18n`
+--
+
+CREATE TABLE `main_i18n` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `category` varchar(32) NOT NULL COMMENT 'Название категории перевода.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Главная таблица переводов интерфейса.';
+
+--
+-- Дамп данных таблицы `main_i18n`
+--
+
+INSERT INTO `main_i18n` (`id`, `category`) VALUES
+(1, 'app'),
+(2, 'app'),
+(3, 'app'),
+(4, 'app'),
+(5, 'app'),
+(6, 'app'),
+(7, 'app'),
+(8, 'app'),
+(9, 'app'),
+(10, 'app'),
+(11, 'app'),
+(12, 'app'),
+(13, 'app'),
+(14, 'app'),
+(15, 'app'),
+(16, 'app'),
+(17, 'app'),
+(18, 'app'),
+(19, 'app'),
+(20, 'app'),
+(21, 'app'),
+(22, 'app'),
+(23, 'app'),
+(24, 'app'),
+(25, 'app'),
+(26, 'app'),
+(27, 'app'),
+(28, 'app'),
+(29, 'app'),
+(30, 'app'),
+(31, 'app'),
+(32, 'app'),
+(33, 'app'),
+(34, 'app'),
+(35, 'app'),
+(36, 'app'),
+(37, 'app'),
+(38, 'app'),
+(39, 'app'),
+(40, 'app'),
+(41, 'app'),
+(42, 'app'),
+(43, 'app'),
+(44, 'app'),
+(45, 'app'),
+(46, 'app'),
+(47, 'app'),
+(48, 'app'),
+(49, 'app'),
+(50, 'app'),
+(51, 'app'),
+(52, 'app'),
+(53, 'app'),
+(54, 'app'),
+(55, 'app'),
+(56, 'app'),
+(57, 'app'),
+(58, 'app'),
+(59, 'app'),
+(60, 'app'),
+(61, 'app'),
+(62, 'app'),
+(63, 'app'),
+(64, 'app'),
+(65, 'app'),
+(66, 'app'),
+(67, 'app'),
+(68, 'app'),
+(69, 'app'),
+(70, 'app'),
+(71, 'app'),
+(72, 'app'),
+(73, 'app'),
+(74, 'app'),
+(75, 'app'),
+(76, 'app'),
+(77, 'app'),
+(78, 'app'),
+(79, 'app'),
+(80, 'app'),
+(81, 'app'),
+(82, 'app'),
+(83, 'app'),
+(84, 'app'),
+(85, 'app'),
+(86, 'app'),
+(87, 'app'),
+(88, 'app'),
+(89, 'app'),
+(90, 'app'),
+(91, 'app'),
+(92, 'app'),
+(93, 'app'),
+(94, 'app'),
+(95, 'app'),
+(96, 'app'),
+(97, 'app'),
+(98, 'app'),
+(99, 'app'),
+(100, 'app'),
+(101, 'app'),
+(102, 'app'),
+(103, 'app'),
+(104, 'app'),
+(105, 'app'),
+(106, 'app'),
+(107, 'app'),
+(108, 'app'),
+(109, 'app'),
+(110, 'app'),
+(111, 'app'),
+(112, 'app'),
+(113, 'app'),
+(114, 'app'),
+(115, 'app'),
+(116, 'app'),
+(117, 'app'),
+(118, 'app'),
+(119, 'app'),
+(120, 'app'),
+(121, 'app'),
+(122, 'app'),
+(123, 'app'),
+(124, 'app'),
+(125, 'app'),
+(126, 'app'),
+(127, 'app'),
+(128, 'app'),
+(129, 'app'),
+(130, 'app'),
+(131, 'app'),
+(132, 'app'),
+(133, 'app'),
+(134, 'app'),
+(135, 'app'),
+(136, 'app'),
+(137, 'app'),
+(138, 'app'),
+(139, 'app'),
+(140, 'app'),
+(141, 'app'),
+(142, 'app'),
+(143, 'app');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `main_i18n_translation`
+--
+
+CREATE TABLE `main_i18n_translation` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `sourceId` int(10) UNSIGNED NOT NULL COMMENT 'Ссылка на исходник.',
+  `language` varchar(5) DEFAULT NULL COMMENT 'Название языка.',
+  `message` text CHARACTER SET utf8 COLLATE utf8_bin COMMENT 'Текст перевода.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Переводы интерфейса.';
+
+--
+-- Дамп данных таблицы `main_i18n_translation`
+--
+
+INSERT INTO `main_i18n_translation` (`id`, `sourceId`, `language`, `message`) VALUES
+(1, 1, 'ru', 'Ваш комментарий'),
+(2, 2, 'ru', 'Отправить'),
+(3, 3, 'ru', 'Запись со стены'),
+(4, 4, 'ru', 'Нравится'),
+(5, 5, 'ru', 'Это спам'),
+(6, 6, 'ru', 'Удалить'),
+(7, 7, 'ru', 'Ответить'),
+(8, 8, 'ru', 'Загрузить еще'),
+(9, 9, 'ru', 'Моя страница'),
+(10, 10, 'ru', 'Мои сообщения'),
+(11, 11, 'ru', 'Мои объявления'),
+(12, 12, 'ru', 'Мои друзья'),
+(13, 13, 'ru', 'Мои компании'),
+(14, 14, 'ru', 'Мои фотографии'),
+(15, 15, 'ru', 'Мои видеозаписи'),
+(16, 16, 'ru', 'Мои настройки'),
+(17, 17, 'ru', 'В контакты'),
+(18, 18, 'ru', 'Страна'),
+(19, 19, 'ru', 'Город'),
+(20, 20, 'ru', 'Языки'),
+(21, 21, 'ru', 'День рождения'),
+(22, 22, 'ru', 'лет'),
+(23, 23, 'ru', 'О себе'),
+(24, 24, 'ru', 'Изменить описание'),
+(25, 25, 'ru', 'Мой аватар'),
+(26, 26, 'ru', 'Все готово'),
+(27, 27, 'ru', 'Расскажите о своем объявлении'),
+(28, 28, 'ru', 'Мои данные'),
+(29, 29, 'ru', 'Мои предпочтения'),
+(30, 30, 'ru', 'Пол'),
+(31, 31, 'ru', 'Дата встречи'),
+(32, 32, 'ru', 'Смотреть профиль'),
+(33, 33, 'ru', 'Поиск по сообщениям'),
+(34, 34, 'ru', 'За период'),
+(35, 35, 'ru', 'Все'),
+(36, 36, 'ru', 'От меня'),
+(37, 37, 'ru', 'Мне'),
+(38, 38, 'ru', 'Создать новое'),
+(39, 39, 'ru', 'Новое объявление'),
+(40, 40, 'ru', 'Заголовок'),
+(41, 41, 'ru', 'Популярные цели'),
+(42, 42, 'ru', 'Нет подходящей цели'),
+(43, 43, 'ru', 'Добавьте свою'),
+(44, 44, 'ru', 'Расположение'),
+(45, 45, 'ru', 'В моем городе'),
+(46, 46, 'ru', 'Не важно'),
+(47, 47, 'ru', 'С кем'),
+(48, 48, 'ru', 'Когда'),
+(49, 49, 'ru', 'Точная дата'),
+(50, 50, 'ru', 'Выбрать дату'),
+(51, 51, 'ru', 'Решим вместе'),
+(52, 52, 'ru', 'Текст объявления'),
+(53, 53, 'ru', 'Введите текст объявления'),
+(54, 54, 'ru', 'Опубликовать'),
+(55, 55, 'ru', 'Вход'),
+(56, 56, 'ru', 'Регистрация'),
+(57, 57, 'ru', 'Запомнить'),
+(58, 58, 'ru', 'Войти'),
+(59, 59, 'ru', 'Шаг'),
+(60, 60, 'ru', 'Расскажите немного о себе, Имя'),
+(61, 61, 'ru', 'Необходимо выбрать фото профиля'),
+(62, 62, 'ru', 'Мои интересы'),
+(63, 63, 'ru', 'Знаю языки'),
+(64, 64, 'ru', 'Добавить язык'),
+(65, 65, 'ru', 'Обязательно напишите о себе'),
+(66, 66, 'ru', 'Это поможет другим лучше узнать вас'),
+(67, 67, 'ru', 'Не ленитесь, напишите хоть что-нибудь'),
+(68, 68, 'ru', 'Зарегистрироваться'),
+(69, 69, 'ru', 'Пожалуйста, авторизуйтесь'),
+(70, 70, 'ru', 'Запомнить меня'),
+(71, 71, 'ru', 'Забыли пароль?'),
+(72, 72, 'ru', 'Вход через соц.сети'),
+(73, 73, 'ru', 'Twitter'),
+(74, 74, 'ru', 'Facebook'),
+(75, 75, 'ru', 'Вконтакте'),
+(76, 76, 'ru', 'Одноклассники'),
+(77, 77, 'ru', 'Имя'),
+(78, 78, 'ru', 'Эл.почта'),
+(79, 79, 'ru', 'Пароль'),
+(80, 80, 'ru', 'Муж'),
+(81, 81, 'ru', 'Жен'),
+(82, 82, 'ru', 'Interest Translations'),
+(83, 83, 'ru', 'Update'),
+(84, 84, 'ru', 'Delete'),
+(85, 85, 'ru', 'Are you sure you want to delete this item?'),
+(86, 86, 'ru', 'Create Interest Translation'),
+(87, 87, 'ru', 'Search'),
+(88, 88, 'ru', 'Reset'),
+(89, 89, 'ru', 'Create'),
+(90, 90, 'ru', 'Update {modelClass}: '),
+(91, 91, 'ru', 'Interest Categories'),
+(92, 92, 'ru', 'Create Interest Category'),
+(93, 93, 'ru', 'Interest Category Translations'),
+(94, 94, 'ru', 'Create Interest Category Translation'),
+(95, 95, 'ru', 'Interests'),
+(96, 96, 'ru', 'Create Interest'),
+(97, 97, 'ru', 'ID'),
+(98, 98, 'ru', 'Сортировка'),
+(99, 99, 'ru', 'Код'),
+(100, 100, 'ru', 'Отображать как системный'),
+(101, 101, 'ru', 'Ads ID'),
+(102, 102, 'ru', 'Interest ID'),
+(103, 103, 'ru', 'Парольдолжен быть от 6 до 16 символов'),
+(104, 104, 'ru', 'Имя должно быть от 2 до 16 символов'),
+(105, 105, 'ru', 'Дата рождения'),
+(106, 106, 'ru', 'Январь'),
+(107, 107, 'ru', 'Февраль'),
+(108, 108, 'ru', 'Март'),
+(109, 109, 'ru', 'Апрель'),
+(110, 110, 'ru', 'Май'),
+(111, 111, 'ru', 'Июнь'),
+(112, 112, 'ru', 'Июль'),
+(113, 113, 'ru', 'Август'),
+(114, 114, 'ru', 'Сентябрь'),
+(115, 115, 'ru', 'Октябрь'),
+(116, 116, 'ru', 'Ноябрь'),
+(117, 117, 'ru', 'Декабрь'),
+(118, 118, 'ru', 'Comment ID'),
+(119, 119, 'ru', 'Image ID'),
+(120, 120, 'ru', 'Пользователь'),
+(121, 121, 'ru', 'Интересы'),
+(122, 122, 'ru', 'Создан'),
+(123, 123, 'ru', 'Активен'),
+(124, 124, 'ru', 'Sender ID'),
+(125, 125, 'ru', 'Receiver ID'),
+(126, 126, 'ru', 'Text'),
+(127, 127, 'ru', 'Date'),
+(128, 128, 'ru', 'Flag'),
+(129, 129, 'ru', 'Категория'),
+(130, 130, 'ru', 'Язык'),
+(131, 131, 'ru', 'Натменование'),
+(132, 132, 'ru', 'Category'),
+(133, 133, 'ru', 'File'),
+(134, 134, 'ru', 'Source ID'),
+(135, 135, 'ru', 'Language'),
+(136, 136, 'ru', 'Message'),
+(137, 137, 'ru', 'Customer ID'),
+(138, 138, 'ru', 'Like Point'),
+(139, 139, 'ru', 'Language ID'),
+(140, 140, 'ru', 'isMain'),
+(141, 141, 'ru', 'likePoint'),
+(142, 142, 'ru', 'Интерес'),
+(143, 143, 'ru', 'Наименование');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `messages`
 --
 
@@ -607,6 +975,22 @@ INSERT INTO `usergroup` (`id`, `name`, `actions`) VALUES
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `ads`
+--
+ALTER TABLE `ads`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `city` (`cityID`),
+  ADD KEY `customerID` (`customerID`);
+
+--
+-- Индексы таблицы `ads_interests`
+--
+ALTER TABLE `ads_interests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customerID` (`adsID`),
+  ADD KEY `interestID` (`interestID`);
 
 --
 -- Индексы таблицы `category`
@@ -785,6 +1169,21 @@ ALTER TABLE `languages_translation`
   ADD KEY `sourceID` (`sourceID`);
 
 --
+-- Индексы таблицы `main_i18n`
+--
+ALTER TABLE `main_i18n`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `INDEXCategory` (`category`);
+
+--
+-- Индексы таблицы `main_i18n_translation`
+--
+ALTER TABLE `main_i18n_translation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKI18nTranslationToI18n` (`sourceId`),
+  ADD KEY `INDEXLanguage` (`language`);
+
+--
 -- Индексы таблицы `messages`
 --
 ALTER TABLE `messages`
@@ -810,6 +1209,16 @@ ALTER TABLE `usergroup`
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
+--
+-- AUTO_INCREMENT для таблицы `ads`
+--
+ALTER TABLE `ads`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `ads_interests`
+--
+ALTER TABLE `ads_interests`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `category`
 --
@@ -926,6 +1335,16 @@ ALTER TABLE `languages`
 ALTER TABLE `languages_translation`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT для таблицы `main_i18n`
+--
+ALTER TABLE `main_i18n`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
+--
+-- AUTO_INCREMENT для таблицы `main_i18n_translation`
+--
+ALTER TABLE `main_i18n_translation`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
+--
 -- AUTO_INCREMENT для таблицы `messages`
 --
 ALTER TABLE `messages`
@@ -933,6 +1352,20 @@ ALTER TABLE `messages`
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
+
+--
+-- Ограничения внешнего ключа таблицы `ads`
+--
+ALTER TABLE `ads`
+  ADD CONSTRAINT `ads_ibfk_2` FOREIGN KEY (`cityID`) REFERENCES `city` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ads_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `ads_interests`
+--
+ALTER TABLE `ads_interests`
+  ADD CONSTRAINT `ads_interests_ibfk_1` FOREIGN KEY (`adsID`) REFERENCES `ads` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ads_interests_ibfk_2` FOREIGN KEY (`interestID`) REFERENCES `interest` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `city`
@@ -1042,6 +1475,12 @@ ALTER TABLE `interest_translation`
 --
 ALTER TABLE `languages_translation`
   ADD CONSTRAINT `languages_translation_ibfk_1` FOREIGN KEY (`sourceID`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `main_i18n_translation`
+--
+ALTER TABLE `main_i18n_translation`
+  ADD CONSTRAINT `FKI18nTranslationToI18n` FOREIGN KEY (`sourceId`) REFERENCES `main_i18n` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `messages`

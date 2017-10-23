@@ -14,6 +14,14 @@ $config = [
         ],
     ],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'app\components\I18n',
+                    'sourceLanguage' => 'ru',
+                ],
+            ],
+        ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [

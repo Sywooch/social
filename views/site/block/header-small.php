@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Url;
 ?>
-<header>
+<header class="logged_header">
     <div class="full_width_container clearfix">
         <?php if (empty($this->params['user'])):?>
         <div class="login_head">
@@ -9,10 +9,12 @@ use yii\helpers\Url;
             <a href="<?= Url::to('/site/enter')?>" class="login_head_link"><?= \Yii::t('app', 'Регистрация')?></a>
         </div>
         <?php else:?>
-            Привет, <a href="<?= Url::to('/profile')?>">
-                <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
-            </a>
-            <a href="<?= Url::to('/site/logout')?>"><?= \Yii::t('app', 'Выйти')?></a>
+            <div class="login_head">
+                <a href="<?= Url::to('/profile')?>" class="login_profile">
+                    <?= !empty($this->params['user']->fullName) ? $this->params['user']->fullName : $this->params['user']->email?>
+                </a>
+                <a href="<?= Url::to('/site/logout')?>" class="log_out_btn"></a>
+            </div>
         <?php endif;?>
         <div class="languages_head">
             <ul class="language-select">

@@ -10,7 +10,7 @@
             <a href="<?= Url::to('/profile/messages')?>" class="aside_nav_2"><?= \Yii::t('app', 'Мои сообщения');?></a>
         </li>
         <li class="<?= (\Yii::$app->controller->action->id == 'ads') ? 'aside_nav_active' :''?>">
-            <a href="<?= Url::to('/profile/ads')?>" class="aside_nav_3"><?= \Yii::t('app', 'Мои объявления');?></a>
+            <a href="<?= Url::to('/profile/ads-list')?>" class="aside_nav_3"><?= \Yii::t('app', 'Мои объявления');?></a>
         </li>
         <li class="<?= (\Yii::$app->controller->action->id == 'friends') ? 'aside_nav_active' :''?>">
             <a href="<?= Url::to('/profile/friends')?>" class="aside_nav_4"><?= \Yii::t('app', 'Мои друзья');?></a>

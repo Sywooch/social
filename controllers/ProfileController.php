@@ -276,10 +276,27 @@ class ProfileController extends AbstractController
      * Кабинет, Мои объявления
      *
      * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
      */
     public function actionAds($id)
     {
-        return $this->render(Yii::$app->controller->action->id, []);
+        $item = Ads::findOne($id);
+
+        if (empty($item))
+            throw new \yii\web\NotFoundHttpException();
+
+        return $this->render(\Yii::$app->controller->action->id, compact('item'));
+    }
+
+    /**
+     * Кабинет, Мои объявления
+     *
+     * @return string
+     */
+    public function actionAdsList()
+    {
+        return $this->render(\Yii::$app->controller->action->id, []);
     }
 
     /**
@@ -290,7 +307,7 @@ class ProfileController extends AbstractController
     public function actionCreateAds()
     {
         $createModel = new Ads();
-
+        $createModel->customerID = $this->user->id;
         if ($createModel->load(\Yii::$app->request->post()) && $createModel->validate()) {
             $createModel->save();
 
@@ -320,7 +337,7 @@ class ProfileController extends AbstractController
             }
             $createModel->save();
 
-            \Yii::$app->response->redirect('/profile/ads/' . $createModel->id);
+            \Yii::$app->response->redirect('/profile/ads/' . $createModel->id . '?new=1');
         }
 
         $interestCategories = InterestCategory::find()
