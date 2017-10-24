@@ -11,18 +11,24 @@ use Yii;
  * @property string $customerID
  * @property string $title
  * @property string $data
- * @property string $city
+ * @property string $cityID
  * @property string $sex
  * @property string $date
  * @property string $content
  * @property string $timeCreate
  * @property string $interestsArray
+ * @property string $sortDate
+ * @property string $views
  * @property string $active
  *
  * @property AdsInterests[] $adsInterests
  */
 class Ads extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = 1;
+
+    const STATUS_NOT_ACTIVE = 0;
+
     public $interestsArray;
 
     /**
@@ -40,9 +46,9 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['customerID', 'title', 'data', 'sex', 'content', 'interestsArray'], 'required'],
-            [['city'], 'integer'],
+            [['cityID'], 'integer'],
             [['sex', 'content'], 'string'],
-            [['date', 'timeCreate'], 'safe'],
+            [['date', 'timeCreate', 'sortDate', 'views'], 'safe'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -58,11 +64,13 @@ class Ads extends \yii\db\ActiveRecord
             'title' => Yii::t('app', 'Заголовок'),
             'data' => Yii::t('app', 'Мои данные'),
             'interestsArray' => Yii::t('app', 'Интересы'),
-            'city' => Yii::t('app', 'Расположение'),
+            'cityID' => Yii::t('app', 'Расположение'),
             'sex' => Yii::t('app', 'С кем'),
             'date' => Yii::t('app', 'Когда'),
             'content' => Yii::t('app', 'Текст объявления'),
             'timeCreate' => Yii::t('app', 'Создан'),
+            'sortDate' => Yii::t('app', 'Сортировка'),
+            'views' => Yii::t('app', 'Просмотры'),
             'active' => Yii::t('app', 'Активен'),
         ];
     }
@@ -104,5 +112,33 @@ class Ads extends \yii\db\ActiveRecord
             'F' => 'Женщина',
             'C' => 'Компания',
         ];
+    }
+
+    /**
+     * Меняет статус обьявления.
+     *
+     * @param $id
+     * @param $status
+     */
+    public static function changeStatus($id, $status)
+    {
+        $model = self::findOne($id);
+
+        $model->active = $status;
+        $model->save(false);
+    }
+
+    /**
+     * Возвращает место записи в общем списке.
+     *
+     * @return int|string
+     */
+    public function getPosition()
+    {
+        // считаем количество строк по убыванию до даты нашей записи
+        return self::find()
+            ->where(['>=', 'sortDate', $this->sortDate])
+            ->orderBy('sortDate DESC')
+            ->count();
     }
 }

@@ -13,6 +13,8 @@ $js = "
 $this->registerJs($js);
 
 $postAds = \Yii::$app->request->post('Ads');
+
+$interestsIDS = \yii\helpers\ArrayHelper::map($model->interests, 'id', 'categoryID');
 ?>
 <?= $this->render('//site/block/search', []); ?>
     <section class="main_container light_bg">
@@ -42,7 +44,7 @@ $postAds = \Yii::$app->request->post('Ads');
                         ]); ?>
                         <div class="new_company_title">
                             <h4><?= \Yii::t('app', 'Заголовок');?></h4>
-                            <?= $form->field($createModel, 'title')->textInput(['class' => 'typical_input_bordered']) ?>
+                            <?= $form->field($model, 'title')->textInput(['class' => 'typical_input_bordered']) ?>
                         </div>
                         <div class="new_company_top">
 
@@ -52,9 +54,10 @@ $postAds = \Yii::$app->request->post('Ads');
                                     <?php if (!empty($interestCategories)):?>
                                     <ul class="filter_chbx_green">
                                         <?php foreach ($interestCategories as $key => $category):?>
+
                                         <li class="categories_list_pull categories_list_pull" data-key="<?= $key + 1?>">
                                             <label>
-                                                <input type="checkbox" class="styler">
+                                                <input type="checkbox" class="styler" <?php if ($model->interests[0]->category->id == $category['id']):?>checked<?php endif;?>>
                                                 <span><?= $category['translation']['name']?> (x)</span>
                                             </label>
                                         </li>
@@ -87,12 +90,13 @@ $postAds = \Yii::$app->request->post('Ads');
                                 </div>
 
                                 <?php foreach ($interestCategories as $key => $category):?>
-                                <div class="wrap_filter_chbx_orange categories_item_<?= $key + 1?>" style="display: none;">
+                                <div class="wrap_filter_chbx_orange categories_item_<?= $key + 1?>" <?php if ($model->interests[0]->category->id != $category['id']):?>style="display: none;"<?php endif;?>>
                                     <ul class="filter_chbx_orange">
                                         <?php foreach ($category['interests'] as $interest):?>
                                         <li>
                                             <label>
-                                                <input type="checkbox" class="styler" name="Ads[interestsArray][]" value="<?= $interest['id']?>">
+                                                <input type="checkbox" class="styler" name="Ads[interestsArray][]"
+                                                       value="<?= $interest['id']?>" <?= isset($interestsIDS[$interest['id']]) ? 'checked' : ''?>>
                                                 <span><?= $interest['translation']['name']?> (x)</span>
                                             </label>
                                         </li>
@@ -241,11 +245,11 @@ $postAds = \Yii::$app->request->post('Ads');
                                         </div>
                                     </div>
                                 </div>
-                                <?= Html::error($createModel, 'interestsArray', ['class' => 'error text-danger']); ?>
+                                <?= Html::error($model, 'interestsArray', ['class' => 'error text-danger']); ?>
                             </div>
                             <div class="new_company_line">
                                 <h4><?= \Yii::t('app', 'Мои данные')?></h4>
-                                <?= $form->field($createModel, 'data')
+                                <?= $form->field($model, 'data')
                                     ->textArea(
                                         [
                                             'class' => 'typical_input_bordered',
@@ -269,7 +273,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                             <input type="radio" class="styler" name="location" value="dropDown">
                                         </label>
                                         <div class="inner_search_select">
-                                            <?= $form->field($createModel, 'city')->dropDownList($countriesGroup, ['class' => false])->label(false);?>
+                                            <?= $form->field($model, 'city')->dropDownList($countriesGroup, ['class' => false])->label(false);?>
                                         </div>
                                     </li>
                                     <li>
@@ -279,7 +283,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                         </label>
                                     </li>
                                 </ul>
-                                <?= Html::error($createModel, 'city', ['class' => 'error text-danger']); ?>
+                                <?= Html::error($model, 'city', ['class' => 'error text-danger']); ?>
                                 <span class="new_c_line_ic">
                                       <img src="/img/loc_ic.png" alt="">
                                 </span>
@@ -287,17 +291,17 @@ $postAds = \Yii::$app->request->post('Ads');
                             <div class="new_company_line">
                                 <h4><?= \Yii::t('app', 'С кем')?></h4>
                                 <ul class="typical_chbx_orange">
-                                    <?php foreach ($createModel->sexTypes as $key => $type):?>
+                                    <?php foreach ($model->sexTypes as $key => $type):?>
                                     <li>
                                         <label>
                                             <input type="radio" class="styler" name="Ads[sex]" value="<?= $key?>"
-                                            <?= (isset($postAds['sex']) && $postAds['sex'] == $key) ? 'checked' : ''?> />
+                                            <?= (isset($model->sex) && $model->sex == $key) ? 'checked' : ''?> />
                                             <span><?= $type?></span>
                                         </label>
                                     </li>
                                     <?php endforeach;?>
                                 </ul>
-                                <?= Html::error($createModel, 'sex', ['class' => 'error text-danger']); ?>
+                                <?= Html::error($model, 'sex', ['class' => 'error text-danger']); ?>
                                 <span class="new_c_line_ic">
                                       <img src="/img/sex_ic.png" alt="">
                                 </span>
@@ -359,7 +363,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                         </label>
                                     </li>
                                 </ul>
-                                <?= Html::error($createModel, 'date', ['class' => 'error text-danger']); ?>
+                                <?= Html::error($model, 'date', ['class' => 'error text-danger']); ?>
                                 <span class="new_c_line_ic">
                                       <img src="/img/date_ic.png" alt="">
                                 </span>
@@ -367,7 +371,7 @@ $postAds = \Yii::$app->request->post('Ads');
                         </div>
                         <div class="new_company_btm">
                             <h4><?= \Yii::t('app', 'Текст объявления');?></h4>
-                            <?= $form->field($createModel, 'content')
+                            <?= $form->field($model, 'content')
                                 ->textArea(
                                         [
                                             'class' => 'typical_input_bordered',
@@ -376,7 +380,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                 ) ?>
                             <div class="hidden_filter_btns">
                                 <div class="green_btn">
-                                    <?= Html::submitButton(\Yii::t('app', 'Опубликовать'), ['class' => 'green_btn_txt']) ?>
+                                    <?= Html::submitButton(\Yii::t('app', 'Сохранить'), ['class' => 'green_btn_txt']) ?>
                                 </div>
                                 <input type="reset" class="bordered_btn" value="Отмена" />
                             </div>

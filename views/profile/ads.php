@@ -7,7 +7,7 @@ use yii\helpers\Url;
             <div class="wrap_content clearfix">
 <?= $this->render('//profile/block/menu', []); ?>
                 <div class="content">
-                    <?php if (\Yii::$app->request->get('new')):?>
+                    <?php if (\Yii::$app->session->hasFlash('adsSave')):?>
                     <div class="announcement_topline">
                         <h3><?= \Yii::t('app', 'Все готово');?>!</h3>
                         <p><?= \Yii::t('app', 'Расскажите о своем объявлении');?>:</p>
@@ -68,7 +68,13 @@ use yii\helpers\Url;
                                         <tbody>
                                         <tr>
                                             <td><?= \Yii::t('app', 'Город')?>:</td>
-                                            <td><?= $item->city->translation->name?></td>
+                                            <td>
+                                                <?php if(!empty($item->city)):?>
+                                                    <?= $item->city->translation->name?>
+                                                <?php else:?>
+                                                    <?= \Yii::t('app', 'Не важно')?>
+                                                <?php endif;?>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td><?= \Yii::t('app', 'Пол')?>:</td>
@@ -78,23 +84,22 @@ use yii\helpers\Url;
                                             <td><?= \Yii::t('app', 'Дата встречи')?>:</td>
                                             <td>
                                                 <?= \Yii::$app->formatter->asDate($item->date, 'd MMMM yyyy') ?>
-                                                <?= date('d F Y', strtotime($item->date))?>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="announcement_tags">
-                                    <span>Спорт</span>
-                                    <a href="#" class="grey_tag">Скалодром</a>
-                                    <a href="#" class="grey_tag">Экстрим</a>
-                                    <a href="#" class="grey_tag">Мнебывкосмос</a>
+                                    <span><?= $item->interests[0]->category->translation->name?></span>
+                                    <?php foreach ($item->interests as $interest):?>
+                                        <a href="javascript:void(0);" class="grey_tag"><?= $interest->translation->name?></a>
+                                    <?php endforeach;?>
                                 </div>
                             </div>
                             <div class="announcement_photo">
                                 <a href="<?= Url::to('/public/profile/' . $item->customer->id)?>" class="title_link"><?= $item->customer->fullName?></a>
                                 <span class="item_hint"><?= $item->customer->city->country->translation->name?>, <?= $item->customer->city->translation->name?></span>
-                                <a href="javascript:void(0)" class="announcement_img">
+                                <a href="javascript:void(0);" class="announcement_img">
                                     <img src="/uploads/<?= $item->customer->id?>/<?= $item->customer->mainImage->file?>" alt="">
                                 </a>
                                 <a href="<?= Url::to('/public/profile/' . $item->customer->id)?>" class="green_btn">

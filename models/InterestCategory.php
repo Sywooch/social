@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "interest_category".
@@ -59,5 +60,14 @@ class InterestCategory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(InterestCategoryTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['interest_category_translation.language' => \Yii::$app->language]);
+    }
+
+    public static function attachAdsCount(&$categories)
+    {
+        $categoryIds = ArrayHelper::map($categories, 'id', 'id');
+
+        foreach ($categories as $category) {
+            $categoryCount = 0;
+        }
     }
 }

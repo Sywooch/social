@@ -17,7 +17,7 @@
         IN+
     </div>
 </li>
-    <?php if (in_array('user', \Yii::$app->user->getIdentity()->group->availableActions)):?>
+<?php if (in_array('user', \Yii::$app->user->getIdentity()->group->availableActions)):?>
 <li <?php echo (Yii::$app->controller->id == 'user' || Yii::$app->controller->id == 'group') ? 'class="active"' : '';?>>
     <a href="javascript:void(0)"><i class="fa fa-male"></i> <span class="nav-label">Пользователи</span> <span
             class="fa arrow"></span></a>
@@ -31,6 +31,9 @@
     </ul>
 </li>
 <?php endif;?>
+<li <?php echo (Yii::$app->controller->id == 'translation') ? 'class="active"' : '';?>>
+    <a href="<?= Url::to('/admin/translation')?>"><span class="nav-label">Переводы</span></a>
+</li>
 <?php if (in_array('languages', \Yii::$app->user->getIdentity()->group->availableActions)):?>
         <li <?php echo (Yii::$app->controller->id == 'languages' || Yii::$app->controller->id == 'languages-translation') ? 'class="active"' : '';?>>
             <a href="javascript:void(0)"><span class="nav-label">Языки</span> <span

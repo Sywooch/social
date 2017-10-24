@@ -64,4 +64,21 @@ class Interest extends \yii\db\ActiveRecord
         return $this->hasOne(InterestTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['interest_translation.language' => \Yii::$app->language]);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAds()
+    {
+        return $this->hasMany(Ads::className(), ['id' => 'adsID'])
+            ->viaTable('ads_interests', ['interestID' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAdsInterests()
+    {
+        return $this->hasMany(AdsInterests::className(), ['interestID' => 'id']);
+    }
 }

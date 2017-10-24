@@ -18,6 +18,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 use \BW\Vkontakte as Vk;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
 class ProfileController extends AbstractController
@@ -284,9 +285,41 @@ class ProfileController extends AbstractController
         $item = Ads::findOne($id);
 
         if (empty($item))
-            throw new \yii\web\NotFoundHttpException();
+            throw new NotFoundHttpException();
 
         return $this->render(\Yii::$app->controller->action->id, compact('item'));
+    }
+
+    /**
+     * Деактивирует обьявление.
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionUnsetAds($id)
+    {
+        Ads::changeStatus($id, Ads::STATUS_NOT_ACTIVE);
+
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    /**
+     * Активирует обьявление.
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionPublicAds($id)
+    {
+        Ads::changeStatus($id, Ads::STATUS_ACTIVE);
+
+        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     /**
@@ -296,7 +329,113 @@ class ProfileController extends AbstractController
      */
     public function actionAdsList()
     {
-        return $this->render(\Yii::$app->controller->action->id, []);
+        $adsList = Ads::find()
+            ->with('interests.category.translation')
+            ->where(
+                [
+                    'customerID' => $this->user->id,
+                ]
+            )
+            ->orderBy('sortDate DESC, active DESC')
+            ->all();
+
+        return $this->render(\Yii::$app->controller->action->id, compact('adsList'));
+    }
+
+    /**
+     * Подгружает данные необходимые для работы с обьявлением.
+     *
+     * @return array
+     */
+    protected function loadAdsData()
+    {
+        $interestCategories = InterestCategory::find()
+            ->joinWith(['translation','interests','interests.translation'])
+            ->asArray()->all();
+
+        InterestCategory::attachAdsCount($interestCategories);
+
+        $countries = Country::find()
+            ->select('country.id, country_translation.name, city.id, city_translation.name')
+            ->joinWith(['translation','cities','cities.translation'])
+            ->asArray()->all();
+
+        $countriesGroup = [];
+        foreach ($countries as $country) {
+            foreach ($country['cities'] as $city) {
+                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
+            }
+        }
+
+        return [$interestCategories, $countriesGroup];
+    }
+
+    /**
+     * Сохраняет обьявление.
+     *
+     * @param $model Ads
+     */
+    protected function saveAds($model)
+    {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            if (empty($model->id)) {
+                $model->sortDate = date('Y-m-d H:i:s');
+                \Yii::$app->session->setFlash('adsSave', true);
+            } else {
+                AdsInterests::deleteAll(['adsID' => $model->id]);
+            }
+
+            $model->save();
+
+            foreach ($model->interestsArray as $interest) {
+                $interestModel = new AdsInterests();
+                $interestModel->interestID = $interest;
+                $interestModel->adsID = $model->id;
+                $interestModel->save();
+            }
+
+            switch (\Yii::$app->request->post('location')) {
+                case 'null':
+                    $model->cityID = null;
+                    break;
+                default:
+                    break;
+            }
+
+            $date =  \Yii::$app->request->post('date_year') . '-' . Yii::$app->request->post('date_month') . '-' . Yii::$app->request->post('date_day');
+            switch (\Yii::$app->request->post('date')) {
+                case '1':
+                    $model->date = $date;
+                    break;
+                default:
+                    $model->date = null;
+                    break;
+            }
+            $model->save();
+
+            \Yii::$app->response->redirect('/profile/ads/' . $model->id);
+        }
+    }
+
+    /**
+     * Редактируем обявление.
+     *
+     * @param $id
+     * @return string
+     *
+     * @throws NotFoundHttpException
+     */
+    public function actionEditAds($id)
+    {
+        $model = Ads::findOne($id);
+        if (empty($model))
+            throw new NotFoundHttpException();
+
+        $this->saveAds($model);
+
+        list($interestCategories, $countriesGroup) = $this->loadAdsData();
+
+        return $this->render(Yii::$app->controller->action->id, compact('model', 'interestCategories', 'countriesGroup'));
     }
 
     /**
@@ -308,57 +447,10 @@ class ProfileController extends AbstractController
     {
         $createModel = new Ads();
         $createModel->customerID = $this->user->id;
-        if ($createModel->load(\Yii::$app->request->post()) && $createModel->validate()) {
-            $createModel->save();
 
-            foreach ($createModel->interestsArray as $interest) {
-                $interestModel = new AdsInterests();
-                $interestModel->interestID = $interest;
-                $interestModel->adsID = $createModel->id;
-                $interestModel->save();
-            }
+        $this->saveAds($createModel);
 
-            switch (\Yii::$app->request->post('location')) {
-                case 'null':
-                    $createModel->city = null;
-                    break;
-                default:
-                    break;
-            }
-
-            $date =  \Yii::$app->request->post('date_year') . '-' . Yii::$app->request->post('date_month') . '-' . Yii::$app->request->post('date_day');
-            switch (\Yii::$app->request->post('date')) {
-                case '1':
-                    $createModel->date = $date;
-                    break;
-                default:
-                    $createModel->date = null;
-                    break;
-            }
-            $createModel->save();
-
-            \Yii::$app->response->redirect('/profile/ads/' . $createModel->id . '?new=1');
-        }
-
-        $interestCategories = InterestCategory::find()
-            ->joinWith('translation')
-            ->joinWith('interests')
-            ->joinWith('interests.translation')
-            ->asArray()->all();
-
-        $countries = Country::find()
-            ->select('country.id, country_translation.name')
-            ->joinWith('translation', false)
-            ->joinWith('cities', false)
-            ->joinWith('cities.translation')
-            ->asArray()->all();
-
-        $countriesGroup = [];
-        foreach ($countries as $country) {
-            foreach ($country['cities'] as $city) {
-                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
-            }
-        }
+        list($interestCategories, $countriesGroup) = $this->loadAdsData();
 
         return $this->render(Yii::$app->controller->action->id, compact('createModel', 'interestCategories', 'countriesGroup'));
     }

@@ -15,19 +15,26 @@ use yii\helpers\Url;
     <div class="companies_content">
         <div class="announcement_inner_block">
             <div class="announcement_inner_block_active">
-                <h2>Активные объявления</h2>
+                <h2><?= \Yii::t('app', 'Активные объявления')?></h2>
+                <?php foreach ($adsList as $ads):?>
+                    <?php if ($ads->active == \app\models\Ads::STATUS_NOT_ACTIVE) continue;?>
                 <!-- announcement_inner_block_item -->
                 <div class="announcement_inner_block_item clearfix">
                     <div class="announcement_item_txt">
                         <span class="announcement_ic"></span>
-                        <h3>Съездить за город на выходные</h3>
-                        <p>Драматизм, на первый взгляд, выстраивает реализм. Мимезис диссонирует сангвиник, что-то подобное можно встретить в работах Ауэрбаха и Тандлера. Реализм готично диссонирует эпитет. Возвышенное постоянно. Аполлоновское начало, в первом приближении, начинает неизменный канон биографии. Эзотерическое начинает классический реализм, таким образом, сходные законы контрастирующего развития характерны и для процессов в психике.</p>
-                        <a href="#" class="green_btn raise_link">
-                            <span class="green_btn_txt">Поднять на 1 место</span>
+                        <h3><?= $ads->title ?></h3>
+                        <p><?= $ads->content ?></p>
+                        <a href="javascript:void(0)" class="green_btn raise_link">
+                            <span class="green_btn_txt"><?= \Yii::t('app', 'Поднять на 1 место')?></span>
                         </a>
-                        <a href="#" class="hide_link">Снять с публикации</a>
-                        <p><b>Объявление на 276 месте в категории “Спорт”</b></p>
-                        <a href="#" class="edit_link">Редактировать</a>
+                        <a href="<?= Url::to('/profile/unset-ads/' . $ads->id)?>" class="hide_link"><?= \Yii::t('app', 'Снять с публикации')?></a>
+<!--                        <p><b>Объявление поднято в поиске.</b></p>-->
+<!--                        <p><b>Повторное поднятие возможно через 8 часов.</b></p>-->
+                        <p><b>
+                                <?= \Yii::t('app', 'Объявление на')?> <?= $ads->position?> <?= \Yii::t('app', 'месте в категории')?>
+                                “<?= $ads->interests[0]->category->translation->name?>”
+                            </b></p>
+                        <a href="<?= Url::to('/profile/edit-ads/' . $ads->id)?>" class="edit_link"><?= \Yii::t('app', 'Редактировать')?></a>
 
 
                         <!--       announcement_mod            -->
@@ -37,20 +44,20 @@ use yii\helpers\Url;
                                 <div class="box-modal_close arcticmodal-close"><i class="flaticon-close"></i></div>
                                 <div class="modal">
                                     <div class="ann_mod_top">
-                                        <h3>Поднятие объявления на 1 место</h3>
+                                        <h3><?= \Yii::t('app', 'Поднятие объявления на 1 место')?></h3>
                                         <div class="ann_mod_img">
-                                            <img src="img/ann_popup.jpg" alt="">
+                                            <img src="/img/ann_popup.jpg" alt="">
                                         </div>
-                                        <span class="green_txt">Стоимость: 500 руб.</span>
+                                        <span class="green_txt"><?= \Yii::t('app', 'Стоимость')?>: 500 руб.</span>
                                     </div>
                                     <div class="ann_mod_btm">
-                                        <h3>Способ оплаты:</h3>
+                                        <h3><?= \Yii::t('app', 'Способ оплаты')?>:</h3>
                                         <div class="ann_mod_pay">
-                                            <a href="#" class="pay_link"><img src="img/pay/1.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/2.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/3.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/4.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/5.jpg" alt=""></a>
+                                            <a href="#" class="pay_link"><img src="/img/pay/1.jpg" alt=""></a>
+                                            <a href="#" class="pay_link"><img src="/img/pay/2.jpg" alt=""></a>
+                                            <a href="#" class="pay_link"><img src="/img/pay/3.jpg" alt=""></a>
+                                            <a href="#" class="pay_link"><img src="/img/pay/4.jpg" alt=""></a>
+                                            <a href="#" class="pay_link"><img src="/img/pay/5.jpg" alt=""></a>
                                         </div>
                                     </div>
                                 </div>
@@ -59,110 +66,48 @@ use yii\helpers\Url;
 
                     </div>
                     <div class="announce_item_info">
-                        <h4>Создано </h4>
-                        <p>23.04.2015</p>
-                        <h4>Просмотров </h4>
-                        <p>7855</p>
+                        <h4><?= \Yii::t('app', 'Создано')?> </h4>
+                        <p><?= date('d.m.Y', strtotime($ads->timeCreate))?></p>
+                        <h4><?= \Yii::t('app', 'Просмотров')?> </h4>
+                        <p><?= $ads->views?></p>
                     </div>
 
                 </div>
-                <!-- announcement_inner_block_item -->
-                <div class="announcement_inner_block_item clearfix">
-                    <div class="announcement_item_txt">
-                        <span class="announcement_ic"></span>
-                        <h3>Съездить за город на выходные</h3>
-                        <p>Возвышенное постоянно. Аполлоновское начало, в первом приближении, начинает неизменный канон биографии. Эзотерическое начинает классический реализм, таким образом, сходные законы контрастирующего развития характерны и для процессов в психике.</p>
-                        <a href="#" class="green_btn raise_link">
-                            <span class="green_btn_txt">Поднять на 1 место</span>
-                        </a>
-                        <a href="#" class="hide_link">Снять с публикации</a>
-                        <p><b>Объявление поднято в поиске.</b></p>
-                        <p><b>Повторное поднятие возможно через 8 часов.</b></p>
-                        <a href="#" class="edit_link">Редактировать</a>
-                        <!--       announcement_mod            -->
-
-                        <div style="display: none;">
-                            <div class="box-modal announcement_mod">
-                                <div class="box-modal_close arcticmodal-close"><i class="flaticon-close"></i></div>
-                                <div class="modal">
-                                    <div class="ann_mod_top">
-                                        <h3>Поднятие объявления на 1 место</h3>
-                                        <div class="ann_mod_img">
-                                            <img src="img/ann_popup.jpg" alt="">
-                                        </div>
-                                        <span class="green_txt">Стоимость: 500 руб.</span>
-                                    </div>
-                                    <div class="ann_mod_btm">
-                                        <h3>Способ оплаты:</h3>
-                                        <div class="ann_mod_pay">
-                                            <a href="#" class="pay_link"><img src="img/pay/1.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/2.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/3.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/4.jpg" alt=""></a>
-                                            <a href="#" class="pay_link"><img src="img/pay/5.jpg" alt=""></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="announce_item_info">
-                        <h4>Создано </h4>
-                        <p>23.04.2015</p>
-                        <h4>Просмотров </h4>
-                        <p>7855</p>
-                    </div>
-
-
-                </div>
+                <?php endforeach;?>
             </div>
+
+
             <div class="announcement_inner_block_archive">
-                <h2>Объявления в архиве</h2>
+                <h2><?= \Yii::t('app', 'Объявления в архиве')?></h2>
+                <?php foreach ($adsList as $ads):?>
+                <?php if ($ads->active == \app\models\Ads::STATUS_ACTIVE) continue;?>
                 <!-- announcement_inner_block_item -->
                 <div class="announcement_inner_block_item clearfix">
                     <div class="announcement_item_txt">
                         <span class="announcement_ic"></span>
-                        <h3>Ищу напарника на скалодром</h3>
-                        <p>Выразительное иллюстрирует онтогенез. Прекрасное, на первый взгляд, иллюстрирует незначительный онтогенез, однако само по себе состояние игры всегда амбивалентно. Декаданс, в первом приближении, неизменяем.</p>
-                        <a href="#" class="green_btn">
-                            <span class="green_btn_txt">Опубликовать</span>
+                        <h3><?= $ads->title?></h3>
+                        <p><?= $ads->content?></p>
+                        <a href="<?= Url::to('/profile/public-ads/' . $ads->id)?>" class="green_btn">
+                            <span class="green_btn_txt"><?= \Yii::t('app', 'Опубликовать')?></span>
                         </a>
-                        <a href="#" class="green_btn">
-                            <span class="green_btn_txt">Опубликовать и поднять на 1 место</span>
-                        </a>
-                        <p><b>Объявление на 276 месте в категории “Спорт”</b></p>
-                        <a href="#" class="edit_link">Редактировать</a>
+<!--                        <a href="#" class="green_btn">-->
+<!--                            <span class="green_btn_txt">Опубликовать и поднять на 1 место</span>-->
+<!--                        </a>-->
+                        <p><b>
+                                <?= \Yii::t('app', 'Объявление на')?> <?= $ads->position?> <?= \Yii::t('app', 'месте в категории')?>
+                                “<?= $ads->interests[0]->category->translation->name?>”
+                            </b></p>
+                        <a href="<?= Url::to('/profile/edit-ads/' . $ads['id'])?>" class="edit_link"><?= \Yii::t('app', 'Редактировать')?></a>
                     </div>
                     <div class="announce_item_info">
-                        <h4>Добавлено </h4>
-                        <p>23.04.2015</p>
-                        <h4>Просмотров </h4>
-                        <p>7855</p>
+                        <h4><?= \Yii::t('app', 'Добавлено')?> </h4>
+                        <p><?= date('d.m.Y', strtotime($ads->timeCreate))?></p>
+                        <h4><?= \Yii::t('app', 'Просмотров')?> </h4>
+                        <p><?= $ads->views?></p>
                     </div>
                 </div>
-
-                <!-- announcement_inner_block_item -->
-                <div class="announcement_inner_block_item clearfix">
-                    <div class="announcement_item_txt">
-                        <span class="announcement_ic"></span>
-                        <h3>Ищу напарника на скалодром</h3>
-                        <p>Выразительное иллюстрирует онтогенез. Прекрасное, на первый взгляд, иллюстрирует незначительный онтогенез, однако само по себе состояние игры всегда амбивалентно. Декаданс, в первом приближении, неизменяем.</p>
-                        <a href="#" class="green_btn">
-                            <span class="green_btn_txt">Написать напарнику</span>
-                        </a>
-                        <p><b>Объявление на 276 месте в категории “Спорт”</b></p>
-                        <a href="#" class="edit_link">Редактировать</a>
-                    </div>
-                    <div class="announce_item_info">
-                        <h4>Добавлено </h4>
-                        <p>23.04.2015</p>
-                        <h4>Просмотров </h4>
-                        <p>7855</p>
-                    </div>
-                </div>
+                <?php endforeach;?>
             </div>
-
-
         </div>
     </div>
 </div>
