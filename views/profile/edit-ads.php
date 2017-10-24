@@ -58,7 +58,7 @@ $interestsIDS = \yii\helpers\ArrayHelper::map($model->interests, 'id', 'category
                                         <li class="categories_list_pull categories_list_pull" data-key="<?= $key + 1?>">
                                             <label>
                                                 <input type="checkbox" class="styler" <?php if ($model->interests[0]->category->id == $category['id']):?>checked<?php endif;?>>
-                                                <span><?= $category['translation']['name']?> (x)</span>
+                                                <span><?= $category['translation']['name']?> (<?= $category['adsCount']?>)</span>
                                             </label>
                                         </li>
                                         <?php endforeach;?>
@@ -97,7 +97,7 @@ $interestsIDS = \yii\helpers\ArrayHelper::map($model->interests, 'id', 'category
                                             <label>
                                                 <input type="checkbox" class="styler" name="Ads[interestsArray][]"
                                                        value="<?= $interest['id']?>" <?= isset($interestsIDS[$interest['id']]) ? 'checked' : ''?>>
-                                                <span><?= $interest['translation']['name']?> (x)</span>
+                                                <span><?= $interest['translation']['name']?> (<?= $interest['adsCount']?>)</span>
                                             </label>
                                         </li>
                                         <?php endforeach;?>

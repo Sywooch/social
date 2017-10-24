@@ -62,12 +62,29 @@ class InterestCategory extends \yii\db\ActiveRecord
             ->andOnCondition(['interest_category_translation.language' => \Yii::$app->language]);
     }
 
+    /**
+     * @param $categories
+     */
     public static function attachAdsCount(&$categories)
     {
         $categoryIds = ArrayHelper::map($categories, 'id', 'id');
 
-        foreach ($categories as $category) {
-            $categoryCount = 0;
+        $interestMap = AdsInterests::find()
+            ->select('interestID, COUNT(DISTINCT `adsID`) as adsCount')
+            ->groupBy('interestID')
+            ->asArray()
+            ->all();
+        $interestMap = ArrayHelper::map($interestMap, 'interestID', 'adsCount');
+
+        foreach ($categories as $c => $category) {
+            $categories[$c]['adsCount'] = 0;
+            foreach ($category['interests'] as $i => $interest) {
+                if (empty($interestMap[$interest['id']]))
+                    $interestMap[$interest['id']] = 0;
+
+                $categories[$c]['interests'][$i]['adsCount'] = $interestMap[$interest['id']];
+//                $categories[$c]['adsCount']+= $interestMap[$interest['id']];
+            }
         }
     }
 }
