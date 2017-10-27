@@ -58,7 +58,6 @@ class CustomerImage extends \yii\db\ActiveRecord
             'customerID' => Yii::t('app', 'Customer ID'),
             'file' => Yii::t('app', 'File'),
             'isMain' => Yii::t('app', 'isMain'),
-            'isMain' => Yii::t('app', 'likePoint'),
             'date' => Yii::t('app', 'Date'),
         ];
     }
@@ -69,5 +68,13 @@ class CustomerImage extends \yii\db\ActiveRecord
     public function getCustomer()
     {
         return $this->hasOne(Customer::className(), ['id' => 'customerID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(CustomerImageComment::className(), ['imageID' => 'id']);
     }
 }

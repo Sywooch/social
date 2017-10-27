@@ -61,6 +61,12 @@ class LoginForm extends Model
                 return false;
             }
 
+            if (!empty($user->unsetMessage)) {
+                $this->addError($attribute, 'Ваша учетная запись заблокирована: ' . $user->unsetMessage);
+
+                return false;
+            }
+
             if ($user->isActive == 0) {
                 $this->addError($attribute, 'Учетная запись не активирована.');
                 return false;

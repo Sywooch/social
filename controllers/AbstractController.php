@@ -6,6 +6,7 @@
  */
 namespace app\controllers;
 
+use app\components\Registry;
 use app\models\InfoPage;
 use app\models\RecoverForm;
 use app\models\RegisterForm;
@@ -60,6 +61,7 @@ class AbstractController extends Controller
     {
         if (\Yii::$app->session->get('user')) {
             $this->user = \Yii::$app->session->get('user');
+            Registry::set('user', $this->user);
         }
 
         if (\Yii::$app->session->get('registration')) {

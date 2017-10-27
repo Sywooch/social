@@ -55,7 +55,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                         <li class="categories_list_pull categories_list_pull" data-key="<?= $key + 1?>">
                                             <label>
                                                 <input type="checkbox" class="styler">
-                                                <span><?= $category['translation']['name']?> (x)</span>
+                                                <span><?= $category['translation']['name']?> (<?= $category['adsCount']?>)</span>
                                             </label>
                                         </li>
                                         <?php endforeach;?>
@@ -93,7 +93,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                         <li>
                                             <label>
                                                 <input type="checkbox" class="styler" name="Ads[interestsArray][]" value="<?= $interest['id']?>">
-                                                <span><?= $interest['translation']['name']?> (x)</span>
+                                                <span><?= $interest['translation']['name']?> (<?= $interest['adsCount']?>)</span>
                                             </label>
                                         </li>
                                         <?php endforeach;?>

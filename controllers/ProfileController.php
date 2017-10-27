@@ -4,12 +4,14 @@ namespace app\controllers;
 
 use app\models\Ads;
 use app\models\AdsInterests;
+use app\models\ChangePasswordForm;
 use app\models\CommonImages;
 use app\models\Country;
 use app\models\Customer;
 use app\models\CustomerComment;
 use app\models\CustomerCommentAnswer;
 use app\models\CustomerCommentImage;
+use app\models\CustomerImageComment;
 use app\models\InterestCategory;
 use app\models\Messages;
 use Yii;
@@ -473,5 +475,59 @@ class ProfileController extends AbstractController
     public function actionCompanies()
     {
         return $this->render(Yii::$app->controller->action->id, []);
+    }
+
+    /**
+     * Кабинет, Мои фотографии.
+     *
+     * @return string
+     */
+    public function actionPhotos()
+    {
+        $comment = new CustomerImageComment();
+
+        if ($comment->load(\Yii::$app->request->post()) && $comment->validate()) {
+            $comment->save();
+            // ::LoadDefaultAttributes;
+            $comment = new CustomerImageComment();
+        }
+
+        $user = Customer::findOne($this->user->id);
+
+        return $this->render(Yii::$app->controller->action->id, compact('comment', 'user'));
+    }
+
+    /**
+     * Кабинет, Мои настройки.
+     *
+     * @return string
+     */
+    public function actionSettings()
+    {
+        $changePasswordForm = new ChangePasswordForm();
+
+        if ($changePasswordForm->load(\Yii::$app->request->post()) && $changePasswordForm->validate()) {
+            $changePasswordForm->changePassword();
+            // ::LoadDefaultAttributes;
+            $changePasswordForm = new ChangePasswordForm();
+
+            \Yii::$app->session->setFlash('passwordSave', true);
+        }
+
+        if (\Yii::$app->request->post('unsetMessage')) {
+
+            switch (\Yii::$app->request->post('unsetMessage')) {
+                case 'text':
+                    Customer::unsetAccount(\Yii::$app->request->post('unsetMessageText'));
+                    break;
+                default:
+                    Customer::unsetAccount(\Yii::$app->request->post('unsetMessage'));
+                    break;
+            }
+
+            return $this->goHome();
+        }
+
+        return $this->render(Yii::$app->controller->action->id, compact('changePasswordForm'));
     }
 }

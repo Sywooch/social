@@ -76,14 +76,23 @@ class InterestCategory extends \yii\db\ActiveRecord
             ->all();
         $interestMap = ArrayHelper::map($interestMap, 'interestID', 'adsCount');
 
+        $interestCategoryMap = AdsInterests::find()
+            ->select('interestID, COUNT(DISTINCT `adsID`) as adsCount, interest_category.id as CID')
+            ->joinWith('interest', false)
+            ->joinWith('interest.category', false)
+            ->groupBy('CID')
+            ->asArray()
+            ->all();
+
+        $interestCategoryMap = ArrayHelper::map($interestCategoryMap, 'CID', 'adsCount');
+
         foreach ($categories as $c => $category) {
-            $categories[$c]['adsCount'] = 0;
+            $categories[$c]['adsCount'] = !empty($interestCategoryMap[$category['id']]) ? $interestCategoryMap[$category['id']] : 0;
             foreach ($category['interests'] as $i => $interest) {
                 if (empty($interestMap[$interest['id']]))
                     $interestMap[$interest['id']] = 0;
 
                 $categories[$c]['interests'][$i]['adsCount'] = $interestMap[$interest['id']];
-//                $categories[$c]['adsCount']+= $interestMap[$interest['id']];
             }
         }
     }

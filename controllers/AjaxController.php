@@ -38,24 +38,58 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Загрузка картинки.
+     * Загрузка картинки c регистрации.
      *
      * @return string
      */
     public function actionImageUpload()
     {
         $image = new CustomerImage();
-        $image->customerID = $this->registration['customerID'];
-        $image->date = date('Y-m-d H:i:s', time());
-        $image->isMain = 1;
 
-        if ($image->validate()) {
-            $image->save();
-            $path = Yii::getAlias('@webroot') . '/uploads/' . $this->registration['customerID'];
+        return $this->uploadImage($image, [
+            'customerID' => $this->registration['customerID'],
+            'date' => date('Y-m-d H:i:s', time()),
+            'isMain' => true,
+        ]);
+    }
+
+    /**
+     * Загрузка картинки c профиля.
+     *
+     * @return string
+     */
+    public function actionImageUploadProfile()
+    {
+        $image = new CustomerImage();
+
+        return $this->uploadImage($image, [
+            'customerID' => $this->user->id,
+            'date' => date('Y-m-d H:i:s', time()),
+            'isMain' => false,
+        ]);
+    }
+
+    /**
+     * Выполняет загрузку картинки.
+     *
+     * @param $model
+     * @param array $params
+     *
+     * @return array
+     */
+    private function uploadImage($model, $params = [])
+    {
+        foreach ($params as $key => $param) {
+            $model->{$key} = $param;
+        }
+
+        if ($model->validate()) {
+            $model->save();
+            $path = Yii::getAlias('@webroot') . '/uploads/' . $params['customerID'];
             if (!is_dir($path)) {
                 BaseFileHelper::createDirectory($path);
             }
-            $uploadPhotos = UploadedFile::getInstances($image, 'image');
+            $uploadPhotos = UploadedFile::getInstances($model, 'image');
 
             if (!empty($uploadPhotos)) {
                 foreach ($uploadPhotos as $file) {
@@ -63,12 +97,12 @@ class AjaxController extends AbstractController
                     $file->saveAs($path . '/' . $photo);
                 }
             }
-            $image->file = $photo;
-            $image->save();
+            $model->file = $photo;
+            $model->save();
 
             return [$photo];
         }
 
-        return $image->getErrors();
+        return $model->getErrors();
     }
 }

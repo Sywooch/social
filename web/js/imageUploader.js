@@ -5,6 +5,15 @@
  */
 var ImageUploader = {
     params: {
+        onLoadImage: function (evt) {
+            $('.step_photo_i_img').append('<span class="loaded_img"><img src="' + evt.target.result + '" alt=""></span>' +
+                '<button class="basket_btn" onclick="ImageUploader.remove(\'' + name + '\', \'' + file.name + '\', this)">' +
+                '<i class="flaticon-garbage"></i>' +
+                '</button>');
+        },
+        onErrorLoad: function (evt) {
+            $('.error-image').show();
+        },
         uploaderUrl: '/ajax/image-upload',
         inputName: 'image',
         formData: [],
@@ -73,15 +82,8 @@ var ImageUploader = {
             ImageUploader.params.uploadItemsCount++;
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = function (evt) {
-                $('.step_photo_i_img').append('<span class="loaded_img"><img src="' + evt.target.result + '" alt=""></span>' +
-                    '<button class="basket_btn" onclick="ImageUploader.remove(\'' + name + '\', \'' + file.name + '\', this)">' +
-                    '<i class="flaticon-garbage"></i>' +
-                    '</button>');
-            };
-            reader.onerror = function (evt) {
-                $('.error-image').show();
-            };
+            reader.onload = function (evt) {ImageUploader.params.onLoadImage(evt)};
+            reader.onerror = function (evt) {ImageUploader.params.onErrorLoad(evt)};
             // Добавляет значение файла.
             ImageUploader.params.formData.push(file);
         });

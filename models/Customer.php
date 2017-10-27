@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\Registry;
 use Yii;
 
 /**
@@ -20,6 +21,7 @@ use Yii;
  * @property string  $registrationTime Время регистрации.
  * @property string  $authID           Идентификатор в соц. сетях.
  * @property string  $authMethod       Метод авторизации соц. сети.
+ * @property string  $unsetMessage     unsetMessage.
  *
  */
 class Customer extends \yii\db\ActiveRecord
@@ -43,6 +45,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['email', 'password', 'registrationIp'], 'required'],
+            [['unsetMessage'], 'safe'],
             [['isActive'], 'integer'],
             [['registrationTime', 'authID', 'authMethod', 'birthday', 'about'], 'safe'],
             [['email', 'fullName'], 'string', 'max' => 255],
@@ -176,15 +179,17 @@ class Customer extends \yii\db\ActiveRecord
         return null;
     }
 
-    public function beforeSave($insert)
+    /**
+     * Блокирует пользователя.
+     */
+    public static function unsetAccount($message)
     {
-        if (parent::beforeSave($insert)) {
-            if (!empty($_POST['Customer']['hashedPassword'])) {
-                $this->password = $_POST['Customer']['hashedPassword'];
-            }
+        $customer = Customer::findOne(Registry::get('user')->id);
+        $customer->unsetMessage = $message;
+        $customer->isActive = false;
 
-            return true;
-        }
-        return false;
+        $customer->save(false);
+
+        \Yii::$app->session->remove('user');
     }
 }

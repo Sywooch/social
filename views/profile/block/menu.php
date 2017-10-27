@@ -18,8 +18,14 @@
         <li class="<?= (\Yii::$app->controller->action->id == 'companies') ? 'aside_nav_active' :''?>">
             <a href="<?= Url::to('/profile/companies')?>" class="aside_nav_5"><?= \Yii::t('app', 'Мои компании');?></a>
         </li>
-        <li><a href="#" class="aside_nav_6"><?= \Yii::t('app', 'Мои фотографии');?></a></li>
-        <li><a href="#" class="aside_nav_7"><?= \Yii::t('app', 'Мои видеозаписи');?></a></li>
-        <li><a href="#" class="aside_nav_8"><?= \Yii::t('app', 'Мои настройки');?></a></li>
+        <li class="<?= (\Yii::$app->controller->action->id == 'photos') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile/photos')?>" class="aside_nav_6"><?= \Yii::t('app', 'Мои фотографии');?></a>
+        </li>
+<!--        <li>-->
+<!--            <a href="#" class="aside_nav_7">--><?//= \Yii::t('app', 'Мои видеозаписи');?><!--</a>-->
+<!--        </li>-->
+        <li class="<?= (\Yii::$app->controller->action->id == 'settings') ? 'aside_nav_active' :''?>">
+            <a href="<?= Url::to('/profile/settings')?>" class="aside_nav_8"><?= \Yii::t('app', 'Мои настройки');?></a>
+        </li>
     </div>
 </aside>
