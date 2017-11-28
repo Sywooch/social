@@ -6,6 +6,7 @@
  */
 namespace app\controllers;
 
+use app\components\Registry;
 use app\models\Country;
 use app\models\Customer;
 use app\models\CustomerInterests;
@@ -18,7 +19,7 @@ use app\models\RegisterForm;
 use Yii;
 
 use \BW\Vkontakte as Vk;
-use yii\base\Model;
+use yii\base\ViewNotFoundException;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -245,20 +246,19 @@ class SiteController extends AbstractController
 
     public function actionStatic($url)
     {
-        $page = InfoPage::find()->where(['code' => $url])->one();
-
-        if (empty($page))
-            throw new \yii\web\NotFoundHttpException();
-
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => " {$page->title}",
-            'url' => false
-        ];
-
-        return $this->render(Yii::$app->controller->action->id, [
-            'page' => $page
-        ]);
+        Registry::set('page', $url);
+        try
+        {
+            return $this->render('pages/' . $url, []);
+        }
+        catch(ViewNotFoundException $e)
+        {
+            $page = InfoPage::find()
+                ->where(['code' => $url])
+                ->one();
+            $page = (isset($page->id)) ? $page : '<h1>PAGE NOT FOUND</h1>';
+            return $this->render('pages/info-page', compact('page'));
+        }
     }
 
     public function actionSubscribe()

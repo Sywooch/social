@@ -18,18 +18,14 @@ use yii\helpers\Url;
         <?php endif;?>
         <div class="languages_head">
             <ul class="language-select">
-                <li class="active" data-lang="ru">
-                    <img src="/img/flags/ru.svg"  class="lang_h_flag" alt="">
-                    Русский
-                </li>
-                <li data-lang="gb">
-                    <img src="/img/flags/gb.svg"  class="lang_h_flag" alt="">
-                    English
-                </li>
-                <li data-lang="de">
-                    <img src="/img/flags/de.svg"  class="lang_h_flag" alt="">
-                    Deutsch
-                </li>
+                <?php foreach (\app\components\Registry::get('languages') as $language):?>
+                    <li class="<?= ($language['code'] == \Yii::$app->language) ? 'active' : '' ?>" data-lang="<?= $language['code']?>">
+                        <img src="/img/flags/<?= $language['code']?>.svg"  class="lang_h_flag" alt="">
+                        <a href="<?php echo Url::to([Yii::$app->request->url, 'language' => $language['code']]);?>">
+                            <?= $language['name']?>
+                        </a>
+                    </li>
+                <?php endforeach;?>
             </ul>
         </div>
     </div>

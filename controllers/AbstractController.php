@@ -15,6 +15,7 @@ use yii\web\Controller;
 use app\models\LoginForm;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use app\models\Languages;
 
 $phpMailer = Yii::getAlias('@app/vendor/phpmailer/PHPMailer.php');
 require_once($phpMailer);
@@ -61,7 +62,7 @@ class AbstractController extends Controller
     {
         if (\Yii::$app->session->get('user')) {
             $this->user = \Yii::$app->session->get('user');
-            Registry::set('user', $this->user);
+            Registry::set('user', $this->user, true);
         }
 
         if (\Yii::$app->session->get('registration')) {
@@ -72,19 +73,22 @@ class AbstractController extends Controller
             Yii::$app->view->params['pages'][$page->code] = $page;
         }
 
-        if (!empty($this->user->id)) {
-            // Заходит авторизированый пользователь.
+        $languages = Languages::find()
+            ->select('languages.id, languages.code, languages_translation.name')
+            ->joinWith('translation', false)
+            ->asArray()
+            ->all();
 
-        } else {
-            // Заходит гость.
+        Registry::set('languages', $languages, true);
 
+        if (\Yii::$app->request->get('language')) {
+            \Yii::$app->session->set('language', \Yii::$app->request->get('language'));
+            return Yii::$app->getResponse()->redirect(strtok($_SERVER["REQUEST_URI"],'?'));
         }
 
-        Yii::$app->view->params['breadcrumbs'][] = [
-            'template' => "<li>{link}</li>\n",
-            'label' => 'Главная',
-            'url' => ['/']
-        ];
+        if (\Yii::$app->session->get('language')) {
+            \Yii::$app->language = \Yii::$app->session->get('language');
+        }
     }
 
     /**

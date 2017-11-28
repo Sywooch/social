@@ -83,4 +83,30 @@ $(document).ready(function(){
                 })));
         });
     });
+
+    $('.message-label').on('click', function () {
+        $(this).hide().next().show();
+    });
+
+    $('.submit-message').on('click', function () {
+        var message = $(this).prev().val(),
+            id = $(this).prev().data('id'),
+            parrent = $(this).parent();
+
+        $.post(
+            '/admin/translation/save-message',
+            {
+                id: id,
+                message: message,
+                _csrf : $('meta[name="csrf-token"]').attr("content")
+            },
+            function (response) {
+                if (response.message != null) {
+                    parrent.hide();
+                    $('.message-label#message-' + id).text(response.message).show();
+                }
+            },
+            'json'
+        );
+    });
 });

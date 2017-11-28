@@ -10,6 +10,14 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'I18n Translations');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    .message-editor-field {
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+
+</script>
 <div class="i18n-translation-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -25,7 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'sourceId',
             'language',
-            'message:ntext',
+            [
+                'attribute' => 'message',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return '
+                    <span class="message message-label" id="message-'.$model->id.'">' .$model->message. '</span>
+                    <div class="message-editor-field">
+                        <input class="message" data-id="' . $model->id . '" value="' .$model->message. '" style="width: 100%;"/>
+                        <button class="submit-message">Сохранить</button>
+                    </div>
+                    ';
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

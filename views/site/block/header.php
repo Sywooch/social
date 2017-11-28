@@ -42,13 +42,13 @@ use yii\helpers\Html;
             <?= Html::submitButton(\Yii::t('app', 'Войти'), ['class' => 'white_btn']) ?>
             <?php ActiveForm::end(); ?>
             <div class="pass_recovery_head">
-                <button class="head_form_link">Забыли пароль?</button>
+                <button class="head_form_link"><?= \Yii::t('app', 'Забыли пароль')?>?</button>
                 <div class="popup_password popup_password_main">
-                    <h4>Напоминание пароля</h4>
+                    <h4><?= \Yii::t('app', 'Напоминание пароля')?></h4>
                     <form>
                         <div class="pass_line">
                             <input type="email" class="typical_input_bordered" placeholder="Ваш E-mail" />
-                            <span class="blue_btn close_password popup_pass_mist_pull">Отправить</span>
+                            <span class="blue_btn close_password popup_pass_mist_pull"><?= \Yii::t('app', 'Отправить')?></span>
                         </div>
                         <div class="capcha_line">
                                      <span class="capcha_img">
@@ -60,11 +60,11 @@ use yii\helpers\Html;
                     <button class="close_btn close_password"><i class="flaticon-close"></i></button>
                 </div>
                 <div class="popup_password popup_password_mistake">
-                    <h4>Напоминание пароля</h4>
+                    <h4><?= \Yii::t('app', 'Напоминание пароля')?></h4>
                     <form>
                         <div class="pass_line">
                             <input type="email" class="typical_input_bordered" value="vasja@yand" />
-                            <span class="blue_btn close_password popup_pass_res_pull">Отправить</span>
+                            <span class="blue_btn close_password popup_pass_res_pull"><?= \Yii::t('app', 'Отправить')?></span>
                         </div>
                         <div class="capcha_line">
                                      <span class="capcha_img">
@@ -72,13 +72,13 @@ use yii\helpers\Html;
                                      </span>
                             <input type="text" class="typical_input_bordered" />
                         </div>
-                        <p class="form_mistake_txt">Пользователь с таким E-mail не найден</p>
+                        <p class="form_mistake_txt"><?= \Yii::t('app', 'Пользователь с таким E-mail не найден')?></p>
                     </form>
                     <button class="close_btn close_password"><i class="flaticon-close"></i></button>
                 </div>
                 <div class="popup_password popup_password_result">
-                    <h4>Пароль успешно отправлен на  vasja@yandex.ru</h4>
-                    <span class="blue_btn close_password">ОК</span>
+                    <h4><?= \Yii::t('app', 'Пароль успешно отправлен на')?>  vasja@yandex.ru</h4>
+                    <span class="blue_btn close_password"><?= \Yii::t('app', 'ОК')?></span>
                     <button class="close_btn close_password"><i class="flaticon-close"></i></button>
                 </div>
             </div>
@@ -93,18 +93,14 @@ use yii\helpers\Html;
         <?php endif;?>
         <div class="languages_head">
             <ul class="language-select">
-                <li class="active" data-lang="ru">
-                    <img src="/img/flags/ru.svg"  class="lang_h_flag" alt="">
-                    Русский
+                <?php foreach (\app\components\Registry::get('languages') as $language):?>
+                <li class="<?= ($language['code'] == \Yii::$app->language) ? 'active' : '' ?>" data-lang="<?= $language['code']?>">
+                    <img src="/img/flags/<?= $language['code']?>.svg"  class="lang_h_flag" alt="">
+                    <a href="<?php echo Url::to([Yii::$app->request->url, 'language' => $language['code']]);?>">
+                        <?= $language['name']?>
+                    </a>
                 </li>
-                <li data-lang="gb">
-                    <img src="/img/flags/gb.svg"  class="lang_h_flag" alt="">
-                    English
-                </li>
-                <li data-lang="de">
-                    <img src="/img/flags/de.svg"  class="lang_h_flag" alt="">
-                    Deutsch
-                </li>
+                <?php endforeach;?>
             </ul>
         </div>
     </div>

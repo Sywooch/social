@@ -18,7 +18,7 @@ class InfoPageSearch extends InfoPage
     public function rules()
     {
         return [
-            [['id', 'createUserId', 'updateUserId'], 'integer'],
+            [['id'], 'integer'],
             [['code', 'title', 'content', 'createTime', 'updateTime'], 'safe'],
         ];
     }
@@ -62,8 +62,6 @@ class InfoPageSearch extends InfoPage
                 'id' => $this->id,
                 'createTime' => $this->createTime,
                 'updateTime' => $this->updateTime,
-                'createUserId' => $this->createUserId,
-                'updateUserId' => $this->updateUserId,
             ]);
         $query->orderBy('id desc');
         $query->andFilterWhere(['like', 'code', $this->code])

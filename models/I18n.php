@@ -1,9 +1,6 @@
 <?php
-
 namespace app\models;
-
 use Yii;
-
 /**
  * This is the model class for table "main_i18n".
  *
@@ -21,7 +18,6 @@ class I18n extends \yii\db\ActiveRecord
     {
         return 'main_i18n';
     }
-
     /**
      * @inheritdoc
      */
@@ -32,7 +28,6 @@ class I18n extends \yii\db\ActiveRecord
             [['category'], 'string', 'max' => 32],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -43,7 +38,6 @@ class I18n extends \yii\db\ActiveRecord
             'category' => Yii::t('app', 'Category'),
         ];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -51,7 +45,6 @@ class I18n extends \yii\db\ActiveRecord
     {
         return $this->hasMany(I18nTranslation::className(), ['sourceId' => 'id']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -60,7 +53,6 @@ class I18n extends \yii\db\ActiveRecord
         return $this->hasOne(I18nTranslation::className(), ['sourceId' => 'id'])
             ->andOnCondition(['main_i18n_translation.language' => \Yii::$app->language]);
     }
-
     /**
      * Парсит файл возвращает массив сообщений, ключи категориии.
      *
@@ -78,7 +70,6 @@ class I18n extends \yii\db\ActiveRecord
         if (is_array($translator) === false) {
             $translator = array($translator);
         }
-
         foreach ($translator as $currentTranslator) {
             $pattern = '/\b' .
                 $currentTranslator .
@@ -89,7 +80,6 @@ class I18n extends \yii\db\ActiveRecord
                 $matches,
                 PREG_SET_ORDER
             );
-
             for ($i = 0; $i < $countMatches; ++$i) {
                 if (($pos = strpos($matches[$i][1], '.')) !== false) {
                     $category = substr($matches[$i][1], $pos + 1, -1);
@@ -101,12 +91,10 @@ class I18n extends \yii\db\ActiveRecord
                 if ($messageUnquoted !== false) {
                     $messages[$category][] = $messageUnquoted;
                 }
-
             }
         }
         return $messages;
     }
-
     /**
      * Парсит строку с помощью токенов, для обработки конкатенации.
      *
@@ -118,7 +106,6 @@ class I18n extends \yii\db\ActiveRecord
     {
         $tokenString = '';
         $tokens = token_get_all('<?php ' . $input . '?>');
-
         foreach ($tokens as $token) {
             switch ($token[0]) {
                 case T_LNUMBER:
@@ -129,10 +116,8 @@ class I18n extends \yii\db\ActiveRecord
                     break;
             }
         }
-
         return $tokenString;
     }
-
     /**
      * Функция получает массив переводов и сохраняет его в базу.
      *
@@ -142,21 +127,26 @@ class I18n extends \yii\db\ActiveRecord
      */
     public function saveToDb($messages)
     {
+        $languages = Languages::find()
+            ->select('languages.id, languages.code, languages_translation.name')
+            ->joinWith('translation', false)
+            ->asArray()
+            ->all();
         foreach ($messages as $category => $strings) {
             foreach ($strings as $string) {
                 $i18 = new I18n();
                 $i18->category = $category;
                 $i18->save();
-
-                $i18Translation = new I18nTranslation();
-                $i18Translation->sourceId = $i18->id;
-                $i18Translation->language = \Yii::$app->language;
-                $i18Translation->message = $string;
-                $i18Translation->save();
+                foreach ($languages as $language) {
+                    $i18Translation = new I18nTranslation();
+                    $i18Translation->sourceId = $i18->id;
+                    $i18Translation->language = $language['code'];
+                    $i18Translation->message = $string;
+                    $i18Translation->save();
+                }
             }
         }
     }
-
     /**
      * Удаляет указанные сообщения из БД.
      *
@@ -173,21 +163,18 @@ class I18n extends \yii\db\ActiveRecord
                 ON main_i18n.id = main_i18n_translation.sourceId
             WHERE main_i18n.category = :category AND main_i18n_translation.message = :message
         ';
-
         foreach ($messages as $category => $strings) {
             foreach ($strings as $string) {
                 $params = [
                     ':category' => $category,
                     ':message' => $string
                 ];
-
                 $command = \Yii::$app->db->createCommand($sql)->execute();
                 $command->bindValues($params);
                 $command->execute();
             }
         }
     }
-
     /**
      * Находит дубли в таблице переводов и удаляет их, оставив по одному оригинальному экземпляру переводов.
      *
@@ -206,7 +193,6 @@ class I18n extends \yii\db\ActiveRecord
                 GROUP BY language, message, category
                 HAVING count > 1
             );
-
             DELETE main_i18n_translation.*, main_i18n.*
             FROM main_i18n_translation
             INNER JOIN (main_i18n, tmp)
@@ -216,7 +202,6 @@ class I18n extends \yii\db\ActiveRecord
                 AND tmp.category = main_i18n.category
                 AND tmp.id <> main_i18n_translation.id
         ';
-
         $numberChanges = \Yii::$app->db->createCommand($sql)->execute();
         if ($numberChanges > 0) {
             echo "\nОбнаружено и удалено " . $numberChanges . " дублей переводов.\n\n";
