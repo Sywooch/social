@@ -4,8 +4,14 @@ namespace app\controllers;
 
 use app\models\Ads;
 use app\models\AdsInterests;
+use app\models\Category;
 use app\models\ChangePasswordForm;
 use app\models\CommonImages;
+use app\models\Company;
+use app\models\CompanyComment;
+use app\models\CompanyCommentAnswer;
+use app\models\CompanyCommentImage;
+use app\models\CompanyInterests;
 use app\models\Country;
 use app\models\Customer;
 use app\models\CustomerComment;
@@ -293,6 +299,80 @@ class ProfileController extends AbstractController
     }
 
     /**
+     * Кабинет, страничка кампании.
+     *
+     * @return string
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionCompany($id)
+    {
+        $item = Company::findOne($id);
+
+        if (empty($item))
+            throw new NotFoundHttpException();
+
+        $comment = new CompanyComment();
+        $answer = new CompanyCommentAnswer();
+
+        if ($answer->load(\Yii::$app->request->post()) && $answer->validate()) {
+            $answer->save();
+        }
+
+        if ($comment->load(\Yii::$app->request->post()) && $comment->validate()) {
+            $comment->save();
+
+            $appPath = '/uploads/custom/' . md5(date('Y-m-d', time()));
+            $path = Yii::getAlias('@webroot') . $appPath;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+
+            $uploadPhotos = UploadedFile::getInstances($comment, 'image');
+
+            if (!empty($uploadPhotos)) {
+                foreach ($uploadPhotos as $file) {
+                    $photo = md5($file->baseName) . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $photo);
+                }
+
+                $image = new CommonImages();
+                $image->file = $appPath . '/' . $photo;
+                $image->save();
+
+                $commentImage = new CompanyCommentImage();
+                $commentImage->attributes = [
+                    'commentID' => $comment->id,
+                    'imageID' => $image->id,
+                ];
+                $commentImage->save();
+            }
+        }
+
+        $query = CompanyComment::find()
+            ->where(['customerID' => $this->user->id])
+            ->with('images')
+            ->with('answers')
+            ->with('answers.customer')
+            ->with('answers.customer.mainImage');
+
+        $countQuery = clone $query;
+        $pages = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => Yii::$app->params['commentsOnPage'],
+                'defaultPageSize' => Yii::$app->params['commentsOnPage']
+            ]
+        );
+
+        $comments = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->all();
+
+        return $this->render(\Yii::$app->controller->action->id, compact('item', 'comments', 'pages'));
+    }
+
+    /**
      * Деактивирует обьявление.
      *
      * @param $id
@@ -373,6 +453,34 @@ class ProfileController extends AbstractController
     }
 
     /**
+     * Подгружает данные необходимые для работы с компаниями.
+     *
+     * @return array
+     */
+    protected function loadCompanyData()
+    {
+        $interestCategories = InterestCategory::find()
+            ->joinWith(['translation','interests','interests.translation'])
+            ->asArray()->all();
+
+        InterestCategory::attachCompanyCount($interestCategories);
+
+        $countries = Country::find()
+            ->select('country.id, country_translation.name, city.id, city_translation.name')
+            ->joinWith(['translation','cities','cities.translation'])
+            ->asArray()->all();
+
+        $countriesGroup = [];
+        foreach ($countries as $country) {
+            foreach ($country['cities'] as $city) {
+                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
+            }
+        }
+
+        return [$interestCategories, $countriesGroup];
+    }
+
+    /**
      * Сохраняет обьявление.
      *
      * @param $model Ads
@@ -416,6 +524,59 @@ class ProfileController extends AbstractController
             $model->save();
 
             \Yii::$app->response->redirect('/profile/ads/' . $model->id);
+        }
+    }
+
+    /**
+     * Сохраняет компанию.
+     *
+     * @param $model Ads
+     */
+    protected function saveCompany($model)
+    {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            if (empty($model->id)) {
+                $model->sortDate = date('Y-m-d H:i:s');
+                \Yii::$app->session->setFlash('companySave', true);
+            } else {
+                AdsInterests::deleteAll(['companyID' => $model->id]);
+            }
+
+            $model->save();
+
+            $appPath = '/uploads/company/' . $model->id;
+            $path = Yii::getAlias('@webroot') . $appPath;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+
+            $uploadPhotos = UploadedFile::getInstances($model, 'file');
+
+            if (!empty($uploadPhotos)) {
+                foreach ($uploadPhotos as $file) {
+                    $photo = md5($file->baseName) . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $photo);
+
+                    $model->image = $appPath . '/' . $photo;
+                    $model->save();
+                }
+            }
+
+            foreach ($model->interestsArray as $interest) {
+                $interestModel = new CompanyInterests();
+                $interestModel->interestID = $interest;
+                $interestModel->companyID = $model->id;
+                $interestModel->save();
+            }
+
+            $model->save();
+
+            \Yii::$app->response->redirect('/profile/company/' . $model->id);
+        } else {
+            if (\Yii::$app->request->isPost) {
+                var_dump($model->getErrors());
+                exit;
+            }
         }
     }
 
@@ -475,6 +636,22 @@ class ProfileController extends AbstractController
     public function actionCompanies()
     {
         return $this->render(Yii::$app->controller->action->id, []);
+    }
+
+    public function actionCreateCompany()
+    {
+        $createModel = new Company();
+        $createModel->customerID = $this->user->id;
+
+        list($interestCategories, $countriesGroup) = $this->loadCompanyData();
+
+//        if ($createModel->load(\Yii::$app->request->post())) {
+//            var_dump(\Yii::$app->request->post()); exit;
+//        }
+
+        $this->saveCompany($createModel);
+
+        return $this->render(Yii::$app->controller->action->id, compact('createModel', 'interestCategories', 'countriesGroup'));
     }
 
     /**

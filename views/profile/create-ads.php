@@ -257,7 +257,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                 <ul class="typical_chbx_orange">
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="Ads[city]" value="<?= $this->params['user']->city->id?>">
+                                            <input type="radio" class="styler" name="location" value="<?= $this->params['user']->city->id?>" checked>
                                             <span>
                                                 <?= \Yii::t('app', 'В моем городе')?>
                                                 (<?= $this->params['user']->city->translation->name?>)
@@ -274,7 +274,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="location" value="null" checked>
+                                            <input type="radio" class="styler" name="location" value="null">
                                             <span><?= \Yii::t('app', 'Не важно')?></span>
                                         </label>
                                     </li>
