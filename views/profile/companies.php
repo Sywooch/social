@@ -24,8 +24,8 @@ use yii\helpers\Url;
                                 <?php foreach ($companies as $company):?>
                                     <!-- companies_recomandations_item -->
                                     <div class="companies_recomandations_item">
-                                        <a href="<?= Url::to('/company/' . $company->id)?>" class="title_link"><?= $company->name?></a>
-                                        <a href="<?= Url::to('/company/' . $company->id)?>" class="companies_recomandations_img">
+                                        <a href="<?= Url::to('/profile/company/' . $company->id)?>" class="title_link"><?= $company->name?></a>
+                                        <a href="<?= Url::to('/profile/company/' . $company->id)?>" class="companies_recomandations_img">
                                             <img src="<?= $company->image?>" alt="">
                                             <span class="view_ic"></span>
                                             <span class="participant_tag participant_tag_responsible">
