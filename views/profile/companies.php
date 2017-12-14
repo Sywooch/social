@@ -9,396 +9,95 @@ use yii\helpers\Url;
 
                 <div class="content">
                     <div class="title_block clearfix">
-                        <h1>Компании</h1>
-                        <a href="<?= Url::to('/profile/create-company')?>" class="add_button"><?= \Yii::t('app', 'Создать компанию')?></a>
+                        <h1><?= \Yii::t('app', 'Мои компании')?></h1>
+                        <a href="#" class="add_button"><?= \Yii::t('app', 'Создать компанию')?></a>
                     </div>
-                    <div class="companies_content">
-                        <div class="filters_block">
-                            <div class="filter_link">
-                                <ul>
-                                    <li><a href="#">Категория</a></li>
-                                    <li><a href="#">Тракторы</a></li>
-                                    <li><a href="#">Стаканы</a></li>
-                                    <li><a href="#">Принтеры</a></li>
-                                    <li><a href="#">Холодильники</a></li>
-                                    <li><a href="#">Скидки</a></li>
-                                    <li><a href="#">Лыжи</a></li>
-                                    <li><a href="#">Шоколад</a></li>
-                                    <li><a href="#">Пионеры</a></li>
-                                    <li><a href="#">Холодильники</a></li>
-                                    <li><a href="#">Скидки</a></li>
-                                    <li><a href="#">Лыжи</a></li>
-                                    <li><a href="#">Шоколад</a></li>
-                                    <li><a href="#">Пионеры</a></li>
-                                    <li><a href="#">Тракторы</a></li>
-                                    <li><a href="#">Стаканы</a></li>
-                                    <li><a href="#">Принтеры</a></li>
-                                </ul>
-                            </div>
-                            <div class="hidden_filter_block">
-                                <button class="hidden_filter_pull">Расширенный фильтр</button>
-                                <div class="hidden_filter">
-                                    <div class="hidden_filter_item">
-                                        <h4>Выберите подходящую тему</h4>
-                                        <div class="wrap_filter_chbx_green">
-                                            <ul class="filter_chbx_green">
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Спорт (12)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Поездка на отдых (9)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Путешествие(27)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Работа, бизнес(10)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Знакомства(640)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Прогулка(11)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Игры(27)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Обучение(3)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Попить кофе(17)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <button class="filter_chbx_green_pull">Показать все</button>
-                                                </li>
-                                            </ul>
-                                            <ul class="filter_chbx_green filter_chbx_green_hidden">
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Спорт (12)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Поездка на отдых (9)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Путешествие(27)</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
+                    <div class="profile_settings_tabs company_tabs">
+                        <div class="tabs">
+                            <span class="tab current"><?= \Yii::t('app', 'Общие')?></span>
+                            <span class="tab"><?= \Yii::t('app', 'Приватность')?></span>
+                        </div>
+                        <div class="profile_settings_tabs_content">
+                            <?php if (!empty($companies)):?>
+                            <div class="box visible">
+                                <div class="company_tabs_block">
+                                <?php foreach ($companies as $company):?>
+                                    <!-- companies_recomandations_item -->
+                                    <div class="companies_recomandations_item">
+                                        <a href="<?= Url::to('/company/' . $company->id)?>" class="title_link"><?= $company->name?></a>
+                                        <a href="<?= Url::to('/company/' . $company->id)?>" class="companies_recomandations_img">
+                                            <img src="<?= $company->image?>" alt="">
+                                            <span class="view_ic"></span>
+                                            <span class="participant_tag participant_tag_responsible">
+                                                <?= \Yii::t('app', 'создатель')?>
+                                            </span>
+                                        </a>
+                                        <div class="companies_recomandations_item_tags">
+                                            <?php foreach ($company->interests as $interest):?>
+                                                <a href="javascript:void(0)" class="grey_tag"><?= $interest->translation->name?></a>
+                                            <?php endforeach;?>
                                         </div>
-                                        <div class="wrap_filter_chbx_orange">
-                                            <ul class="filter_chbx_orange">
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Скалолазание (12)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Волейбол (41)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Футбол (3)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Бокс (12)</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="checkbox" class="styler">
-                                                        <span>Рыбалка (142)</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
+                                        <div class="companies_recomandations_item_btm">
+                                            <a onclick="$('.leave_company_mod').arcticmodal()" class="green_btn">
+                                                <span class="green_btn_txt"><?= \Yii::t('app', 'Покинуть группу')?></span></a>
+                                            <div class="already_joined_block">
+                                                <p><?= \Yii::t('app', 'человек в группе')?></p>
+                                                <span class="joined_number"><?= $company->participantsCount?></span>
+                                            </div>
                                         </div>
+<!--                                        <div class="companies_recomandations_item_btm companies_recomandations_item_btm_joined">-->
+<!--                                            <p>Вас назначили  ответственным в группе</p>-->
+<!--                                            <a href="#" class="green_btn"><span class="green_btn_txt">Принять</span></a>-->
+<!--                                            <button class="cancel_btn_red"><i class="flaticon-close-cross"></i></button>-->
+<!--                                        </div>-->
                                     </div>
-                                    <div class="hidden_filter_item">
-                                        <div class="filter_key_words">
-                                            <input type="text" class="typical_input_bordered" placeholder="Ключевые слова" />
-                                            <div class="inner_search_select">
-                                                <select>
-                                                    <option>Россия, Москва</option>
-                                                    <option>Другая страна...</option>
-                                                    <option>Россия, Московская область</option>
-                                                    <option>Россия, Санкт-Петербург</option>
-                                                    <option>Россия. Ленинградская область</option>
-                                                    <option>Другой город...</option>
-                                                </select>
+                                    <div style="display: none;">
+                                        <div class="box-modal leave_company_mod">
+                                            <div class="box-modal_close arcticmodal-close"><i class="flaticon-close"></i></div>
+                                            <div class="modal">
+                                                <div class="modal_top">
+                                                    <h3 class="green_txt"><?= \Yii::t('app', 'Вы уверены, что хотите покинуть компанию')?>?</h3>
+                                                    <div class="delete_account_modal_top">
+                                                                <span class="d_acc_ic">
+                                                                    <img src="/img/leave_c_mod.png" alt="">
+                                                                </span>
+                                                        <p><?= \Yii::t('app', 'Вы являетесь создателем данной компании. Для выхода из нее вам необходимо передать права другому участнику компании')?></p>
+                                                    </div>
+                                                </div>
+                                                <div class="participants_company_block">
+                                                    <div class="participants_tabs_top">
+                                                        <input type="search" class="typical_input_bordered" placeholder="Поиск по участникам" />
+                                                        <p><?= \Yii::t('app', 'Всего')?> 332 <?= \Yii::t('app', 'участника')?></p>
+                                                    </div>
+                                                    <div class="participants_tabs_inner typical_scroll">
+                                                        <div class="participant_item">
+                                                            <a href="#" class="wall_comment_title">Владимир Кожевников</a>
+                                                            <a href="#" class="participant_item_img">
+                                                                <img src="/img/participant.jpg" alt="">
+                                                            </a>
+                                                            <span class="founder">ответственный</span>
+                                                        </div>
+                                                        <div class="participant_item">
+                                                            <a href="#" class="wall_comment_title">Владимир Кожевников</a>
+                                                            <a href="#" class="participant_item_img">
+                                                                <img src="/img/participant.jpg" alt="">
+                                                            </a>
+                                                            <div class="participant_item_btm">
+                                                                <a href="#" class="green_btn">
+                                                                    <span class="green_btn_txt">Назначить</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="hidden_filter_item">
-                                        <h4>Сортировать результаты</h4>
-                                        <div class="filter_sort">
-                                            <ul class="typical_chbx_orange">
-                                                <li>
-                                                    <label>
-                                                        <input type="radio" class="styler" name="filter_sort"/>
-                                                        <span>По релевантности</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="radio" class="styler" name="filter_sort"/>
-                                                        <span>По популярности</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label>
-                                                        <input type="radio" class="styler" name="filter_sort"/>
-                                                        <span>По дате публикации</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="hidden_filter_btns">
-                                            <div class="green_btn">
-                                                <input type="submit" class="green_btn_txt" value="Применить" />
-                                            </div>
-                                            <input type="reset" class="bordered_btn" value="Отменить" />
-                                        </div>
-                                    </div>
+                                <?php endforeach;?>
+                                    <!--       leave_company_mod            -->
                                 </div>
                             </div>
-                        </div>
-                        <div class="companies_recomandations_inner_block">
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Реальные рыбаки</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/1.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>В общем, нестандартный подход основательно подпорчен предыдущим опытом применения.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Мы - Толкинисты!!!</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/2.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>Целевой трафик синхронизирует BTL. Привлечение аудитории, не меняя концепции, </p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Пейте Пиво Пацаны :)</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/3.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>Несмотря на сложности, рекламное сообщество специфицирует социальный статус</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Мы любим сиськи!</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/4.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>А вот по мнению аналитиков ассортиментная политика предприятия усиливает пресс-клиппинг, повышая конкуренцию.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">НЕ здоровое питание</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/5.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>В общем, нестандартный подход основательно подпорчен предыдущим опытом применения.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Выгуливатели собак</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/6.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>Медиаплан обуславливает комплексный инвестиционный продукт. VIP-мероприятие, конечно, раскручивает контент, признавая определенные ю.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Реальные рыбаки</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/1.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>В общем, нестандартный подход основательно подпорчен предыдущим опытом применения.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Мы - Толкинисты!!!</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/2.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>Целевой трафик синхронизирует BTL. Привлечение аудитории, не меняя концепции, </p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Пейте Пиво Пацаны :)</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/3.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>Несмотря на сложности, рекламное сообщество специфицирует социальный статус</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Мы любим сиськи!</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/4.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>А вот по мнению аналитиков ассортиментная политика предприятия усиливает пресс-клиппинг, повышая конкуренцию.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">НЕ здоровое питание</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/5.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>В общем, нестандартный подход основательно подпорчен предыдущим опытом применения.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-
-                            <!-- companies_recomandations_item -->
-                            <div class="companies_recomandations_item">
-                                <a href="#" class="title_link">Выгуливатели собак</a>
-                                <a href="#" class="companies_recomandations_img">
-                                    <img src="/img/companies_rec/6.jpg" alt="">
-                                    <span class="view_ic"></span>
-                                </a>
-                                <div class="com_rec_inn_txt">
-                                    <p>Медиаплан обуславливает комплексный инвестиционный продукт. VIP-мероприятие, конечно, раскручивает контент, признавая определенные ю.</p>
-                                </div>
-                                <div class="recent_search_item_btm">
-                                    <a href="#" class="green_btn"><span class="green_btn_txt">Вступить</span></a>
-                                    <div class="group_number_block"><span class="group_number">1240</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="content_load">
-                            <a href="#" class="load_more_link">Загрузить еще</a>
+                            <?php endif;?>
                         </div>
                     </div>
                 </div>

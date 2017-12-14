@@ -635,7 +635,9 @@ class ProfileController extends AbstractController
      */
     public function actionCompanies()
     {
-        return $this->render(Yii::$app->controller->action->id, []);
+        $companies = Company::find()->where(['customerId' => $this->user->id])->all();
+
+        return $this->render(Yii::$app->controller->action->id, compact('companies'));
     }
 
     public function actionCreateCompany()
