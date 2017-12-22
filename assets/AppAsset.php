@@ -32,6 +32,7 @@ class AppAsset extends AssetBundle
 		'/web/js/cropper.min.js',
 		'/web/js/main.js',
 		'/web/js/imageUploader.js',
+		'/web/js/script.js',
    ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -26,14 +26,12 @@ use yii\helpers\Html;
                         <input type="email" class="typical_input" placeholder="Эл.почта">
                         <input type="password" class="typical_input" placeholder="Пароль">
                         <div class="typycal_select">
-                            <select>
+                            <select class="city-selector">
                                 <option>Россия, Москва</option>
-                                <option>Другая страна...</option>
                                 <option>Россия, Московская область</option>
                                 <option>Россия, Санкт-Петербург</option>
                                 <option>Россия. Ленинградская область</option>
-                                <option>Другой город...</option>
-
+                                <option value="else">Другой город...</option>
                             </select>
                         </div>
                         <div class="typical_birth_date">
@@ -515,14 +513,12 @@ use yii\helpers\Html;
                             <input type="radio" name="main1" class="styler">
                         </label>
                         <div class="white_select">
-                            <select>
+                            <select class="city-selector">
                                 <option>Россия, Москва</option>
-                                <option>Другая страна...</option>
                                 <option>Россия, Московская область</option>
                                 <option>Россия, Санкт-Петербург</option>
                                 <option>Россия. Ленинградская область</option>
-                                <option>Другой город...</option>
-
+                                <option value="else">Другой город...</option>
                             </select>
                         </div>
                     </li>
@@ -554,33 +550,15 @@ use yii\helpers\Html;
         <div class="title_block clearfix">
             <h2>Сейчас ищут в Москве:</h2>
             <div class="choose_city_block">
+
                 <div class="typycal_select">
-                    <select>
-                        <option>Выбрать другой город</option>
+                    <select class="city-selector">
                         <option>Москва</option>
-                        <option>Подольск</option>
-                        <option>Коломна</option>
-                        <option>Зеленоград</option>
-                        <option>Белые столбы</option>
-                        <option>Абрамцево</option>
-                        <option>Москва</option>
-                        <option>Подольск</option>
-                        <option>Коломна</option>
-                        <option>Зеленоград</option>
-                        <option>Белые столбы</option>
-                        <option>Абрамцево</option>
-                        <option>Москва</option>
-                        <option>Подольск</option>
-                        <option>Коломна</option>
-                        <option>Зеленоград</option>
-                        <option>Белые столбы</option>
-                        <option>Абрамцево</option>
-                        <option>Москва</option>
-                        <option>Подольск</option>
-                        <option>Коломна</option>
-                        <option>Зеленоград</option>
-                        <option>Белые столбы</option>
-                        <option>Абрамцево</option>
+                        <option>Санкт-Петербург</option>
+                        <option>Новосибирск</option>
+                        <option>Екатеринбург</option>
+                        <option>Нижний Новгород</option>
+                        <option value="else">Другой город...</option>
                     </select>
                 </div>
             </div>
@@ -821,3 +799,76 @@ use yii\helpers\Html;
         </div>
     </div>
 </section>
+
+<div style="display: none;">
+    <div class="box-modal city_modal">
+        <div class="box-modal_close arcticmodal-close"><i class="flaticon-close"></i></div>
+        <div class="modal">
+            <div class="city_modal_top">
+                <h4>Россия</h4>
+                <a href="#">Сменить страну</a>
+                <input type="text" class="typical_input_bordered" />
+            </div>
+            <div class="city_modal_btm">
+                <ul>
+                    <li><a href="#">Москва</a></li>
+                    <li><a href="#">Подольск</a></li>
+                    <li><a href="#">Коломна</a></li>
+                    <li><a href="#">Зеленоград</a></li>
+                    <li class="city_letter">А</li>
+                    <li><a href="">Россия</a></li>
+                    <li><a href="">Австрия</a></li>
+                    <li><a href="">Азербайджан</a></li>
+                    <li><a href="">Албания</a></li>
+                    <li><a href="">Алжир</a></li>
+                    <li><a href="">Ангола</a></li>
+                    <li><a href="">Андорра</a></li>
+                    <li><a href="">Антигуа</a></li>
+                    <li><a href="">Антигуа</a></li>
+                    <li class="city_letter">Б</li>
+                    <li><a href="">Россия</a></li>
+                    <li><a href="">Австрия</a></li>
+                    <li><a href="">Азербайджан</a></li>
+                    <li><a href="">Албания</a></li>
+                    <li><a href="">Алжир</a></li>
+                    <li><a href="">Ангола</a></li>
+                    <li><a href="">Андорра</a></li>
+                    <li><a href="">Антигуа</a></li>
+                    <li class="city_letter">В</li>
+                    <li><a href="">Москва</a></li>
+                    <li><a href="">Подольск</a></li>
+                    <li><a href="">Коломна</a></li>
+                    <li><a href="">Зеленоград</a></li>
+                    <li class="city_letter">г</li>
+                    <li><a href="">Россия</a></li>
+                    <li><a href="">Австрия</a></li>
+                    <li><a href="">Азербайджан</a></li>
+                    <li><a href="">Албания</a></li>
+                    <li><a href="">Алжир</a></li>
+                    <li><a href="">Ангола</a></li>
+                    <li><a href="">Андорра</a></li>
+                    <li><a href="">Антигуа</a></li>
+                    <li class="city_letter">д</li>
+                    <li><a href="">Москва</a></li>
+                    <li><a href="">Подольск</a></li>
+                    <li><a href="">Коломна</a></li>
+                    <li><a href="">Зеленоград</a></li>
+                    <li class="city_letter">е</li>
+                    <li><a href="">Россия</a></li>
+                    <li><a href="">Австрия</a></li>
+                    <li><a href="">Азербайджан</a></li>
+                    <li><a href="">Албания</a></li>
+                    <li><a href="">Алжир</a></li>
+                    <li><a href="">Ангола</a></li>
+                    <li><a href="">Андорра</a></li>
+                    <li><a href="">Антигуа</a></li>
+                    <li class="city_letter">ж</li>
+                    <li><a href="">Москва</a></li>
+                    <li><a href="">Подольск</a></li>
+                    <li><a href="">Коломна</a></li>
+                    <li><a href="">Зеленоград</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
