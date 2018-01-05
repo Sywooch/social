@@ -95,6 +95,23 @@ class Ads extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getParticipants()
+    {
+        return $this->hasMany(Customer::className(), ['id' => 'participantID'])
+            ->viaTable('ads_participant', ['adsID' => 'id']);
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getParticipantsCount()
+    {
+        return AdsParticipant::find()->where('adsID = :thisID', [':thisID' => $this->id])->count();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCustomer()
     {
         return $this->hasOne(Customer::className(), ['id' => 'customerID']);

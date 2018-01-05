@@ -9,6 +9,8 @@ return [
     'adminEmail' => 'admin@example.com',
     'serverName' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://" . $_SERVER['HTTP_HOST'],
     'commentsOnPage' => 3,
+    'mainPageAdsCount' => 4,
+    'mainPageCompanyCount' => 6,
     'seo' => [
         'title' => '',
         'keywords' => '',

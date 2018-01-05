@@ -10,7 +10,7 @@ use yii\helpers\Url;
                 <div class="content">
                     <div class="title_block clearfix">
                         <h1><?= \Yii::t('app', 'Мои компании')?></h1>
-                        <a href="#" class="add_button"><?= \Yii::t('app', 'Создать компанию')?></a>
+                        <a href="<?= Url::to('/profile/create-company')?>" class="add_button"><?= \Yii::t('app', 'Создать компанию')?></a>
                     </div>
                     <div class="profile_settings_tabs company_tabs">
                         <div class="tabs">

@@ -17,7 +17,7 @@ use yii\helpers\Html;
             <div class="main_page_top_wrap clearfix">
                 <a href="#" class="logo"><img src="/img/logo.png" alt=""></a>
                 <div class="main_page_txt">
-                    <p>Найди друзей по интересам и присоединяйся к компаниям!</p>
+                    <p><?= \Yii::t('app', 'Найди друзей по интересам и присоединяйся к компаниям')?>!</p>
                 </div>
                 <?php if (empty($this->params['user'])):?>
                 <div class="registration_form">
@@ -548,7 +548,7 @@ use yii\helpers\Html;
 <section class="recent_search_results light_bg">
     <div class="container">
         <div class="title_block clearfix">
-            <h2>Сейчас ищут в Москве:</h2>
+            <h2><?= \Yii::t('app', 'Сейчас ищут в')?> Москве:</h2>
             <div class="choose_city_block">
 
                 <div class="typycal_select">
@@ -564,238 +564,75 @@ use yii\helpers\Html;
             </div>
         </div>
         <div class="recent_search_block">
-
-            <!-- recent_search_item -->
-            <div class="recent_search_item">
-                <a href="#" class="title_link">Посмотреть футбол</a>
-                <span class="item_hint">Россия, Москва</span>
-                <a href="#" class="recent_search_img">
-                    <img src="/img/recent_search_prof/1.jpg" alt="">
-                    <span class="photos_number_link">8</span>
-                </a>
-                <div class="recent_search_txt">
-                    <p>Надоело пить пиво и смотреть футбольные матчи отдному, ищу того, кто тоже болеет за ЦСК!</p>
-                    <span class="item_hint">Евгений, 36</span>
-                </div>
-                <div class="recent_search_item_tags">
-                    <a href="#" class="grey_tag">футбол</a>
-                    <a href="#" class="grey_tag">пиво</a>
-                    <a href="#" class="grey_tag">кино</a>
-                </div>
-                <div class="recent_search_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Присоединиться</span></a>
-                    <div class="group_number_block"><span class="group_number">23</span></div>
-                </div>
-            </div>
-
-            <!-- recent_search_item -->
-            <div class="recent_search_item">
-                <a href="#" class="title_link">Сходить в театр</a>
-                <span class="item_hint">Россия, Москва</span>
-                <a href="#" class="recent_search_img">
-                    <img src="/img/recent_search_prof/2.jpg" alt="">
-                    <span class="photos_number_link">3</span>
-                </a>
-                <div class="recent_search_txt">
-                    <p>Хочу сходить на премьеру спектакля “Короли и мыши” в Театр Маяковского, кто со мной!</p>
-                    <span class="item_hint">Жанна, 22</span>
-                </div>
-                <div class="recent_search_item_tags">
-                    <a href="#" class="grey_tag">театр</a>
-                    <a href="#" class="grey_tag">музыка</a>
-                </div>
-                <div class="recent_search_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Присоединиться</span></a>
-                    <div class="group_number_block"><span class="group_number">3268</span></div>
-                </div>
-            </div>
-
-            <!-- recent_search_item -->
-            <div class="recent_search_item">
-                <a href="#" class="title_link">Съездить на рыбалку</a>
-                <span class="item_hint">Россия, Москва</span>
-                <a href="#" class="recent_search_img">
-                    <img src="/img/recent_search_prof/3.jpg" alt="">
-                    <span class="photos_number_link">12</span>
-                </a>
-                <div class="recent_search_txt">
-                    <p>В выходные еду на весь день на рыбалку на Южное озеро 30 км от Москвы, пацаны присоединяйтесь :)</p>
-                    <span class="item_hint">Олег, 27</span>
-                </div>
-                <div class="recent_search_item_tags">
-                    <a href="#" class="grey_tag">рыбалка</a>
-                </div>
-                <div class="recent_search_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Присоединиться</span></a>
-                    <div class="group_number_block"><span class="group_number">9</span></div>
-                </div>
-            </div>
-
-            <!-- recent_search_item -->
-            <div class="recent_search_item">
-                <a href="#" class="title_link">Поиграть в Playstation</a>
-                <span class="item_hint">Россия, Москва</span>
-                <a href="#" class="recent_search_img">
-                    <img src="/img/recent_search_prof/4.jpg" alt="">
-                    <span class="photos_number_link">1</span>
-                </a>
-                <div class="recent_search_txt">
-                    <p>Чуваки!! Давайте зарубимся у меня дома или по сетке в Need For Speed: Rivals!</p>
-                    <span class="item_hint">Евгений, 36</span>
-                </div>
-                <div class="recent_search_item_tags">
-                    <a href="#" class="grey_tag">playstation</a>
-                    <a href="#" class="grey_tag">пиво</a>
-                    <button class="grey_tag more_gr_tags">...</button>
-                    <div class="hidden_gr_tags">
-                        <div class="wrap_h_gr_tags">
-                            <a href="#" class="grey_tag">playstation</a>
-                            <a href="#" class="grey_tag">пиво</a>
-                        </div>
+        <?php if (!empty($ads)):?>
+            <?php foreach ($ads as $element):?>
+                <!-- recent_search_item -->
+                <div class="recent_search_item">
+                    <a href="<?= Url::to('/public/ads/' . $element->id)?>" class="title_link"><?= $element->title ?></a>
+                    <span class="item_hint"><?= $element->city->country->translation->name?>, <?= $element->city->translation->name?></span>
+                    <a href="<?= Url::to('/public/profile/' . $element->customer->id)?>" class="recent_search_img">
+                        <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                        <span class="photos_number_link"></span>
+                    </a>
+                    <div class="recent_search_txt">
+                        <p><?= $element->content ?></p>
+                        <span class="item_hint"><?= $element->customer->fullName?>, <?= $element->customer->age?></span>
+                    </div>
+                    <div class="recent_search_item_tags">
+                        <?php foreach ($element->interests as $interest):?>
+                            <a href="javascript:void(0);" class="grey_tag"><?= $interest->translation->name?></a>
+                        <?php endforeach;?>
+                    </div>
+                    <div class="recent_search_item_btm">
+                        <a href="<?= Url::to('/public/ads/' . $element->id)?>" class="green_btn"><span class="green_btn_txt"><?= \Yii::t('app', 'Присоединиться')?></span></a>
+                        <div class="group_number_block"><span class="group_number">{ads_members}</span></div>
                     </div>
                 </div>
-                <div class="recent_search_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Присоединиться</span></a>
-                    <div class="group_number_block"><span class="group_number">180</span></div>
-                </div>
-            </div>
+            <?php endforeach;?>
+        <?php endif;?>
         </div>
         <div class="block_btm clearfix">
-            <a href="#" class="add_button">Добавить объявление</a>
-            <a href="#" class="more_link">Еще 2137 объявлений</a>
+            <?php if(!empty($this->params['user'])):?>
+                <a href="<?= Url::to('/profile/create-ads')?>" class="add_button"><?= \Yii::t('app', 'Добавить объявление')?></a>
+            <?php endif;?>
+
+            <a href="<?= Url::to('/search/ads')?>" class="more_link"><?= \Yii::t('app', 'Еще')?> <?= $adsCount?> <?= \Yii::t('app', 'объявлений')?></a>
         </div>
     </div>
 </section>
 <section class="companies_recomandations">
     <div class="container">
         <div class="title_block clearfix">
-            <h2>Присоединяйтесь к компаниям:</h2>
+            <h2><?= \Yii::t('app', 'Присоединяйтесь к компаниям')?>:</h2>
         </div>
         <div class="companies_recomandations_block">
-
-            <!-- companies_recomandations_item -->
-            <div class="companies_recomandations_item">
-                <a href="#" class="title_link">Реальные рыбаки</a>
-                <a href="#" class="companies_recomandations_img">
-                    <img src="/img/companies_rec/1.jpg" alt="">
-                    <span class="view_ic"></span>
-                </a>
-                <div class="companies_recomandations_item_tags">
-                    <a href="#" class="grey_tag">рыбалка</a>
-                    <a href="#" class="grey_tag">пиво</a>
-                    <a href="#" class="grey_tag">водка</a>
-                </div>
-                <div class="companies_recomandations_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Смотреть</span></a>
-                    <div class="already_joined_block"><p>Присоединились человек</p><span class="joined_number">529</span></div>
-                </div>
-            </div>
-
-            <!-- companies_recomandations_item -->
-            <div class="companies_recomandations_item">
-                <a href="#" class="title_link">Мы - Толкинисты!!!</a>
-                <a href="#" class="companies_recomandations_img">
-                    <img src="/img/companies_rec/2.jpg" alt="">
-                    <span class="view_ic"></span>
-                </a>
-                <div class="companies_recomandations_item_tags">
-                    <a href="#" class="grey_tag">фентези</a>
-                    <a href="#" class="grey_tag">драконы</a>
-                    <a href="#" class="grey_tag">сражения</a>
-                    <a href="#" class="grey_tag">книги</a>
-                    <a href="#" class="grey_tag">косплей</a>
-                </div>
-                <div class="companies_recomandations_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Смотреть</span></a>
-                    <div class="already_joined_block"><p>Присоединились человек</p><span class="joined_number">2156</span></div>
-                </div>
-            </div>
-
-            <!-- companies_recomandations_item -->
-            <div class="companies_recomandations_item">
-                <a href="#" class="title_link">Пейте Пиво Пацаны :)</a>
-                <a href="#" class="companies_recomandations_img">
-                    <img src="/img/companies_rec/3.jpg" alt="">
-                    <span class="view_ic"></span>
-                </a>
-                <div class="companies_recomandations_item_tags">
-                    <a href="#" class="grey_tag">пиво</a>
-                </div>
-                <div class="companies_recomandations_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Смотреть</span></a>
-                    <div class="already_joined_block"><p>Присоединились человек</p><span class="joined_number">8727</span></div>
-                </div>
-            </div>
-
-            <!-- companies_recomandations_item -->
-            <div class="companies_recomandations_item">
-                <a href="#" class="title_link">Мы любим сиськи!</a>
-                <a href="#" class="companies_recomandations_img">
-                    <img src="/img/companies_rec/4.jpg" alt="">
-                    <span class="view_ic"></span>
-                </a>
-                <div class="companies_recomandations_item_tags">
-                    <a href="#" class="grey_tag">женщины</a>
-                    <a href="#" class="grey_tag">сиськи</a>
-                    <a href="#" class="grey_tag">клубничка</a>
-                </div>
-                <div class="companies_recomandations_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Смотреть</span></a>
-                    <div class="already_joined_block"><p>Присоединились человек</p><span class="joined_number">34529</span></div>
-                </div>
-            </div>
-
-            <!-- companies_recomandations_item -->
-            <div class="companies_recomandations_item">
-                <a href="#" class="title_link">НЕ здоровое питание</a>
-                <a href="#" class="companies_recomandations_img">
-                    <img src="/img/companies_rec/5.jpg" alt="">
-                    <span class="view_ic"></span>
-                </a>
-                <div class="companies_recomandations_item_tags">
-                    <a href="#" class="grey_tag">еда</a>
-                    <a href="#" class="grey_tag">питание</a>
-                    <a href="#" class="grey_tag">мясо</a>
-                    <a href="#" class="grey_tag">кухня</a>
-                    <a href="#" class="grey_tag">фастфуд</a>
-                    <a href="#" class="grey_tag">пельмени</a>
-                    <a href="#" class="grey_tag">пиво</a>
-                    <button class="grey_tag more_gr_tags">...</button>
-                    <div class="hidden_gr_tags">
-                        <div class="wrap_h_gr_tags">
-                            <a href="#" class="grey_tag">playstation</a>
-                            <a href="#" class="grey_tag">пиво</a>
+            <?php if (!empty($companies)):?>
+                <?php foreach ($companies as $element):?>
+                    <!-- companies_recomandations_item -->
+                    <div class="companies_recomandations_item">
+                        <a href="<?= Url::to('/public/company/' . $element->id)?>" class="title_link"><?= $element->title?></a>
+                        <a href="<?= Url::to('/public/company/' . $element->id)?>" class="companies_recomandations_img">
+                            <img src="<?= $element->image?>" alt="">
+                            <span class="view_ic"></span>
+                        </a>
+                        <div class="companies_recomandations_item_tags">
+                            <?php foreach ($element->interests as $interest):?>
+                                <a href="javascript:void(0)" class="grey_tag"><?= $interest->translation->name?></a>
+                            <?php endforeach;?>
+                        </div>
+                        <div class="companies_recomandations_item_btm">
+                            <a href="<?= Url::to('/public/company/' . $element->id)?>" class="green_btn"><span class="green_btn_txt"><?= \Yii::t('app', 'Смотреть')?></span></a>
+                            <div class="already_joined_block"><p><?= \Yii::t('app', 'Присоединились человек')?></p>
+                                <span class="joined_number"><?= $element->participantsCount?></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="companies_recomandations_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Смотреть</span></a>
-                    <div class="already_joined_block"><p>Присоединились человек</p><span class="joined_number">3132</span></div>
-                </div>
-            </div>
-
-            <!-- companies_recomandations_item -->
-            <div class="companies_recomandations_item">
-                <a href="#" class="title_link">Выгуливатели собак</a>
-                <a href="#" class="companies_recomandations_img">
-                    <img src="/img/companies_rec/6.jpg" alt="">
-                    <span class="view_ic"></span>
-                </a>
-                <div class="companies_recomandations_item_tags">
-                    <a href="#" class="grey_tag">собаки</a>
-                    <a href="#" class="grey_tag">животные</a>
-                    <a href="#" class="grey_tag">прогулки</a>
-                    <a href="#" class="grey_tag">дерьмо</a>
-                </div>
-                <div class="companies_recomandations_item_btm">
-                    <a href="#" class="green_btn"><span class="green_btn_txt">Смотреть</span></a>
-                    <div class="already_joined_block"><p>Присоединились человек</p><span class="joined_number">547</span></div>
-                </div>
-            </div>
+                <?php endforeach;?>
+            <?php endif;?>
         </div>
         <div class="block_btm clearfix">
-            <a href="#" class="add_button">Создать компанию</a>
-            <a href="#" class="more_link">Еще 1724 компаний</a>
+            <a href="<?= Url::to('/profile/create-company')?>" class="add_button"><?= \Yii::t('app', 'Создать компанию')?></a>
+            <a href="<?= Url::to('/search/company')?>" class="more_link"><?= \Yii::t('app', 'Еще')?> <?= $companiesCount?> <?= \Yii::t('app', 'компаний')?></a>
         </div>
     </div>
 </section>

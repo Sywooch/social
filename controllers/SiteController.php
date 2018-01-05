@@ -7,6 +7,9 @@
 namespace app\controllers;
 
 use app\components\Registry;
+use app\models\Ads;
+use app\models\City;
+use app\models\Company;
 use app\models\Country;
 use app\models\Customer;
 use app\models\CustomerInterests;
@@ -116,7 +119,26 @@ class SiteController extends AbstractController
      */
     public function actionIndex()
     {
-        return $this->render(Yii::$app->controller->action->id, []);
+        $defaultCityID = 1;
+        $adsQuery = Ads::find()->where('cityID = :cityID AND active = 1', [
+            ':cityID' => empty($this->user) ? $defaultCityID : $this->user->cityID
+        ]);
+
+        $ads = $adsQuery->limit(\Yii::$app->params['mainPageAdsCount'])->orderBy('sortDate desc')->all();
+        $adsCount = $adsQuery->count();
+
+        $companiesQuery = Company::find()->where('cityID = :cityID', [
+            ':cityID' => empty($this->user) ? $defaultCityID : $this->user->cityID
+        ]);
+        $companies = $companiesQuery->limit(\Yii::$app->params['mainPageCompanyCount'])->orderBy('sortDate desc')->all();
+        $companiesCount = $companiesQuery->count();
+
+        return $this->render(Yii::$app->controller->action->id, compact('ads', 'companies', 'adsCount', 'companiesCount'));
+    }
+
+    public function actionAds($id)
+    {
+
     }
 
     /**
