@@ -40,7 +40,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     *
+     * Подписка.
      */
     public function actionAdsInvite()
     {
@@ -50,6 +50,21 @@ class AjaxController extends AbstractController
         $model->participantID = $this->_post['participantID'];
 
         $model->save();
+
+        return [];
+    }
+
+    /**
+     * Отписка.
+     */
+    public function actionAdsUnsubscribe()
+    {
+        AdsParticipant::deleteAll('adsID = :adsID AND participantID = :participantID', [
+            ':adsID' => $this->_post['adsID'],
+            ':participantID' => $this->_post['participantID']
+        ]);
+
+        return [];
     }
 
     /**

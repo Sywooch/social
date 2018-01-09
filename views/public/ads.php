@@ -108,7 +108,9 @@ use yii\helpers\Url;
                                 </div>
                             </div>
                             <?php if ($this->params['user']->id != $item->customer->id):?>
-                            <a href="javascript:void(0);" class="bordered_btn"><?= \Yii::t('app', 'Отменить')?></a>
+                            <a href="javascript:void(0);" class="bordered_btn ads-unsubscribe" data-adsID="<?= $item->id?>" data-participantID="<?= $this->params['user']->id?>">
+                                <?= \Yii::t('app', 'Отменить')?>
+                            </a>
                             <?php endif?>
                         </div>
                         <?php endif;?>

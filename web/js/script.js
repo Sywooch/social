@@ -16,8 +16,44 @@ $('.user-send-message').on('click', function () {
     }
 });
 
+// Подписка обьявы
 $('.ads-invite').on('click', function () {
+    var link = $(this),
+        adsID = link.data('adsid'),
+        participantID = link.data('participantid');
 
+    $.ajax({
+        url: '/ajax/ads-invite',
+        type: 'post',
+        data: {
+            adsID: adsID,
+            participantID: participantID
+        },
+        dataType: "json",
+        success: function () {
+            location.reload();
+        }
+    });
+});
+
+// Отписка от обьявы
+$('.ads-unsubscribe').on('click', function () {
+    var link = $(this),
+        adsID = link.data('adsid'),
+        participantID = link.data('participantid');
+
+    $.ajax({
+        url: '/ajax/ads-unsubscribe',
+        type: 'post',
+        data: {
+            adsID: adsID,
+            participantID: participantID
+        },
+        dataType: "json",
+        success: function () {
+            location.reload();
+        }
+    });
 });
 
 // Действие добавления в друзья.
