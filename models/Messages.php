@@ -55,7 +55,7 @@ class Messages extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'senderID' => Yii::t('app', 'Sender ID'),
             'receiverID' => Yii::t('app', 'Receiver ID'),
-            'text' => Yii::t('app', 'Text'),
+            'text' => Yii::t('app', 'Текст сообщения'),
             'date' => Yii::t('app', 'Date'),
             'flag' => Yii::t('app', 'Flag'),
         ];

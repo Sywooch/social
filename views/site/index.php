@@ -585,7 +585,7 @@ use yii\helpers\Html;
                     </div>
                     <div class="recent_search_item_btm">
                         <a href="<?= Url::to('/public/ads/' . $element->id)?>" class="green_btn"><span class="green_btn_txt"><?= \Yii::t('app', 'Присоединиться')?></span></a>
-                        <div class="group_number_block"><span class="group_number">{ads_members}</span></div>
+                        <div class="group_number_block"><span class="group_number"><?= $element->participantsCount?></span></div>
                     </div>
                 </div>
             <?php endforeach;?>

@@ -4,6 +4,8 @@
  */
 namespace app\controllers;
 
+use app\models\AdsParticipant;
+use app\models\CustomerFriend;
 use app\models\CustomerImage;
 use Yii;
 use yii\web\Response;
@@ -35,6 +37,41 @@ class AjaxController extends AbstractController
         $this->_post = Yii::$app->request->post();
 
         Yii::$app->response->format = Response::FORMAT_JSON;
+    }
+
+    /**
+     *
+     */
+    public function actionAdsInvite()
+    {
+        $model = new AdsParticipant();
+
+        $model->adsID = $this->_post['adsID'];
+        $model->participantID = $this->_post['participantID'];
+
+        $model->save();
+    }
+
+    /**
+     *
+     */
+    public function actionFriendInvite()
+    {
+        $model = new CustomerFriend();
+
+        $model->customerID = $this->_post['customerID'];
+        $model->friendID = $this->_post['friendID'];
+
+        $model->save();
+
+        $model = new CustomerFriend();
+
+        $model->customerID = $this->_post['friendID'];
+        $model->friendID = $this->_post['customerID'];
+
+        $model->save();
+
+        return [];
     }
 
     /**

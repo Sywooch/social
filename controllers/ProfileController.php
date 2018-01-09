@@ -200,7 +200,7 @@ class ProfileController extends AbstractController
             ->with('sender.mainImage')
             ->orderBy('date desc');
 
-        $customDate = date('d-m-Y', strtotime("-1 month")) . ' - ' . date('d-m-Y', time());
+        $customDate = date('d-m-Y', strtotime("-3 month")) . ' - ' . date('d-m-Y', time());
         $filterDate = \Yii::$app->request->get('date', $customDate);
         if ($filterDate) {
             $filterDate = explode(' - ', $filterDate);
@@ -213,7 +213,6 @@ class ProfileController extends AbstractController
         }
 
         $messages = $query->asArray()->all();
-
         $groups = $this->groupMessages($messages);
 
         return $this->render(Yii::$app->controller->action->id, compact('groups', 'customDate'));

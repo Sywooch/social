@@ -238,11 +238,7 @@
             $(this).parent().find('.avatar_mod').arcticmodal();
         });
         
-        $('.add_friend_link').click(function(e){
-            e.preventDefault();
-            $(this).parent().find('.add_friend_mod').arcticmodal();
-        });
-        
+
         // pull
         $('.categories_list_pull_1').click(function(){
             $(this).parents('.wrap_categories').find('.category_item_1').fadeToggle(400);  

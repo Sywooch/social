@@ -3,9 +3,13 @@
 namespace app\controllers;
 
 use app\models\Ads;
+use app\models\Customer;
+use app\models\Messages;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use app\models\CustomerComment;
+use yii\data\Pagination;
 
 use \BW\Vkontakte as Vk;
 use yii\web\NotFoundHttpException;
@@ -41,10 +45,6 @@ class PublicController extends AbstractController
     {
         parent::init();
 
-        if (empty($this->user->id)) {
-            \Yii::$app->response->redirect('/');
-        }
-
         $facebook = new \Facebook\Facebook([
             'app_id' => Yii::$app->params['social']['facebook']['id'],
             'app_secret' => Yii::$app->params['social']['facebook']['secret'],
@@ -66,6 +66,44 @@ class PublicController extends AbstractController
      */
     public function actionIndex()
     {
+    }
+
+    public function actionProfile($id)
+    {
+        $item = Customer::findOne($id);
+
+        if (empty($item))
+            throw new NotFoundHttpException();
+
+        $model = new Messages();
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            \Yii::$app->session->setFlash('messageSend', true);
+            $model->save();
+        }
+
+        $query = CustomerComment::find()
+            ->where(['customerID' => $id])
+            ->with('customer')
+            ->with('customer.mainImage')
+            ->with('images')
+            ->with('answers')
+            ->with('answers.customer')
+            ->with('answers.customer.mainImage');
+
+        $countQuery = clone $query;
+        $pages = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => Yii::$app->params['commentsOnPage'],
+                'defaultPageSize' => Yii::$app->params['commentsOnPage']
+            ]
+        );
+
+        $comments = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->all();
+
+        return $this->render(\Yii::$app->controller->action->id, compact('item','comments', 'pages'));
     }
 
     public function actionAds($id)

@@ -110,6 +110,16 @@ class Ads extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $userId
+     *
+     * @return int|string
+     */
+    public function isParticipant($userId)
+    {
+        return AdsParticipant::find()->where('adsID = :thisID AND participantID = :participantID', [':thisID' => $this->id, ':participantID' => $userId])->count();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getCustomer()

@@ -86,15 +86,32 @@ use yii\helpers\Url;
                                 </a>
                             </div>
                         </div>
+
+                        <?php if(empty($this->params['user']) || (!$item->isParticipant($this->params['user']->id) && $this->params['user']->id != $item->customer->id)):?>
                         <div class="announcement_btm">
                             <div class="announcement_number">
                                 <p><?= \Yii::t('app', 'Уже присоеденились')?></p>
                                 <div class="group_number_block"><span class="group_number"><?= $item->participantsCount?></span></div>
                             </div>
-                            <a href="javascript:void(0);" class="green_btn">
+                            <?php if (!empty($this->params['user'])):?>
+                            <a href="javascript:void(0);" class="green_btn ads-invite" data-adsID="<?= $item->id?>" data-participantID="<?= $this->params['user']->id?>">
                                 <span class="green_btn_txt"><?= \Yii::t('app', 'Присоединиться')?></span>
                             </a>
+                            <?php endif;?>
                         </div>
+                        <?php elseif ($item->isParticipant($this->params['user']->id) || $this->params['user']->id == $item->customer->id):?>
+                        <div class="announcement_btm">
+                            <div class="announcement_number announcement_number_joined">
+                                <p><?= \Yii::t('app', 'Уже присоеденились')?></p>
+                                <div class="group_number_block group_number_block_joined">
+                                    <span class="group_number"><?= $item->participantsCount?> <?= \Yii::t('app', 'и Вы')?></span>
+                                </div>
+                            </div>
+                            <?php if ($this->params['user']->id != $item->customer->id):?>
+                            <a href="javascript:void(0);" class="bordered_btn"><?= \Yii::t('app', 'Отменить')?></a>
+                            <?php endif?>
+                        </div>
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="decorations_companies">

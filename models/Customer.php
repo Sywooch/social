@@ -92,6 +92,14 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCompanies()
+    {
+        return $this->hasMany(Company::className(), ['customerID' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCompanyParticipants()
     {
         return $this->hasMany(CompanyParticipant::className(), ['participantID' => 'id']);
@@ -132,9 +140,28 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getFriends()
+    {
+        return $this->hasMany(Customer::className(), ['id' => 'friendID'])
+            ->viaTable('customer_friend', ['customerID' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCity()
     {
         return $this->hasOne(City::className(), ['id' => 'cityID']);
+    }
+
+    /**
+     * @param $userId
+     *
+     * @return int|string
+     */
+    public function isFriend($userId)
+    {
+        return CustomerFriend::find()->where('customerID = :thisID AND friendID = :friendID', [':thisID' => $this->id, ':friendID' => $userId])->count();
     }
 
     public function getLanguagesList()
