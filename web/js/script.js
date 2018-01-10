@@ -16,6 +16,25 @@ $('.user-send-message').on('click', function () {
     }
 });
 
+$('.company-invite').on('click', function () {
+    var link = $(this),
+        companyID = link.data('companyid'),
+        participantID = link.data('participantid');
+
+    $.ajax({
+        url: '/ajax/company-invite',
+        type: 'post',
+        data: {
+            companyID: companyID,
+            participantID: participantID
+        },
+        dataType: "json",
+        success: function () {
+            location.reload();
+        }
+    });
+});
+
 // Подписка обьявы
 $('.ads-invite').on('click', function () {
     var link = $(this),

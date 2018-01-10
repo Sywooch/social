@@ -134,4 +134,22 @@ class Company extends \yii\db\ActiveRecord
     {
         return CompanyParticipant::find()->where('companyID = :thisID', [':thisID' => $this->id])->count();
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyComments()
+    {
+        return $this->hasMany(CompanyComment::className(), ['companyID' => 'id']);
+    }
+
+    /**
+     * @param $userId
+     *
+     * @return int|string
+     */
+    public function isParticipant($userId)
+    {
+        return CompanyParticipant::find()->where('companyID = :thisID AND participantID = :participantID', [':thisID' => $this->id, ':participantID' => $userId])->count();
+    }
 }

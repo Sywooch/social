@@ -623,7 +623,7 @@ use yii\helpers\Html;
                         <div class="companies_recomandations_item_btm">
                             <a href="<?= Url::to('/public/company/' . $element->id)?>" class="green_btn"><span class="green_btn_txt"><?= \Yii::t('app', 'Смотреть')?></span></a>
                             <div class="already_joined_block"><p><?= \Yii::t('app', 'Присоединились человек')?></p>
-                                <span class="joined_number"><?= $element->participantsCount?></span>
+                                <span class="joined_number"><?= $element->ParticipantsCount?></span>
                             </div>
                         </div>
                     </div>

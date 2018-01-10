@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use app\models\Ads;
+use app\models\Company;
+use app\models\CompanyComment;
+use app\models\CompanyCommentImage;
 use app\models\Customer;
 use app\models\Messages;
 use Yii;
@@ -114,5 +117,41 @@ class PublicController extends AbstractController
             throw new NotFoundHttpException();
 
         return $this->render(\Yii::$app->controller->action->id, compact('item'));
+    }
+
+    public function actionCompany($id)
+    {
+        $item = Company::findOne($id);
+
+        if (empty($item))
+            throw new NotFoundHttpException();
+
+        $this->commentListen($id);
+
+        $query = CompanyComment::find()
+            ->where(['companyID' => $id])
+            ->with('images')
+            ->with('answers')
+            ->with('customer')
+            ->with('customer.mainImage')
+            ->with('answers.customer')
+            ->with('answers.customer.mainImage')
+            ->orderBy('date DESC')
+        ;
+
+        $countQuery = clone $query;
+        $pages = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => Yii::$app->params['commentsOnPage'],
+                'defaultPageSize' => Yii::$app->params['commentsOnPage']
+            ]
+        );
+
+        $comments = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->all();
+
+        return $this->render(\Yii::$app->controller->action->id, compact('item', 'comments', 'pages'));
     }
 }

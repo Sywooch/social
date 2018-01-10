@@ -1,37 +1,31 @@
+<?php
+use yii\helpers\Url;
+?>
+<?= $this->render('//site/block/search', []); ?>
+
 <section class="main_container light_bg">
     <div class="container">
         <div class="wrap_content clearfix">
-            <aside>
-                <div class="aside_nav">
-                    <li><a href="#" class="aside_nav_1">Моя страница</a></li>
-                    <li><a href="#" class="aside_nav_2">Мои сообщения</a></li>
-                    <li><a href="#" class="aside_nav_3">Мои объявления</a></li>
-                    <li><a href="#" class="aside_nav_4">Мои друзья</a></li>
-                    <li><a href="#" class="aside_nav_5">Мои компании</a></li>
-                    <li><a href="#" class="aside_nav_6">Мои фотографии</a></li>
-                    <li><a href="#" class="aside_nav_7">Мои видеозаписи</a></li>
-                    <li><a href="#" class="aside_nav_8">Мои настройки</a></li>
-                </div>
-            </aside>
+            <?= $this->render('//profile/block/menu', []); ?>
             <div class="content">
                 <div class="title_block clearfix">
-                    <h1>Реальные рыбаки</h1>
+                    <h1><?= $item->name?></h1>
                 </div>
                 <div class="profile_page clearfix">
                     <div class="profile_block">
                         <div class="profile_block_top">
                             <div class="profile_quote">
-                                <p>Мы сами рыбакастые рыбаки в мире!</p>
+                                <p><?= $item->title?></p>
                             </div>
                             <table class="profile_info">
                                 <tbody>
                                 <tr>
-                                    <td>Страна, Город</td>
-                                    <td>Россия, Нижневартовск</td>
+                                    <td><?= \Yii::t('app', 'Страна, Город')?></td>
+                                    <td><?= $item->city->country->translation->name?>, <?= $item->city->translation->name?></td>
                                 </tr>
                                 <tr>
-                                    <td>Языки</td>
-                                    <td>Русский, Немецкий</td>
+                                    <td><?= \Yii::t('app', 'Языки')?></td>
+                                    <td><?php echo implode(', ', $item->customer->languagesList)?></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -39,85 +33,50 @@
                             <table class="profile_info">
                                 <tbody>
                                 <tr>
-                                    <td>Описание</td>
-                                    <td>Диониссийское начало диссонирует элитарный меланхолик. Возрождение изящно начинает архетип. Богатство мировой литературы от Платона до Ортеги-и-Гассета свидетельствует о том, что художественный идеал изящно дает холерик</td>
+                                    <td><?= \Yii::t('app', 'Описание')?></td>
+                                    <td><?= $item->description?></td>
                                 </tr>
                                 </tbody>
                             </table>
                             <hr>
                             <div class="profile_block_top_btns">
-                                <a href="#" class="green_btn">
-                                    <span class="green_btn_txt">Отправить сообщение</span>
-                                </a>
-                                <a href="#" class="green_btn">
-                                    <span class="green_btn_txt">Вступить в компанию</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="profile_block_wall">
-                            <div class="wall_post">
-                                <div class="wall_post_top clearfix">
-                                    <a href="#" class="profile_photo_link">
-                                        <img src="img/profile_company.jpg" alt="">
+                                <?php if (!empty($this->params['user']->id)):?>
+                                    <a href="javascript:void(0)" class="green_btn" onclick="$('.message-send').show()">
+                                        <span class="green_btn_txt"><?= \Yii::t('app', 'Отправить сообщение')?></span>
                                     </a>
-                                    <div class="wall_post_txt">
-                                        <p>Мероприятие невиданного охвата и с колоссальной идеей. Для
-                                            меня честь и удовольствие работать с такой замечательной и
-                                            очень молодой командой. То, что мы сделали за эти несколько месяцев, — это настоящий подвиг. Коля , Мари , спасибо вам, что привлекли. Работать в коллективе людей, для которых нет невыполнимых задач, - это самый лучший опыт.</p>
-                                        <a href="#" class="wall_post_img">
-                                            <img src="img/profile_company_post.jpg" alt="">
-                                        </a>
-                                        <div class="wall_post_links clearfix">
-                                            <div class="wall_post_links_left">
-                                                <p>19 января 2015</p>
-                                                <a href="#" class="wall_post_author">Сергей Говнечук</a>
-                                            </div>
-                                            <div class="wall_post_links_likes">
-                                                <span>24</span>
-                                                <a href="#" class="like_btn">Нравится</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php endif;?>
+                                <?php if (!empty($this->params['user']->id) && $this->params['user']->id != $item->customer->id && !$item->isParticipant($this->params['user']->id)):?>
+                                    <a href="javascript:void(0)" class="green_btn company-invite" data-companyID="<?= $item->id?>" data-participantID="<?= $this->params['user']->id?>">
+                                        <span class="green_btn_txt"><?= \Yii::t('app', 'Вступить в компанию')?></span>
+                                    </a>
+                                <?php endif;?>
                             </div>
                         </div>
+                        <?= $this->render('//public/block/company/comment', ['comments' => $comments, 'pages' => $pages]); ?>
                     </div>
                     <div class="profile_aside">
-                        <a href="#" class="announcement_img">
-                            <img src="img/profile_company.jpg" alt="">
+                        <a href="javascript:void(0)" class="announcement_img">
+                            <img src="<?= $item->image?>" alt="">
                         </a>
                         <div class="company_participants">
-                            <h3>Участники <span>(245)</span></h3>
+                            <h3><?= \Yii::t('app', 'Участники')?> <span>(<?= $item->ParticipantsCount?>)</span></h3>
+                            <?php if (!empty($item->participants)):?>
                             <div class="company_participants_links">
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
-                                <a href="#" class="company_participant_it"><img src="img/participant.jpg" alt=""></a>
+                                <?php foreach ($item->participants as $participant):?>
+                                <a href="<?= Url::to('/public/profile/' . $participant->id)?>" class="company_participant_it">
+                                    <img src="/uploads/<?= $participant->id?>/<?= $participant->mainImage->file?>" alt="">
+                                </a>
+                                <?php endforeach;?>
                             </div>
-                            <a href="#" class="prof_all_link">Все участники</a>
+                            <a href="javascript:void(0);" class="prof_all_link"><?= \Yii::t('app', 'Все участники')?></a>
+                            <?php endif;?>
                         </div>
                         <div class="profile_interests_block">
-                            <h3>Интересы</h3>
+                            <h3><?= \Yii::t('app', 'Интересы')?></h3>
                             <div class="companies_recomandations_item_tags">
-                                <a href="#" class="grey_tag">еда</a>
-                                <a href="#" class="grey_tag">питание</a>
-                                <a href="#" class="grey_tag">мясо</a>
-                                <a href="#" class="grey_tag">кухня</a>
-                                <a href="#" class="grey_tag">парни</a>
-                                <button class="grey_tag more_gr_tags">...</button>
-                                <div class="hidden_gr_tags">
-                                    <div class="wrap_h_gr_tags">
-                                        <a href="#" class="grey_tag">пельмени</a>
-                                        <a href="#" class="grey_tag">пиво</a>
-                                        <a href="#" class="grey_tag">playstation</a>
-                                        <a href="#" class="grey_tag">пиво</a>
-                                    </div>
-                                </div>
+                                <?php foreach ($item->interests as $interest):?>
+                                    <a href="javascript:void(0)" class="grey_tag"><?= $interest->translation->name?></a>
+                                <?php endforeach;?>
                             </div>
                         </div>
                     </div>
@@ -125,7 +84,7 @@
             </div>
             <div class="decorations_settings">
                             <span class="dec_set_right_1">
-                                <img src="img/decor/decor_prof_r_1.png" alt="">
+                                <img src="/img/decor/decor_prof_r_1.png" alt="">
                             </span>
             </div>
         </div>

@@ -7,6 +7,10 @@
 namespace app\controllers;
 
 use app\components\Registry;
+use app\models\CommonImages;
+use app\models\CompanyComment;
+use app\models\CompanyCommentAnswer;
+use app\models\CompanyCommentImage;
 use app\models\InfoPage;
 use app\models\RecoverForm;
 use app\models\RegisterForm;
@@ -16,7 +20,8 @@ use app\models\LoginForm;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use app\models\Languages;
-
+use yii\web\UploadedFile;
+use yii\helpers\BaseFileHelper;
 $phpMailer = Yii::getAlias('@app/vendor/phpmailer/PHPMailer.php');
 require_once($phpMailer);
 
@@ -222,6 +227,51 @@ class AbstractController extends Controller
         $mailer->Body = $body;
         if (!$mailer->send()) {
             error_log($mailer->ErrorInfo);
+        }
+    }
+
+    /**
+     * Добавление комментария компании.
+     */
+    protected function commentListen($companyID)
+    {
+        $comment = new CompanyComment();
+        $answer = new CompanyCommentAnswer();
+
+        $comment->companyID = $companyID;
+
+        if ($answer->load(\Yii::$app->request->post()) && $answer->validate()) {
+            $answer->save();
+        }
+
+        if ($comment->load(\Yii::$app->request->post()) && $comment->validate()) {
+            $comment->save();
+
+            $appPath = '/uploads/custom/' . md5(date('Y-m-d', time()));
+            $path = Yii::getAlias('@webroot') . $appPath;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+
+            $uploadPhotos = UploadedFile::getInstances($comment, 'image');
+
+            if (!empty($uploadPhotos)) {
+                foreach ($uploadPhotos as $file) {
+                    $photo = md5($file->baseName) . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $photo);
+                }
+
+                $image = new CommonImages();
+                $image->file = $appPath . '/' . $photo;
+                $image->save();
+
+                $commentImage = new CompanyCommentImage();
+                $commentImage->attributes = [
+                    'commentID' => $comment->id,
+                    'imageID' => $image->id,
+                ];
+                $commentImage->save();
+            }
         }
     }
 }

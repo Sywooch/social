@@ -5,6 +5,7 @@
 namespace app\controllers;
 
 use app\models\AdsParticipant;
+use app\models\CompanyParticipant;
 use app\models\CustomerFriend;
 use app\models\CustomerImage;
 use Yii;
@@ -37,6 +38,21 @@ class AjaxController extends AbstractController
         $this->_post = Yii::$app->request->post();
 
         Yii::$app->response->format = Response::FORMAT_JSON;
+    }
+
+    /**
+     * Подписка компании.
+     */
+    public function actionCompanyInvite()
+    {
+        $model = new CompanyParticipant();
+
+        $model->companyID = $this->_post['companyID'];
+        $model->participantID = $this->_post['participantID'];
+
+        $model->save();
+
+        return [];
     }
 
     /**

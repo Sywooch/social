@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "company_comment".
  *
  * @property string $id
+ * @property string $companyID
  * @property string $customerID
  * @property string $text
  * @property string $date
@@ -40,7 +41,7 @@ class CompanyComment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customerID'], 'required'],
+            [['customerID', 'companyID', 'text'], 'required'],
             [['customerID', 'likePoint'], 'integer'],
             [['text'], 'string'],
             [['date'], 'safe'],
@@ -56,8 +57,9 @@ class CompanyComment extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'companyID' => Yii::t('app', 'Company ID'),
             'customerID' => Yii::t('app', 'Customer ID'),
-            'text' => Yii::t('app', 'Text'),
+            'text' => Yii::t('app', 'Комментарий'),
             'date' => Yii::t('app', 'Date'),
             'likePoint' => Yii::t('app', 'Like Point'),
         ];
