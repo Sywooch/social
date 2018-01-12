@@ -96,3 +96,11 @@ $('.add_friend_link').click(function(e){
         }
     });
 });
+
+$('.white_tag').on('click', function () {
+    if ($(this).hasClass('hovered')) {
+        $(this).removeClass('hovered');
+    } else {
+        $(this).addClass('hovered');
+    }
+});

@@ -11,6 +11,7 @@ return [
     'commentsOnPage' => 3,
     'mainPageAdsCount' => 4,
     'mainPageCompanyCount' => 6,
+    'mainInterestsElements' => 7,
     'seo' => [
         'title' => '',
         'keywords' => '',

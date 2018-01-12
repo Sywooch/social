@@ -59,4 +59,28 @@ class Country extends \yii\db\ActiveRecord
     {
         return $this->hasMany(City::className(), ['countryId' => 'id']);
     }
+
+    /**
+     * Возвращает групировку по городам.
+     *
+     * @return array
+     */
+    public function getCountriesGroup()
+    {
+        $countries = self::find()
+            ->select('country.id, country_translation.name')
+            ->joinWith('translation', false)
+            ->joinWith('cities', false)
+            ->joinWith('cities.translation')
+            ->asArray()->all();
+
+        $countriesGroup = [];
+        foreach ($countries as $country) {
+            foreach ($country['cities'] as $city) {
+                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
+            }
+        }
+
+        return $countriesGroup;
+    }
 }

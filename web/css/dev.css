@@ -2,3 +2,26 @@
     color: #a94442;
     font-size: 12px;
 }
+
+.white_tags_pull:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    font-size: 14px;
+    line-height: 29px;
+}
+
+.tags_block.tags_block_is_open .white_tag {
+    opacity: 0.5;
+}
+
+.tags_block.tags_block_is_open .white_tag:hover{
+    opacity: 1;
+}
+
+.white_tag.hovered {
+    opacity: 1;
+}

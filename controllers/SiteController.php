@@ -16,6 +16,7 @@ use app\models\CustomerInterests;
 use app\models\CustomerLanguages;
 use app\models\InfoPage;
 
+use app\models\Interest;
 use app\models\InterestCategory;
 use app\models\Languages;
 use app\models\RegisterForm;
@@ -133,7 +134,9 @@ class SiteController extends AbstractController
         $companies = $companiesQuery->limit(\Yii::$app->params['mainPageCompanyCount'])->orderBy('sortDate desc')->all();
         $companiesCount = $companiesQuery->count();
 
-        return $this->render(Yii::$app->controller->action->id, compact('ads', 'companies', 'adsCount', 'companiesCount'));
+        $interests = Interest::find()->all();
+
+        return $this->render(Yii::$app->controller->action->id, compact('ads', 'companies', 'adsCount', 'companiesCount', 'interests'));
     }
 
     public function actionAds($id)
@@ -148,20 +151,7 @@ class SiteController extends AbstractController
      */
     public function actionEnter()
     {
-        $countries = Country::find()
-            ->select('country.id, country_translation.name')
-            ->joinWith('translation', false)
-            ->joinWith('cities', false)
-            ->joinWith('cities.translation')
-            ->asArray()->all();
-
-
-        $countriesGroup = [];
-        foreach ($countries as $country) {
-            foreach ($country['cities'] as $city) {
-                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
-            }
-        }
+        $countriesGroup = (new Country())->getCountriesGroup();
 
         return $this->render(Yii::$app->controller->action->id, compact('countriesGroup'));
     }
