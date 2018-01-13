@@ -63,7 +63,6 @@ class SearchController extends AbstractController
      */
     public function actionIndex()
     {
-        
         return $this->render(Yii::$app->controller->action->id, []);
     }
 }

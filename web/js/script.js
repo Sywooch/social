@@ -104,3 +104,12 @@ $('.white_tag').on('click', function () {
         $(this).addClass('hovered');
     }
 });
+
+// Смена вкладок поиска.
+$('.tab').on('click', function () {
+    $('.tab').removeClass('current');
+    $(this).addClass('current');
+
+    $('.search_page_results').hide();
+    $('.search_page_results.' + $(this).data('page')).show();
+});

@@ -31,7 +31,7 @@ AppAsset::register($this);
 <body>
 <div class="wrapper">
 
-    <?php if(Yii::$app->controller->action->id == 'index') {
+    <?php if(Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'index') {
         echo $this->render('//site/block/header');
     } else {
         echo $this->render('//site/block/header-small');
