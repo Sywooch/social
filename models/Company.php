@@ -152,4 +152,24 @@ class Company extends \yii\db\ActiveRecord
     {
         return CompanyParticipant::find()->where('companyID = :thisID AND participantID = :participantID', [':thisID' => $this->id, ':participantID' => $userId])->count();
     }
+
+    /**
+     * Выполняет поиск компаний по парамтрам.
+     *
+     * @param array $params
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function searchByParams($params = [])
+    {
+        $query = self::find()->with('interests')
+            ->where(['like', 'title', $params['text']])
+            ->andFilterWhere(['cityID' => $params['city']]);
+
+        if (!empty($params['interest'])) {
+            $query->joinWith('interests')->andFilterWhere(['in','interest.id', $params['interest']]);
+        }
+
+        return $query->all();
+    }
 }

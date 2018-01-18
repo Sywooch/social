@@ -113,3 +113,28 @@ $('.tab').on('click', function () {
     $('.search_page_results').hide();
     $('.search_page_results.' + $(this).data('page')).show();
 });
+
+// Всплывающий список для строки поиска
+
+/*
+$('.white_input').click(function () {
+    $(this).parents('.main_search').find('.search_hidden').fadeToggle(400);
+    $(this).parents('.main_search').find('.white_input').toggleClass('white_input_is_open');
+});
+*/
+$(document).click( function(){
+    if( $(event.target).closest(".main_search").length )
+        return;
+    $(".search_hidden").fadeOut(400);
+});
+
+// Форма волшебного поиска
+$('#magic-search-form').on('submit', function () {
+    $('input[name="SearchForm[interest][]"]').remove();
+    $('.white_tag.hovered').each(function(i,param){
+        $('<input />').attr('type', 'hidden')
+            .attr('name', 'SearchForm[interest][]')
+            .attr('value', $(param).data('id'))
+            .appendTo('#magic-search-form');
+    });
+});

@@ -155,11 +155,6 @@
             $('.tags_block').toggleClass('tags_block_is_open');
         });
         
-        $('.white_input').click(function () {
-            $(this).parents('.main_search').find('.search_hidden').fadeToggle(400);  
-            $(this).parents('.main_search').find('.white_input').toggleClass('white_input_is_open');
-        });
-        
         $('.basket_btn_close').click(function () {
             $(this).parents('.wrap_pay_line').find('.pay_line_to_delete').fadeToggle(400);  
         });
@@ -167,7 +162,7 @@
         
         $('.language-select').click(function(){
             $(this).toggleClass('open');
-        })
+        });
 
         $('.language-select li').click(function(){
             var setLang = $('.language-select').data('location'),
@@ -175,7 +170,7 @@
             $('.language-select').data('location', dataLangSelect);
             $('.language-select li').removeClass('active');
             $(this).toggleClass('active');
-        })
+        });
         
         $(document).mouseup(function (e) {
             var container = $(".popup_password");
@@ -297,12 +292,7 @@
 
     });
 
-    $(document).click( function(){
-        if( $(event.target).closest(".main_search").length ) 
-            return;
-        $(".search_hidden").fadeOut(400);
 
-    });
     
 
     $(document).click( function(){

@@ -219,4 +219,24 @@ class Customer extends \yii\db\ActiveRecord
 
         \Yii::$app->session->remove('user');
     }
+
+    /**
+     * Выполняет поиск пользователей по парамтрам.
+     *
+     * @param array $params
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function searchByParams($params = [])
+    {
+        $query = self::find()->with('interests')
+            ->where(['like', 'fullName', $params['text'] . '%', false])
+            ->andFilterWhere(['cityID' => $params['city']]);
+
+        if (!empty($params['interest'])) {
+            $query->joinWith('interests')->andFilterWhere(['in','interest.id', $params['interest']]);
+        }
+
+        return $query->all();
+    }
 }

@@ -6,6 +6,10 @@ use yii\base\Model;
 
 class SearchForm extends Model
 {
+    const ADS_TYPE = 'ads';
+    const COMPANY_TYPE = 'company';
+    const ALL_TYPE = 'all';
+
     public $text;
 
     public $interest;

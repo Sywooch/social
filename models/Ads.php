@@ -168,4 +168,24 @@ class Ads extends \yii\db\ActiveRecord
             ->orderBy('sortDate DESC')
             ->count();
     }
+
+    /**
+     * Выполняет поиск обьявлений по парамтрам.
+     *
+     * @param array $params
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function searchByParams($params = [])
+    {
+        $query = self::find()->with('interests')
+            ->where(['like', 'title', $params['text']])
+            ->andFilterWhere(['cityID' => $params['city']]);
+
+        if (!empty($params['interest'])) {
+            $query->joinWith('interests')->andFilterWhere(['in','interest.id', $params['interest']]);
+        }
+
+        return $query->all();
+    }
 }

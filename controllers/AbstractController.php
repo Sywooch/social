@@ -27,6 +27,8 @@ require_once($phpMailer);
 
 class AbstractController extends Controller
 {
+    const DEFAULT_CITY = 1;
+
     /**
      * Пользователь в регистрацие.
      */

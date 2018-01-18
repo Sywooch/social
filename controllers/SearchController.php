@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Ads;
+use app\models\Company;
+use app\models\Customer;
+use app\models\SearchForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -63,6 +67,57 @@ class SearchController extends AbstractController
      */
     public function actionIndex()
     {
-        return $this->render(Yii::$app->controller->action->id, []);
+        $post = \Yii::$app->request->post('SearchForm');
+
+        switch ($post['cityCheckbox']) {
+            case '0':
+                if (empty($this->user)) {
+                    $post['city'] = self::DEFAULT_CITY;
+                } else {
+                    $post['city'] = $this->user->cityID;
+                }
+                break;
+            case '1':
+                break;
+            default:
+                $post['city'] = self::DEFAULT_CITY;
+                break;
+        }
+
+        $searchResult = $this->getSearchResults($post);
+
+        return $this->render(Yii::$app->controller->action->id, $searchResult);
+    }
+
+    /**
+     * Возвращает поисковые параметры.
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function getSearchResults($params = [])
+    {
+        $result = [
+            'users' => false,
+            'ads' => false,
+            'companies' => false,
+        ];
+
+        if ($params['type'] == SearchForm::ALL_TYPE) {
+            $result ['users'] = Customer::searchByParams($params);
+            $result ['ads'] = Ads::searchByParams($params);
+            $result ['companies'] = Company::searchByParams($params);
+        }
+
+        if ($params['type'] == SearchForm::ADS_TYPE) {
+            $result ['ads'] = Ads::searchByParams($params);
+        }
+
+        if ($params['type'] == SearchForm::COMPANY_TYPE) {
+            $result ['companies'] = Company::searchByParams($params);
+        }
+
+        return $result;
     }
 }

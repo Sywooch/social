@@ -6,7 +6,11 @@ $searchForm = new \app\models\SearchForm();
         <h2><?= \Yii::t('app', 'Найди прямо сейчас')?></h2>
         <?php $form = \yii\widgets\ActiveForm::begin([
             'action' => '/search',
-            'options' => ['class'=>'row'],
+            'enableAjaxValidation' => false,
+            'options' => [
+                    'class' => 'row',
+                    'id' => 'magic-search-form'
+            ],
             'fieldConfig' => [
                 'template' => '{input}',
                 'inputOptions' => ['class' => 'white_input'],
@@ -21,12 +25,6 @@ $searchForm = new \app\models\SearchForm();
                 <input type="submit" class="orange_btn_txt" value="<?= \Yii::t('app', 'Искать')?>" />
             </div>
             <div class="search_hidden">
-                <div class="search_hidden_line">
-                    <a href="#" class="search_hidden_txt">Выгуливание жены</a>
-                </div>
-                <div class="search_hidden_line">
-                    <a href="#" class="search_hidden_txt">Выгуливание жены</a>
-                </div>
                 <div class="search_hidden_line">
                     <a href="#" class="search_hidden_txt">Выгуливание жены</a>
                 </div>
@@ -63,26 +61,26 @@ $searchForm = new \app\models\SearchForm();
                     <div class="white_select">
                         <?= $form->field($searchForm, 'city')
                             ->dropDownList(
-                                    array_merge((new \app\models\Country())->getCountriesGroup(), ['else' => \Yii::t('app', 'Другой город...')]),
+                                \yii\helpers\ArrayHelper::merge((new \app\models\Country())->getCountriesGroup(), ['else' => \Yii::t('app', 'Другой город...')]),
                                     ['class' => 'city-selector',])
                             ->label(false);?>
                     </div>
                 </li>
                 <li>
                     <label>
-                        <input type="radio" name="SearchForm[type]" class="styler">
+                        <input type="radio" name="SearchForm[type]" value="ads" class="styler">
                         <span><?= \Yii::t('app', 'Напарник')?></span>
                     </label>
                 </li>
                 <li>
                     <label>
-                        <input type="radio" name="SearchForm[type]" class="styler">
+                        <input type="radio" name="SearchForm[type]" value="company" class="styler">
                         <span><?= \Yii::t('app', 'Компания')?></span>
                     </label>
                 </li>
                 <li>
                     <label>
-                        <input type="radio" name="SearchForm[type]" class="styler" checked>
+                        <input type="radio" name="SearchForm[type]" value="all" class="styler" checked>
                         <span><?= \Yii::t('app', 'Не важно')?></span>
                     </label>
                 </li>
