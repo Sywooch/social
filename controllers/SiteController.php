@@ -8,9 +8,12 @@ namespace app\controllers;
 
 use app\components\Registry;
 use app\models\Ads;
+use app\models\Area;
+use app\models\AreaTranslation;
 use app\models\City;
 use app\models\Company;
 use app\models\Country;
+use app\models\CountryTranslation;
 use app\models\Customer;
 use app\models\CustomerInterests;
 use app\models\CustomerLanguages;
@@ -151,7 +154,7 @@ class SiteController extends AbstractController
      */
     public function actionEnter()
     {
-        $countriesGroup = (new Country())->getCountriesGroup();
+        $countriesGroup = (new City())->getCountriesGroup();
 
         return $this->render(Yii::$app->controller->action->id, compact('countriesGroup'));
     }

@@ -76,4 +76,19 @@ class Messages extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Customer::className(), ['id' => 'receiverID']);
     }
+
+    /**
+     * Создает новое сообщение для диалога.
+     *
+     * @param $senderID
+     * @param $receiverID
+     */
+    public function initial($senderID, $receiverID) {
+        $this->setAttributes([
+            'senderID' => $senderID,
+            'receiverID' => $receiverID
+        ], false);
+
+        $this->save(false);
+    }
 }

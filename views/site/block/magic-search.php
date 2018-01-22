@@ -61,7 +61,7 @@ $searchForm = new \app\models\SearchForm();
                     <div class="white_select">
                         <?= $form->field($searchForm, 'city')
                             ->dropDownList(
-                                \yii\helpers\ArrayHelper::merge((new \app\models\Country())->getCountriesGroup(), ['else' => \Yii::t('app', 'Другой город...')]),
+                                \yii\helpers\ArrayHelper::merge((new \app\models\City())->getCountriesGroup(), ['else' => \Yii::t('app', 'Другой город...')]),
                                     ['class' => 'city-selector',])
                             ->label(false);?>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\Registry;
 use Yii;
 
 /**
@@ -9,7 +10,6 @@ use Yii;
  *
  * @property string $id
  * @property string $language
- * @property string $name
  *
  * @property City[] $cities
  */
@@ -29,7 +29,7 @@ class Country extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['id'], 'required'],
         ];
     }
 
@@ -55,32 +55,8 @@ class Country extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCities()
+    public function getAreas()
     {
-        return $this->hasMany(City::className(), ['countryId' => 'id']);
-    }
-
-    /**
-     * Возвращает групировку по городам.
-     *
-     * @return array
-     */
-    public function getCountriesGroup()
-    {
-        $countries = self::find()
-            ->select('country.id, country_translation.name')
-            ->joinWith('translation', false)
-            ->joinWith('cities', false)
-            ->joinWith('cities.translation')
-            ->asArray()->all();
-
-        $countriesGroup = [];
-        foreach ($countries as $country) {
-            foreach ($country['cities'] as $city) {
-                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
-            }
-        }
-
-        return $countriesGroup;
+        return $this->hasMany(Area::className(), ['countryId' => 'id']);
     }
 }

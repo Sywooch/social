@@ -1,3 +1,7 @@
+<?php
+use yii\helpers\Url;
+?>
+
 <?= $this->render('//site/block/search', []); ?>
 <section class="main_container light_bg">
     <div class="container">
@@ -72,59 +76,29 @@
                             </li>
                         </ul>
                     </div>
+                    <?php if (!empty(\app\components\Registry::get('user')->friends)):?>
                     <div class="friends_block">
+                        <?php foreach (\app\components\Registry::get('user')->friends as $friend):?>
                         <div class="friends_block_item clearfix">
                             <div class="friends_block_item_left clearfix">
-                                <a href="#" class="message_author">
-                                    <img src="/img/profile_company.jpg" alt="">
+                                <a href="<?= Url::to('/public/profile/' . $friend->id)?>" class="message_author">
+                                    <img src="/uploads/<?= $friend->id?>/<?= $friend->mainImage->file?>" alt="">
                                 </a>
                                 <div class="index_message_item_left_txt">
-                                    <a href="#">Владимир Кожевников</a>
-                                    <p>18 июня 2017 22:14</p>
+                                    <a href="<?= Url::to('/public/profile/' . $friend->id)?>"><?= $friend->fullName?></a>
+                                    <p><?= date('d.m.Y', strtotime($friend->birthday))?></p>
                                 </div>
                             </div>
                             <div class="friends_block_item_right">
-                                <a href="#" class="green_btn">
-                                    <span class="green_btn_txt">Отправить сообщение</span>
+                                <a href="<?= Url::to('/profile/create-dialog/' . $friend->id)?>" class="green_btn create-dialog">
+                                    <span class="green_btn_txt"><?= \Yii::t('app', 'Отправить сообщение')?></span>
                                 </a>
-                                <a href="#" class="typical_link">Убрать из друзей</a>
+                                <a href="javascript:void(0)" class="typical_link"><?= \Yii::t('app', 'Убрать из друзей')?></a>
                             </div>
                         </div>
-                        <div class="friends_block_item clearfix">
-                            <div class="friends_block_item_left clearfix">
-                                <a href="#" class="message_author">
-                                    <img src="/img/profile_company.jpg" alt="">
-                                </a>
-                                <div class="index_message_item_left_txt">
-                                    <a href="#">Владимир Кожевников</a>
-                                    <p>18 июня 2017 22:14</p>
-                                </div>
-                            </div>
-                            <div class="friends_block_item_right">
-                                <a href="#" class="green_btn">
-                                    <span class="green_btn_txt">Отправить сообщение</span>
-                                </a>
-                                <a href="#" class="typical_link">Убрать из друзей</a>
-                            </div>
-                        </div>
-                        <div class="friends_block_item clearfix">
-                            <div class="friends_block_item_left clearfix">
-                                <a href="#" class="message_author">
-                                    <img src="/img/profile_company.jpg" alt="">
-                                </a>
-                                <div class="index_message_item_left_txt">
-                                    <a href="#">Владимир Кожевников</a>
-                                    <p>18 июня 2017 22:14</p>
-                                </div>
-                            </div>
-                            <div class="friends_block_item_right">
-                                <a href="#" class="green_btn">
-                                    <span class="green_btn_txt">Отправить сообщение</span>
-                                </a>
-                                <a href="#" class="typical_link">Убрать из друзей</a>
-                            </div>
-                        </div>
+                        <?php endforeach;?>
                     </div>
+                    <?php endif;?>
                 </div>
             </div>
             <div class="decorations_companies">

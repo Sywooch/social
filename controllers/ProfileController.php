@@ -219,6 +219,28 @@ class ProfileController extends AbstractController
     }
 
     /**
+     * Создание нового диалога, либо продолжение текущего.
+     *
+     * @param $id
+     *
+     * @return \yii\web\Response
+     */
+    public function actionCreateDialog($id)
+    {
+        $message = Messages::findOne([
+            'senderID' => $this->user->id,
+            'receiverID' => $id,
+        ]);
+
+        if (empty($message->id)) {
+            $message = new Messages();
+            $message->initial($this->user->id, $id);
+        }
+
+        return $this->redirect(['profile/dialog/' . $message->id]);
+    }
+
+    /**
      * Диалог с пользователем.
      *
      * @param $id
@@ -240,7 +262,9 @@ class ProfileController extends AbstractController
 
         $dialog = Messages::find()
             ->where(['receiverID' => [$message->senderID, $message->receiverID]])
+            ->andWhere(['not', ['text' => null]])
             ->orWhere(['senderID' => [$message->senderID, $message->receiverID]])
+            ->andWhere(['not', ['text' => null]])
             ->with('sender')
             ->with('sender.mainImage')
             ->orderBy('date asc')

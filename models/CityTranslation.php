@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "city_translation".
  *
  * @property string $id
- * @property string $sourceId
+ * @property string $sourceID
  * @property string $language
  * @property string $name
  */
@@ -28,8 +28,8 @@ class CityTranslation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sourceId', 'language', 'name'], 'required'],
-            [['sourceId'], 'integer'],
+            [['sourceID', 'language', 'name'], 'required'],
+            [['sourceID'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['name'], 'string', 'max' => 255],
         ];
@@ -42,7 +42,7 @@ class CityTranslation extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'sourceId' => 'Source ID',
+            'sourceID' => 'Source ID',
             'language' => 'Язык перевода',
             'name' => 'Наименование',
         ];

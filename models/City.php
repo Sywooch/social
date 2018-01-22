@@ -2,15 +2,14 @@
 
 namespace app\models;
 
+use app\components\Registry;
 use Yii;
 
 /**
  * This is the model class for table "city".
  *
  * @property string $id
- * @property string $countryId
- * @property string $language
- * @property integer $name
+ * @property string $areaId
  *
  * @property Country $country
  */
@@ -30,10 +29,8 @@ class City extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['countryId', 'name'], 'required'],
-            [['countryId', 'name'], 'integer'],
-            [['language'], 'string', 'max' => 5],
-            [['countryId'], 'exist', 'skipOnError' => true, 'targetClass' => Country::className(), 'targetAttribute' => ['countryId' => 'id']],
+            [['areaId'], 'required'],
+            [['areaId'], 'exist', 'skipOnError' => true, 'targetClass' => Area::className(), 'targetAttribute' => ['areaId' => 'id']],
         ];
     }
 
@@ -44,9 +41,7 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'countryId' => 'Country ID',
-            'language' => 'Language',
-            'name' => 'Name',
+            'areaId' => 'Country ID',
         ];
     }
 
@@ -62,8 +57,33 @@ class City extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCountry()
+    public function getArea()
     {
-        return $this->hasOne(Country::className(), ['id' => 'countryId']);
+        return $this->hasOne(Area::className(), ['id' => 'areaId']);
+    }
+
+    /**
+     * Возвращает групировку по городам.
+     *
+     * @return array
+     */
+    public function getCountriesGroup()
+    {
+        $countriesGroup = [];
+
+        $data = self::find()
+            ->select('city.id, country_translation.name as country, city_translation.name as city')
+            ->where(['country.id' => Registry::get('countryID')])
+            ->joinWith('translation', false)
+            ->joinWith('area', false)
+            ->joinWith('area.country', false)
+            ->joinWith('area.country.translation', false)
+            ->asArray()->limit(5)->all();
+
+        foreach ($data as $item) {
+            $countriesGroup[$item['id']] = $item['country'] . ', ' . $item['city'];
+        }
+
+        return $countriesGroup;
     }
 }

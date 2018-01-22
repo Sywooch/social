@@ -1,3 +1,8 @@
+// Создание нового диалога
+$('.create-dialog').on('click', function () {
+
+});
+
 // Окошко выбора города.
 $('.city-selector').on('change', function () {
     if ($(this).val() == 'else') {
