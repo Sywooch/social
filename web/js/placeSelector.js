@@ -81,5 +81,16 @@ modalWindow.on('input', '.selector-city-search', function () {
 
 // Клик выбора города
 modalWindow.on('click', '.select-city', function () {
+    var element = $(this);
+    // Добавляем позицию в селектор.
+    $('.city-selector').find('option').each(function (f, e) {
+        if (e.value != 'else') {
+            e.remove();
+        } else {
+            $(e).before('<option value="'+element.data('id')+'" selected>'+element.data('country')+', '+element.text()+'</option>');
+        }
+
+    });
+    $('select').trigger('refresh');
     $('.city_modal').arcticmodal('close');
 });
