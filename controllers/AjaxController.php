@@ -5,7 +5,10 @@
 namespace app\controllers;
 
 use app\models\AdsParticipant;
+use app\models\Area;
+use app\models\City;
 use app\models\CompanyParticipant;
+use app\models\Country;
 use app\models\CustomerFriend;
 use app\models\CustomerImage;
 use Yii;
@@ -38,6 +41,59 @@ class AjaxController extends AbstractController
         $this->_post = Yii::$app->request->post();
 
         Yii::$app->response->format = Response::FORMAT_JSON;
+    }
+
+    public function actionGetJsonList()
+    {
+        Yii::$app->response->format = Response::FORMAT_HTML;
+
+        // Страны
+        if (empty($this->_post['country']) && empty($this->_post['area']) && empty($this->_post['city'])) {
+            $query = Country::find()
+                ->select('country.id, country_translation.name, country.sort')
+                ->joinWith('translation', false)
+                ->orderBy('country.sort desc, country_translation.name');
+
+            if (!empty($this->_post['search']))
+                $query->where(['like', 'country_translation.name', $this->_post['search'] . '%', false]);
+
+            $countries = $query->asArray()->all();
+            return $this->renderPartial('templates/country-selector', compact('countries'));
+        }
+
+        // Областя
+        if (!empty($this->_post['country']) && empty($this->_post['area']) && empty($this->_post['city'])) {
+            $country = Country::findOne($this->_post['country']);
+
+            $query = Area::find()
+                ->select('area.id, area_translation.name, area.sort')
+                ->where(['area.countryId' => $this->_post['country']])
+                ->joinWith('translation', false)
+                ->orderBy('area.sort desc, area_translation.name');
+
+            if (!empty($this->_post['search']))
+                $query->andWhere(['like', 'area_translation.name', $this->_post['search'] . '%', false]);
+
+            $areas = $query->asArray()->all();
+            return $this->renderPartial('templates/area-selector', compact('country', 'areas'));
+        }
+
+        // Города
+        if (empty($this->_post['country']) && !empty($this->_post['area']) && empty($this->_post['city'])) {
+            $area = Area::findOne($this->_post['area']);
+
+            $query = City::find()
+                ->select('city.id, city_translation.name, city.sort')
+                ->where(['city.areaId' => $this->_post['area']])
+                ->joinWith('translation', false)
+                ->orderBy('city.sort desc, city_translation.name');
+
+            if (!empty($this->_post['search']))
+                $query->andWhere(['like', 'city_translation.name', $this->_post['search'] . '%', false]);
+
+            $cities = $query->asArray()->all();
+            return $this->renderPartial('templates/city-selector', compact('area', 'cities'));
+        }
     }
 
     /**

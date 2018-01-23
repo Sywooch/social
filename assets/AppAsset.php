@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
 		'/web/js/main.js',
 		'/web/js/imageUploader.js',
 		'/web/js/script.js',
+		'/web/js/placeSelector.js',
    ];
     public $depends = [
         'yii\web\YiiAsset',
