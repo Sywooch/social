@@ -39,12 +39,10 @@ use yii\helpers\Html;
 
                 <div class="typycal_select">
                     <select class="city-selector">
-                        <option>Москва</option>
-                        <option>Санкт-Петербург</option>
-                        <option>Новосибирск</option>
-                        <option>Екатеринбург</option>
-                        <option>Нижний Новгород</option>
-                        <option value="else">Другой город...</option>
+                        <?php foreach ((new \app\models\City())->getCountriesGroup() as $id => $item):?>
+                            <option value="<?= $id?>"><?= $item?></option>
+                        <?php endforeach;?>
+                        <option value="else"><?= \Yii::t('app', 'Другой город')?>...</option>
                     </select>
                 </div>
             </div>

@@ -6,6 +6,7 @@ use app\models\Ads;
 use app\models\AdsInterests;
 use app\models\Category;
 use app\models\ChangePasswordForm;
+use app\models\City;
 use app\models\CommonImages;
 use app\models\Company;
 use app\models\CompanyComment;
@@ -78,6 +79,14 @@ class ProfileController extends AbstractController
         Yii::$app->view->params['vk'] = $vk;
         Yii::$app->view->params['facebook'] = $facebook;
         Yii::$app->view->params['user'] = $this->user;
+    }
+
+    /**
+     *
+     */
+    public function actionEdit()
+    {
+        return $this->render(Yii::$app->controller->action->id, []);
     }
 
     /**
@@ -460,17 +469,7 @@ class ProfileController extends AbstractController
 
         InterestCategory::attachAdsCount($interestCategories);
 
-        $countries = Country::find()
-            ->select('country.id, country_translation.name, city.id, city_translation.name')
-            ->joinWith(['translation','cities','cities.translation'])
-            ->asArray()->all();
-
-        $countriesGroup = [];
-        foreach ($countries as $country) {
-            foreach ($country['cities'] as $city) {
-                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
-            }
-        }
+        $countriesGroup = (new City())->getCountriesGroup();
 
         return [$interestCategories, $countriesGroup];
     }

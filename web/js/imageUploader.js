@@ -5,11 +5,13 @@
  */
 var ImageUploader = {
     params: {
-        onLoadImage: function (evt) {
-            $('.step_photo_i_img').append('<span class="loaded_img"><img src="' + evt.target.result + '" alt=""></span>' +
-                '<button class="basket_btn" onclick="ImageUploader.remove(\'' + name + '\', \'' + file.name + '\', this)">' +
-                '<i class="flaticon-garbage"></i>' +
-                '</button>');
+        onLoadImage: function (evt, file, container) {
+            var element = $('.' + container);
+            element.find('.step_photo_i_img').hide();
+            element.find('.green_btn').hide();
+            element.append('<span class="loaded_img"><img src="' + evt.target.result + '" alt=""></span>' +
+                '<button class="basket_btn" onclick="ImageUploader.remove(\'' + file.name + '\', this, \'' + container + '\')"><i class="flaticon-garbage"></i></button>'
+        );
         },
         onErrorLoad: function (evt) {
             $('.error-image').show();
@@ -71,18 +73,19 @@ var ImageUploader = {
     /**
      * Выполняет добавление в очередь через input.
      *
-     * Например <input type="file" class="styler" onchange="ImageUploader.load(this)" multiple="">
+     * Например <input type="file" class="styler" onchange="ImageUploader.load(this, 'container')" multiple="">
      *
      * @param object
+     * @param container
      */
-    load: function (object) {
+    load: function (object, container) {
         this.init(object);
 
         $.each($(object)[0].files, function (i, file) {
             ImageUploader.params.uploadItemsCount++;
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = function (evt) {ImageUploader.params.onLoadImage(evt)};
+            reader.onload = function (evt) {ImageUploader.params.onLoadImage(evt, file, container)};
             reader.onerror = function (evt) {ImageUploader.params.onErrorLoad(evt)};
             // Добавляет значение файла.
             ImageUploader.params.formData.push(file);
@@ -96,9 +99,18 @@ var ImageUploader = {
      * @param fileName
      * @param object
      */
-    remove: function removeUploadPhoto(name, fileName, object) {
-        $('.step_photo_i_img').empty();
-        $(object).remove();
+    remove: function removeUploadPhoto(fileName, object, container) {
+        // $('.' + container).find('.loaded_img').remove();
+        // $('.step_photo_i_img').empty();
+        var element = $('.' + container),
+            button = $(object);
+
+        button.prev('span').remove();
+        button.remove();
+
+        element.find('.step_photo_i_img').show();
+        element.find('.green_btn').show();
+
         var tmpData = [];
         for (let value of this.params.formData) {
             if (value.name == fileName) {
@@ -108,6 +120,7 @@ var ImageUploader = {
             }
         }
         this.params.formData = tmpData;
+        console.log(this.params.formData);
     },
 
     /**
@@ -170,12 +183,20 @@ var ImageUploader = {
     }
 };
 
-$('#step-two-form').on('beforeSubmit', function() {
-    if ($(this).data('presave') == false) {
-        ImageUploader.uploadQueueStart(function ()
-        {
-            $('#step-two-form').data('presave', true).submit();
-        });
-        return false;
-    }
+$('.complete-registration').on('click', function () {
+    event.preventDefault();
+    var link = $(this).attr('href');
+         ImageUploader.uploadQueueStart(function ()
+         {
+             location.href = link;
+         });
 });
+// $('#step-two-form').on('beforeSubmit', function() {
+//     if ($(this).data('presave') == false) {
+//         ImageUploader.uploadQueueStart(function ()
+//         {
+//             $('#step-two-form').data('presave', true).submit();
+//         });
+//         return false;
+//     }
+// });

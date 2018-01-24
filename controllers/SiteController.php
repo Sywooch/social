@@ -208,11 +208,9 @@ class SiteController extends AbstractController
     }
 
     /**
-     * Завершение регистрации.
-     *
-     * @throws \yii\web\NotFoundHttpException
+     * Второй шаг регистрации.
      */
-    public function actionRegisterComplete()
+    public function actionRegisterStepThree()
     {
         $customer = Customer::findOne($this->registration['customerID']);
 
@@ -232,12 +230,32 @@ class SiteController extends AbstractController
             }
         }
 
-        if (\Yii::$app->request->post('language')) {
+        if (\Yii::$app->request->post('languages')) {
+            foreach (\Yii::$app->request->post('languages') as $language) {
                 $model = new CustomerLanguages();
                 $model->customerID = $this->registration['customerID'];
-                $model->languageID = Yii::$app->request->post('language');
+                $model->languageID = $language;
                 $model->save();
+            }
         }
+
+        return $this->render(
+            Yii::$app->controller->action->id,
+            []
+        );
+    }
+
+    /**
+     * Завершение регистрации.
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionRegisterComplete()
+    {
+        $customer = Customer::findOne($this->registration['customerID']);
+
+        if (empty($customer))
+            throw new \yii\web\NotFoundHttpException();
 
         \Yii::$app->session->set('user', $customer);
 

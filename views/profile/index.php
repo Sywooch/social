@@ -21,7 +21,7 @@
                                     <td><?= \Yii::t('app', 'Страна')?>, <?= \Yii::t('app', 'Город')?></td>
                                     <td>
                                         <a href="javascript:void(0)" class="change_city_link">
-                                            <?= $this->params['user']->city->country->translation->name?>, <?= $this->params['user']->city->translation->name?>
+                                            <?= $this->params['user']->city->area->country->translation->name?>, <?= $this->params['user']->city->translation->name?>
                                         </a>
                                     </td>
                                 </tr>

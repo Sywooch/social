@@ -11,6 +11,7 @@ use app\models\CompanyParticipant;
 use app\models\Country;
 use app\models\CustomerFriend;
 use app\models\CustomerImage;
+use app\models\Interest;
 use Yii;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -94,6 +95,20 @@ class AjaxController extends AbstractController
             $cities = $query->asArray()->all();
             return $this->renderPartial('templates/city-selector', compact('area', 'cities'));
         }
+    }
+
+    /**
+     * Поиск по интересам.
+     */
+    public function actionInterestSearch()
+    {
+        $interest = Interest::find()->select('interest.id, interest_category.id as cid, interest_translation.name')
+            ->joinWith('category', false)
+            ->joinWith('translation', false)
+            ->where(['like', 'interest_translation.name', $this->_post['search'] . '%', false])
+            ->asArray()->all();
+
+        return $interest;
     }
 
     /**

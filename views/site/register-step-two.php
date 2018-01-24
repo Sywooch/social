@@ -8,24 +8,11 @@ use yii\helpers\Html;
 <section class="main_container light_bg">
     <div class="container">
         <div class="title_block step_title_block clearfix">
-            <h1><span><?= \Yii::t('app', 'Шаг')?> 2:</span> <?= \Yii::t('app', 'Расскажите немного о себе, Имя')?></h1>
+            <h1><span><?= \Yii::t('app', 'Шаг')?> 2:</span> <?= \Yii::t('app', 'Информация обо мне')?></h1>
         </div>
-
         <div class="step_block">
-            <div class="step_block_avatar">
-                <h3><?= \Yii::t('app', 'Необходимо выбрать фото профиля')?></h3>
-                <div class="wrap_step_block_ava">
-                    <div class="step_photo_top">
-                        <div class="step_photo_i_img">
-                        </div>
-                    </div>
-                    <div class="green_btn">
-                        <input type="file" class="styler" data-name="CustomerImage[image]" data-url="/ajax/image-upload" onchange="ImageUploader.load(this)" multiple="">
-                    </div>
-                </div>
-            </div>
             <?php $form = ActiveForm::begin([
-                'action' => '/site/register-complete',
+                'action' => '/site/register-step-three',
                 'enableAjaxValidation' => false,
                 'options' =>
                     [
@@ -49,19 +36,30 @@ use yii\helpers\Html;
                     <?php if (!empty($interestCategories)):?>
                     <ul class="categories_list">
                         <?php foreach ($interestCategories as $key => $category):?>
-                        <li class="categories_list_pull categories_list_pull_<?= $key + 1?>"><?= $category['translation']['name']?></li>
+                            <li class="categories_list_pull categories_list_pull_<?= $category['id']?>"><?= $category['translation']['name']?></li>
                         <?php endforeach;?>
+                        <li class="categories_list_pull"><a class="category_modal_link"  onclick="$('.goal_modal').arcticmodal()"><?= \Yii::t('app', 'Добавьте свою')?></a></li>
                     </ul>
-
                     <div class="categories_hidden">
+                        <div class="main_search interests_search interests_search_right">
+                            <input type="text" class="white_input interest-search" placeholder="<?= \Yii::t('app', 'Волшебный поиск')?>" />
+                            <input type="button" class="search_btn"/>
+                            <div class="search_hidden">
+                                <div class="search_hidden_line_interest list">
+                                </div>
+                                <div class="search_hidden_line_interest">
+                                    <a class="category_modal_link"  onclick="$('.goal_modal').arcticmodal()"><?= \Yii::t('app', 'Добавьте свою')?></a>
+                                </div>
+                            </div>
+                        </div>
                         <?php foreach ($interestCategories as $key => $category):?>
-                        <div class="category_item category_item_<?= $key + 1?>">
+                        <div class="category_item category_item_<?= $category['id']?>">
                             <h4><?= $category['translation']['name']?></h4>
                             <?php if (!empty($category['interests'])):?>
                             <ul class="filter_chbx_orange">
                                 <?php foreach ($category['interests'] as $interest):?>
                                 <li>
-                                    <label>
+                                    <label class="interest-label item-<?= $interest['id']?>">
                                         <input type="checkbox" class="styler" name="interests[]" value="<?= $interest['id']?>">
                                         <span><?= $interest['translation']['name']?></span>
                                     </label>
@@ -73,31 +71,42 @@ use yii\helpers\Html;
                         <?php endforeach;?>
                     </div>
                     <?php endif;?>
+                    <!--       goal_modal            -->
+
+                    <div style="display: none;">
+                        <div class="box-modal goal_modal">
+                            <div class="box-modal_close arcticmodal-close"><i class="flaticon-close"></i></div>
+                            <div class="modal">
+                                <div class="goal_mod">
+                                    <h4><?= \Yii::t('app', 'Добавление интересов')?></h4>
+                                    <textarea class="typical_input_bordered" placeholder="<?= \Yii::t('app', 'Перечислите через запятую')?>"></textarea>
+                                    <div class="green_btn">
+                                        <input type="submit" class="green_btn_txt" value="<?= \Yii::t('app', 'Добавить')?>" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
             <?php if (!empty($languages)):?>
-            <div class="step_languages step_languages_type2">
+            <div class="step_languages">
                 <h3><?= \Yii::t('app', 'Знаю языки')?></h3>
-                <ul>
-                    <?php foreach ($languages as $language):?>
-                        <li>
-                            <a href="javascript:void(0)"><?= $language['translation']['name']?></a>
-                            <button class="delete_btn"><i class="flaticon-close-cross"></i></button>
-                        </li>
-                    <?php endforeach;?>
+                <ul class="language-selector-block">
+                    <li class="language-selector-li">
+                        <div class="inner_search_select">
+                            <select class="language-selector">
+                                <option value=""><?= \Yii::t('app', 'Добавить язык')?></option>
+                                <?php foreach ($languages as $language):?>
+                                    <option value="<?= $language['id']?>"><?= $language['translation']['name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </li>
                 </ul>
-                <div class="typical_select_bordered">
-                    <select name="language">
-                        <option value=""><?= \Yii::t('app', 'Добавить язык')?></option>
-                        <?php foreach ($languages as $language):?>
-                            <option value="<?= $language['id']?>"><?= $language['translation']['name']?></option>
-                        <?php endforeach;?>
-                    </select>
-                </div>
             </div>
             <?php endif;?>
-            <div class="step_info_btm step_info_btm_type_2">
+            <div class="step_info_btm">
                 <h3><?= \Yii::t('app', 'О себе')?></h3>
                 <div class="step_info_form clearfix">
                     <?= $form->field(new \app\models\Customer(), 'about')->textArea(['class' => 'typical_input_bordered']) ?>

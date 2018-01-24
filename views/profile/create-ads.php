@@ -269,7 +269,9 @@ $postAds = \Yii::$app->request->post('Ads');
                                             <input type="radio" class="styler" name="location" value="dropDown">
                                         </label>
                                         <div class="inner_search_select">
-                                            <?= $form->field($createModel, 'city')->dropDownList($countriesGroup, ['class' => false])->label(false);?>
+                                            <?= $form->field($createModel, 'city')
+                                                ->dropDownList(\yii\helpers\ArrayHelper::merge($countriesGroup, ['else' => \Yii::t('app', 'Другой город...')]), ['class' => 'city-selector'])
+                                                ->label(false);?>
                                         </div>
                                     </li>
                                     <li>
@@ -397,3 +399,4 @@ $postAds = \Yii::$app->request->post('Ads');
 
         </div>
 </section>
+<?= $this->render('//site/block/modals', []); ?>

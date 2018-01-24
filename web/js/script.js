@@ -1,6 +1,75 @@
-// Создание нового диалога
-$('.create-dialog').on('click', function () {
+// Выбор языков
+$('.language-selector').on('change', function () {
+    var element = $(this),
+        value = element.find('option:selected').val(),
+        text = element.find('option:selected').text();
 
+    element.find('option:selected').remove();
+
+    $('.language-selector-block > .language-selector-li').before(
+        '<li class="selected-language">' +
+        '<a href="javascript:void(0);" data-id="'+value+'">'+text+'</a>' +
+        '</li>'
+    );
+
+    element.trigger('refresh');
+});
+
+// Убрать выбраный язык
+$('.language-selector-block').on('click', 'a', function () {
+    var element = $(this),
+        selector = $('.language-selector');
+
+    selector.append(
+        '<option value="'+element.data('id')+'">'+element.text()+'</option>'
+    );
+
+    element.parent().remove();
+    selector.trigger('refresh');
+});
+
+// Отправка формы второго шага.
+$('#step-two-form').on('submit', function () {
+    $('input[name="languages[]"]').remove();
+    $('.selected-language a').each(function(i,param){
+        console.log(param);
+        $('<input />').attr('type', 'hidden')
+            .attr('name', 'languages[]')
+            .attr('value', $(param).data('id'))
+            .appendTo('#step-two-form');
+    });
+});
+
+// Поиск по интересам.
+$('.interest-search').on('input', function () {
+    var element = $(this);
+
+    $.ajax({
+        url: '/ajax/interest-search',
+        type: 'post',
+        data: {
+            search: element.val()
+        },
+        dataType: 'json'
+    }).done(function(response) {
+        $('.search_hidden_line_interest.list').empty();
+        $.each(response, function (f, element) {
+            $('.search_hidden_line_interest.list').append('<div class="search_hidden_line_interest">' +
+                '<button class="add_interest"><i class="flaticon-cross"></i></button>' +
+                '<a href="javascript:void(0)" class="search_hidden_txt" data-id="'+element.id+'" data-cid="'+element.cid+'">'+element.name+'</a>' +
+                '</div>');
+            $('.search_hidden').show();
+        });
+    });
+});
+
+$('.search_hidden_line_interest.list').on('click', '.search_hidden_txt', function () {
+    var element = $(this);
+
+    if (!$('.categories_list_pull_' + element.data('cid')).hasClass('categories_list_pull_is_open')) {
+        $('.categories_list_pull_' + element.data('cid')).trigger('click');
+    }
+    $('.interest-label.item-' + element.data('id')).trigger('click');
 });
 
 // Отправка сообщения с публичной странички пользователя.
