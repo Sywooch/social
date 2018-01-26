@@ -27,7 +27,7 @@ $messageModel = new \app\models\Messages();
                                 <tbody>
                                 <tr>
                                     <td><?= \Yii::t('app', 'Страна')?>, <?= \Yii::t('app', 'Город')?></td>
-                                    <td><?= $item->city->country->translation->name?>, <?= $item->city->translation->name?></td>
+                                    <td><?= $item->city->area->country->translation->name?>, <?= $item->city->translation->name?></td>
                                 </tr>
                                 <tr>
                                     <td><?= \Yii::t('app', 'Языки')?></td>

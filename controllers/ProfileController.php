@@ -487,17 +487,7 @@ class ProfileController extends AbstractController
 
         InterestCategory::attachCompanyCount($interestCategories);
 
-        $countries = Country::find()
-            ->select('country.id, country_translation.name, city.id, city_translation.name')
-            ->joinWith(['translation','cities','cities.translation'])
-            ->asArray()->all();
-
-        $countriesGroup = [];
-        foreach ($countries as $country) {
-            foreach ($country['cities'] as $city) {
-                $countriesGroup[$city['id']] = $country['name'] . ', ' . $city['translation']['name'];
-            }
-        }
+        $countriesGroup = (new City())->getCountriesGroup();
 
         return [$interestCategories, $countriesGroup];
     }
@@ -510,6 +500,7 @@ class ProfileController extends AbstractController
     protected function saveAds($model)
     {
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+
             if (empty($model->id)) {
                 $model->sortDate = date('Y-m-d H:i:s');
                 \Yii::$app->session->setFlash('adsSave', true);
@@ -530,7 +521,11 @@ class ProfileController extends AbstractController
                 case 'null':
                     $model->cityID = null;
                     break;
+                case 'dropDown':
+
+                    break;
                 default:
+                    $model->cityID = \Yii::$app->request->post('location');
                     break;
             }
 

@@ -119,7 +119,7 @@ class InterestCategory extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-        $interestCategoryMap = ArrayHelper::map($interestCategoryMap, 'CID', 'adsCount');
+        $interestCategoryMap = ArrayHelper::map($interestCategoryMap, 'CID', 'companyCount');
 
         foreach ($categories as $c => $category) {
             $categories[$c]['companyCount'] = !empty($interestCategoryMap[$category['id']]) ? $interestCategoryMap[$category['id']] : 0;

@@ -27,7 +27,7 @@ require_once($phpMailer);
 
 class AbstractController extends Controller
 {
-    const DEFAULT_CITY = 1;
+    const DEFAULT_CITY = 4400;
 
     /**
      * Пользователь в регистрацие.
@@ -68,7 +68,6 @@ class AbstractController extends Controller
     public function init()
     {
         Registry::set('countryID', 9908, true);
-
 
         if (\Yii::$app->session->get('user')) {
             $this->user = \Yii::$app->session->get('user');

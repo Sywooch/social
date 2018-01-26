@@ -21,7 +21,7 @@ use yii\helpers\Url;
                                 <tbody>
                                 <tr>
                                     <td><?= \Yii::t('app', 'Страна, Город')?></td>
-                                    <td><?= $item->city->country->translation->name?>, <?= $item->city->translation->name?></td>
+                                    <td><?= $item->city->area->country->translation->name?>, <?= $item->city->translation->name?></td>
                                 </tr>
                                 <tr>
                                     <td><?= \Yii::t('app', 'Языки')?></td>

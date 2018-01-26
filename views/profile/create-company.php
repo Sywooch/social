@@ -120,7 +120,9 @@ $this->registerJs($js);
                             <div class="new_company_inline">
                                 <h4><?= \Yii::t('app', 'Расположение')?></h4>
                                 <div class="inner_search_select">
-                                    <?= $form->field($createModel, 'cityID')->dropDownList($countriesGroup, ['class' => false])->label(false);?>
+                                    <?= $form->field($createModel, 'cityID')
+                                        ->dropDownList(\yii\helpers\ArrayHelper::merge($countriesGroup, ['else' => \Yii::t('app', 'Другой город...')]), ['class' => 'city-selector'])
+                                        ->label(false);?>
                                 </div>
                             </div>
                             <span class="new_c_line_ic">

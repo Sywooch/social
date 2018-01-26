@@ -15,7 +15,7 @@ use yii\helpers\Html;
     <div class="main_page_top">
         <div class="full_width_container">
             <div class="main_page_top_wrap clearfix">
-                <a href="#" class="logo"><img src="/img/logo.png" alt=""></a>
+                <a href="/" class="logo"><img src="/img/logo.png" alt=""></a>
                 <div class="main_page_txt">
                     <p><?= \Yii::t('app', 'Найди друзей по интересам и присоединяйся к компаниям')?>!</p>
                 </div>
@@ -34,11 +34,12 @@ use yii\helpers\Html;
 <section class="recent_search_results light_bg">
     <div class="container">
         <div class="title_block clearfix">
-            <h2><?= \Yii::t('app', 'Сейчас ищут в')?> Москве:</h2>
+            <h2><?= \Yii::t('app', 'Сейчас ищут в')?> <?= $citySearch->translation->name?>:</h2>
             <div class="choose_city_block">
 
                 <div class="typycal_select">
                     <select class="city-selector">
+                        <option value="<?= $citySearch->id?>"><?= $citySearch->area->country->translation->name?>, <?= $citySearch->translation->name?></option>
                         <?php foreach ((new \app\models\City())->getCountriesGroup() as $id => $item):?>
                             <option value="<?= $id?>"><?= $item?></option>
                         <?php endforeach;?>
@@ -53,7 +54,7 @@ use yii\helpers\Html;
                 <!-- recent_search_item -->
                 <div class="recent_search_item">
                     <a href="<?= Url::to('/public/ads/' . $element->id)?>" class="title_link"><?= $element->title ?></a>
-                    <span class="item_hint"><?= $element->city->country->translation->name?>, <?= $element->city->translation->name?></span>
+                    <span class="item_hint"><?= $element->city->area->country->translation->name?>, <?= $element->city->translation->name?></span>
                     <a href="<?= Url::to('/public/profile/' . $element->customer->id)?>" class="recent_search_img">
                         <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
                         <span class="photos_number_link"></span>

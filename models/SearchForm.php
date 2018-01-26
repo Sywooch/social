@@ -27,7 +27,7 @@ class SearchForm extends Model
     {
         return [
             // email and password are both required
-            [['text'], 'required'],
+//            [['text'], 'required'],
             [['interest', 'city', 'type', 'cityCheckbox'], 'safe'],
         ];
     }

@@ -69,6 +69,9 @@ class SearchController extends AbstractController
     {
         $post = \Yii::$app->request->post('SearchForm');
 
+        if (empty($post))
+            throw new NotFoundHttpException();
+
         switch ($post['cityCheckbox']) {
             case '0':
                 if (empty($this->user)) {

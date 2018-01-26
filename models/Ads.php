@@ -46,9 +46,9 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['customerID', 'title', 'data', 'sex', 'content', 'interestsArray'], 'required'],
-            [['cityID'], 'integer'],
+//            [['cityID'], 'integer'],
             [['sex', 'content'], 'string'],
-            [['date', 'timeCreate', 'sortDate', 'views'], 'safe'],
+            [['date', 'timeCreate', 'sortDate', 'views', 'cityID'], 'safe'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -180,7 +180,10 @@ class Ads extends \yii\db\ActiveRecord
     {
         $query = self::find()->with('interests')
             ->where(['like', 'title', $params['text']])
-            ->andFilterWhere(['cityID' => $params['city']]);
+            ->andWhere(['or',
+                ['cityID' => $params['city']],
+                ['cityID' => NULL]
+            ]);
 
         if (!empty($params['interest'])) {
             $query->joinWith('interests')->andFilterWhere(['in','interest.id', $params['interest']]);

@@ -38,7 +38,7 @@ $current = false;
                 <!-- recent_search_item -->
                 <div class="recent_search_item user_search_item">
                     <a href="<?= Url::to('/public/profile/' . $user->id)?>" class="title_link"><?= $user->fullName?></a>
-                    <span class="item_hint"><?= $user->age?> <?= \Yii::t('app', 'лет')?>, <?= $user->city->country->translation->name?>, <?= $user->city->translation->name?></span>
+                    <span class="item_hint"><?= $user->age?> <?= \Yii::t('app', 'лет')?>, <?= $user->city->area->country->translation->name?>, <?= $user->city->translation->name?></span>
                     <a href="<?= Url::to('/public/profile/' . $user->id)?>" class="recent_search_img">
                         <img src="/uploads/<?= $user->id?>/<?= $user->mainImage->file?>" alt="">
                         <span class="photos_number_link"><?= count($user->images)?></span>
@@ -64,7 +64,13 @@ $current = false;
                 <!-- announcement_search_item -->
                 <div class="recent_search_item announcement_search_item">
                     <a href="<?= Url::to('/public/ads/' . $element->id)?>" class="title_link"><?= $element->title ?></a>
-                    <span class="item_hint"><?= $element->city->country->translation->name?>, <?= $element->city->translation->name?></span>
+                    <span class="item_hint">
+                        <?php if (!empty($element->city)):?>
+                            <?= $element->city->area->country->translation->name?>, <?= $element->city->translation->name?>
+                        <?php else:?>
+                            <?= \Yii::t('app', 'Любой город')?>
+                        <?php endif;?>
+                    </span>
                     <a href="<?= Url::to('/public/profile/' . $element->customer->id)?>" class="recent_search_img">
                         <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
                         <span class="photos_number_link"></span>

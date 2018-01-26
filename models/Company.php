@@ -54,12 +54,12 @@ class Company extends \yii\db\ActiveRecord
     {
         return [
             [['cityID', 'url', 'name', 'title', 'description', 'interestsArray'], 'required'],
-            [['cityID', 'participantsCount'], 'integer'],
+            [['participantsCount'], 'integer'],
             [['description'], 'string'],
             [['file'], 'file', 'extensions' => 'gif, jpg, png'],
             [['url', 'image'], 'string', 'max' => 255],
             [['name'], 'string', 'max' => 40],
-            [['timeCreate', 'sortDate'], 'safe'],
+            [['cityID', 'timeCreate', 'sortDate'], 'safe'],
             [['cityID'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['cityID' => 'id']],
         ];
     }

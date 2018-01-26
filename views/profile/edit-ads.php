@@ -261,7 +261,7 @@ $interestsIDS = \yii\helpers\ArrayHelper::map($model->interests, 'id', 'category
                                 <ul class="typical_chbx_orange">
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="Ads[city]" value="<?= $this->params['user']->city->id?>">
+                                            <input type="radio" class="styler" name="location" value="<?= $this->params['user']->city->id?>" <?= $model->cityID == $this->params['user']->city->id ? 'checked':''?>>
                                             <span>
                                                 <?= \Yii::t('app', 'В моем городе')?>
                                                 (<?= $this->params['user']->city->translation->name?>)
@@ -270,15 +270,36 @@ $interestsIDS = \yii\helpers\ArrayHelper::map($model->interests, 'id', 'category
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="location" value="dropDown">
+                                            <input type="radio" class="styler" name="location" value="dropDown" <?= (is_numeric($model->cityID) && $model->cityID != $this->params['user']->city->id) ? 'checked':''?>>
                                         </label>
                                         <div class="inner_search_select">
-                                            <?= $form->field($model, 'city')->dropDownList($countriesGroup, ['class' => false])->label(false);?>
+                                            <?php
+                                            $countriesGroup = \yii\helpers\ArrayHelper::merge(
+                                                $countriesGroup,
+                                                ['else' => \Yii::t('app', 'Другой город...')]
+                                            );
+                                            $options = [];
+                                            if (is_numeric($model->cityID) && $model->cityID != $this->params['user']->city->id) {
+                                                $countriesGroup = \yii\helpers\ArrayHelper::merge(
+                                                    [$model->city->id => $model->city->area->country->translation->name .', '. $model->city->translation->name],
+                                                    $countriesGroup
+                                                );
+                                                $options = [$model->city->id => ['selected' => true]];
+                                            }
+
+                                            ?>
+                                            <?= $form->field($model, 'city')
+                                                ->dropDownList(
+                                                    $countriesGroup,
+                                                    ['class' => 'city-selector'],
+                                                    ['options' => $options]
+                                                )
+                                                ->label(false);?>
                                         </div>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="radio" class="styler" name="location" value="null" checked>
+                                            <input type="radio" class="styler" name="location" value="null" <?= (is_null($model->cityID)) ? 'checked':''?>>
                                             <span><?= \Yii::t('app', 'Не важно')?></span>
                                         </label>
                                     </li>
