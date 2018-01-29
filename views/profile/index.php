@@ -122,7 +122,7 @@
                                                             </span>
                                                 <div class="wall_post_links clearfix">
                                                     <div class="wall_post_links_left">
-                                                        <p><?= $this->params['user']->mainImage->date?></p>
+                                                        <p><?= !empty($this->params['user']->mainImage) ? $this->params['user']->mainImage->date : ''?></p>
                                                     </div>
                                                     <div class="wall_post_links_likes">
                                                         <span><?= $this->params['user']->mainImage->likePoint?></span>
