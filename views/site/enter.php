@@ -97,7 +97,9 @@ $registration = new \app\models\RegisterForm();
                     <?= $form->field($registration, 'password')->passwordInput(['placeholder' => \Yii::t('app', 'Пароль')])->label(false) ?>
 
                     <div class="typical_select_bordered">
-                        <?= $form->field($registration, 'city')->dropDownList(\yii\helpers\ArrayHelper::merge($countriesGroup, ['else' => \Yii::t('app', 'Другой город...')]), ['class' => 'city-selector'])->label(false);?>
+                        <?= $form->field($registration, 'city')
+                            ->dropDownList(\yii\helpers\ArrayHelper::merge($countriesGroup, ['else' => \Yii::t('app', 'Другой город...')]), ['class' => 'city-selector'])
+                            ->label(false);?>
                     </div>
 
                     <div class="typical_birth_date">
