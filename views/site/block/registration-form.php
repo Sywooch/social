@@ -42,7 +42,7 @@ $registration = new \app\models\RegisterForm();
                         <?php for ($i = 1; $i <= 31; $i++):?>
                         <li>
                             <label>
-                                <input type="radio" class="styler"  name="b_day">
+                                <input type="radio" class="styler"  name="b_day" value="<?= $i?>">
                                 <span data-numeric="<?= $i?>"><?= $i?></span>
                             </label>
                         </li>
@@ -54,7 +54,7 @@ $registration = new \app\models\RegisterForm();
                         <?php foreach (\app\models\RegisterForm::getMonthTranslation() as $numeric => $translation):?>
                         <li>
                             <label>
-                                <input type="radio" class="styler" name="b_month">
+                                <input type="radio" class="styler" name="b_month" value="<?= $numeric?>">
                                 <span data-numeric="<?= $numeric?>"><?= $translation?></span>
                             </label>
                         </li>
@@ -66,7 +66,7 @@ $registration = new \app\models\RegisterForm();
                         <?php for ($i = 1980; $i <= 2012; $i++):?>
                         <li>
                             <label>
-                                <input type="radio" class="styler" name="b_year">
+                                <input type="radio" class="styler" name="b_year" value="<?= $i?>">
                                 <span data-numeric="<?= $i?>"><?= $i?></span>
                             </label>
                         </li>
