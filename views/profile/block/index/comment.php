@@ -17,7 +17,11 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
     <div class="wall_post wall_post_new">
         <div class="wall_post_top clearfix">
             <a href="javascript:void(0)" class="profile_photo_link">
-                <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                <?php if (!empty($this->params['user']->mainImage)):?>
+                    <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                <?php else:?>
+                    <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                <?php endif;?>
             </a>
             <div class="wall_post_txt">
                 <?php $form = ActiveForm::begin([
