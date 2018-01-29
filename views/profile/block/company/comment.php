@@ -17,7 +17,11 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
     <div class="wall_post message-send" style="display: none;">
         <div class="wall_post_top clearfix">
             <a href="javascript:void(0)" class="profile_photo_link">
-                <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                <?php if (!empty($this->params['user']->mainImage)):?>
+                    <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                <?php else:?>
+                    <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                <?php endif;?>
             </a>
             <div class="wall_post_txt">
                 <?php $form = ActiveForm::begin([
@@ -69,7 +73,11 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
                         <button class="basket_btn"><i class="flaticon-garbage"></i></button>
                     </div>
                     <a href="javascript:void(0)" class="profile_photo_link">
-                        <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                        <?php if (!empty($this->params['user']->mainImage)):?>
+                            <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                        <?php else:?>
+                            <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                        <?php endif;?>
                     </a>
                     <div class="wall_post_txt">
                         <p><?= $comment['text']?></p>
@@ -99,7 +107,11 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
                                                 <?php endif;?>
                                                 <div class="wall_post_modal_txt clearfix">
                                                     <a href="javascript:void(0)" class="profile_photo_link">
-                                                        <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                                                        <?php if (!empty($this->params['user']->mainImage)):?>
+                                                            <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                                                        <?php else:?>
+                                                            <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                                                        <?php endif;?>
                                                     </a>
                                                     <div class="wall_post_modal_right">
                                                         <p><?= $comment['text']?></p>

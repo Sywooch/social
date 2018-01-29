@@ -36,7 +36,11 @@ $messageModel = new \app\models\Messages();
 
             <div class="message_item message_item_current clearfix">
                 <a href="<?= Url::to('/profile')?>" class="message_author">
-                    <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                    <?php if (!empty($this->params['user']->mainImage)):?>
+                        <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                    <?php else:?>
+                        <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                    <?php endif;?>
                 </a>
                 <div class="message_item_txt">
                     <?php $form = ActiveForm::begin([

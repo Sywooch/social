@@ -121,7 +121,11 @@ $messageModel = new \app\models\Messages();
                                             <p><?= \Yii::t('app', 'Вы и')?> <?= $item->fullName?> <?= \Yii::t('app', 'теперь друзья')?>!</p>
                                             <div class="add_friend_mod_img">
                                                 <a href="javascript:void(0)" class="add_friend_photo add_friend_photo_m">
-                                                    <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                                                    <?php if (!empty($this->params['user']->mainImage)):?>
+                                                        <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                                                    <?php else:?>
+                                                        <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                                                    <?php endif;?>
                                                 </a>
                                                 <!--                                                            <a href="#" class="add_friend_photo add_friend_photo_f"></a>-->
                                                 <a href="javascript:void(0)" class="add_friend_photo">

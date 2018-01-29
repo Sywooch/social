@@ -97,7 +97,11 @@
                     </div>
                     <div class="profile_aside">
                         <a href="javascript:void(0)" class="announcement_img avatar_mod_link">
-                            <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                            <?php if (!empty($this->params['user']->mainImage)):?>
+                                <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                            <?php else:?>
+                                <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                            <?php endif;?>
                         </a>
 
                         <!--       avatar_mod            -->
@@ -110,7 +114,11 @@
                                         <div class="wall_post_top clearfix">
                                             <div class="wall_post_txt">
                                                             <span class="wall_post_img">
+                                                            <?php if (!empty($this->params['user']->mainImage)):?>
                                                                 <img src="/uploads/<?= $this->params['user']->id?>/<?= $this->params['user']->mainImage->file?>" alt="">
+                                                            <?php else:?>
+                                                                <img src="/img/no-img-<?= $this->params['user']->sex?>.jpg" alt="">
+                                                            <?php endif;?>
                                                             </span>
                                                 <div class="wall_post_links clearfix">
                                                     <div class="wall_post_links_left">
