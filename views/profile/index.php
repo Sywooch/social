@@ -125,7 +125,7 @@
                                                         <p><?= !empty($this->params['user']->mainImage) ? $this->params['user']->mainImage->date : ''?></p>
                                                     </div>
                                                     <div class="wall_post_links_likes">
-                                                        <span><?= $this->params['user']->mainImage->likePoint?></span>
+                                                        <span><?= !empty($this->params['user']->mainImage) ? $this->params['user']->mainImage->likePoint : ''?></span>
                                                         <a href="javascript:void(0)" class="like_btn"><?= \Yii::t('app', 'Нравится');?></a>
                                                     </div>
                                                 </div>
