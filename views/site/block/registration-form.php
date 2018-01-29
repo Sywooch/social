@@ -87,7 +87,7 @@ $registration = new \app\models\RegisterForm();
                 </li>
                 <li>
                     <label>
-                        <input type="radio" class="styler" name="sex" name="RegisterForm[sex]" value="2">
+                        <input type="radio" class="styler" name="RegisterForm[sex]" value="2">
                         <span><?= \Yii::t('app', 'Жен')?></span>
                     </label>
                 </li>
