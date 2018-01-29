@@ -67,7 +67,7 @@ class AbstractController extends Controller
      */
     public function init()
     {
-        Registry::set('countryID', 9908, true);
+        Registry::set('countryID', 3159, true);
 
         if (\Yii::$app->session->get('user')) {
             $this->user = \Yii::$app->session->get('user');
