@@ -14,7 +14,7 @@ use yii\helpers\Html;
             <?php $form = ActiveForm::begin([
                 'action' => '/site/login',
                 'enableAjaxValidation' => true,
-                'options'=>['class'=>'row'],
+                'options'=>['class'=>'row', 'style' => 'display: initial;'],
                 'fieldConfig' => [
                     'template' => '{input}{error}',
                     'errorOptions' => ['tag'=>'span', 'class' => 'error text-danger'],

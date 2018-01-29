@@ -25,3 +25,13 @@
 .white_tag.hovered {
     opacity: 1;
 }
+
+.language-select.open a {
+    color: #000000;
+    height: auto;
+}
+
+.language-select a {
+    color: #fff;
+    font-size: 15px;
+}
