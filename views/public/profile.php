@@ -129,7 +129,11 @@ $messageModel = new \app\models\Messages();
                                                 </a>
                                                 <!--                                                            <a href="#" class="add_friend_photo add_friend_photo_f"></a>-->
                                                 <a href="javascript:void(0)" class="add_friend_photo">
-                                                    <img src="/uploads/<?= $item->id?>/<?= $item->mainImage->file?>" alt="">
+                                                    <?php if (!empty($item->mainImage)):?>
+                                                        <img src="/uploads/<?= $item->id?>/<?= $item->mainImage->file?>" alt="">
+                                                    <?php else:?>
+                                                        <img src="/img/no-img-<?= $item->sex?>.jpg" alt="">
+                                                    <?php endif;?>
                                                 </a>
                                             </div>
                                             <div class="add_friend_mod_social">
@@ -152,7 +156,11 @@ $messageModel = new \app\models\Messages();
                     </div>
                     <div class="profile_aside">
                         <a href="javascript:void(0)" class="announcement_img avatar_mod_link">
-                            <img src="/uploads/<?= $item->id?>/<?= $item->mainImage->file?>" alt="">
+                            <?php if (!empty($item->mainImage)):?>
+                                <img src="/uploads/<?= $item->id?>/<?= $item->mainImage->file?>" alt="">
+                            <?php else:?>
+                                <img src="/img/no-img-<?= $item->sex?>.jpg" alt="">
+                            <?php endif;?>
                         </a>
 
                         <!--       avatar_mod            -->
@@ -167,14 +175,18 @@ $messageModel = new \app\models\Messages();
                                         <div class="wall_post_top clearfix">
                                             <div class="wall_post_txt">
                                                             <span class="wall_post_img">
+                                                            <?php if (!empty($item->mainImage)):?>
                                                                 <img src="/uploads/<?= $item->id?>/<?= $item->mainImage->file?>" alt="">
+                                                            <?php else:?>
+                                                                <img src="/img/no-img-<?= $item->sex?>.jpg" alt="">
+                                                            <?php endif;?>
                                                             </span>
                                                 <div class="wall_post_links clearfix">
                                                     <div class="wall_post_links_left">
-                                                        <p><?= $item->mainImage->date?></p>
+                                                        <p><?= !empty($item->mainImage) ? $item->mainImage->date : ''?></p>
                                                     </div>
                                                     <div class="wall_post_links_likes">
-                                                        <span><?= $item->mainImage->likePoint?></span>
+                                                        <span><?= !empty($item->mainImage) ? $item->mainImage->likePoint : ''?></span>
                                                         <a href="javascript:void(0)" class="like_btn"><?= \Yii::t('app', 'Нравится');?></a>
                                                     </div>
                                                 </div>
@@ -215,7 +227,11 @@ $messageModel = new \app\models\Messages();
                             <div class="company_participants_links">
                                 <?php foreach ($item->friends as $friend):?>
                                     <a href="<?= Url::to('/public/profile/' . $friend->id)?>" class="company_participant_it">
-                                        <img src="/uploads/<?= $friend->id?>/<?= $friend->mainImage->file?>" alt="">
+                                        <?php if (!empty($friend->mainImage)):?>
+                                            <img src="/uploads/<?= $friend->id?>/<?= $friend->mainImage->file?>" alt="">
+                                        <?php else:?>
+                                            <img src="/img/no-img-<?= $friend->sex?>.jpg" alt="">
+                                        <?php endif;?>
                                     </a>
                                 <?php endforeach;?>
                             </div>

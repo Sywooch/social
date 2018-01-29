@@ -82,7 +82,11 @@ use yii\helpers\Url;
                         <div class="friends_block_item clearfix">
                             <div class="friends_block_item_left clearfix">
                                 <a href="<?= Url::to('/public/profile/' . $friend->id)?>" class="message_author">
-                                    <img src="/uploads/<?= $friend->id?>/<?= $friend->mainImage->file?>" alt="">
+                                    <?php if (!empty($friend->mainImage)):?>
+                                        <img src="/uploads/<?= $friend->id?>/<?= $friend->mainImage->file?>" alt="">
+                                    <?php else:?>
+                                        <img src="/img/no-img-<?= $friend->sex?>.jpg" alt="">
+                                    <?php endif;?>
                                 </a>
                                 <div class="index_message_item_left_txt">
                                     <a href="<?= Url::to('/public/profile/' . $friend->id)?>"><?= $friend->fullName?></a>

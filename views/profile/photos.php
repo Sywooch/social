@@ -74,7 +74,11 @@ $this->registerJs($js);
                                     <?php foreach ($image->comments as $element):?>
                                     <div class="wall_comment_item clearfix">
                                         <a href="<?= Url::to('/public/user/' . $element->customerID)?>" class="profile_photo_link">
-                                            <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                                            <?php if (!empty($element->customer->mainImage)):?>
+                                                <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                                            <?php else:?>
+                                                <img src="/img/no-img-<?= $element->customer->sex?>.jpg" alt="">
+                                            <?php endif;?>
                                         </a>
                                         <div class="wall_comment_item_txt">
                                             <div class="typical_tooltip wall_tooltip">
@@ -99,7 +103,11 @@ $this->registerJs($js);
 
                                     <div class="wall_comment_item clearfix">
                                         <a href="#" class="profile_photo_link">
-                                            <img src="/uploads/<?= $user->id?>/<?= $user->mainImage->file?>" alt="">
+                                            <?php if (!empty($user->mainImage)):?>
+                                                <img src="/uploads/<?= $user->id?>/<?= $user->mainImage->file?>" alt="">
+                                            <?php else:?>
+                                                <img src="/img/no-img-<?= $user->sex?>.jpg" alt="">
+                                            <?php endif;?>
                                         </a>
                                         <div class="wall_comment_item_txt">
                                             <div class="wall_comment_input">

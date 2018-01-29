@@ -100,7 +100,11 @@ use yii\helpers\Url;
                                 <a href="<?= Url::to('/public/profile/' . $item->customer->id)?>" class="title_link"><?= $item->customer->fullName?></a>
                                 <span class="item_hint"><?= $item->customer->city->area->country->translation->name?>, <?= $item->customer->city->translation->name?></span>
                                 <a href="javascript:void(0);" class="announcement_img">
-                                    <img src="/uploads/<?= $item->customer->id?>/<?= $item->customer->mainImage->file?>" alt="">
+                                    <?php if (!empty($item->customer->mainImage)):?>
+                                        <img src="/uploads/<?= $item->customer->id?>/<?= $item->customer->mainImage->file?>" alt="">
+                                    <?php else:?>
+                                        <img src="/img/no-img-<?= $item->customer->sex?>.jpg" alt="">
+                                    <?php endif;?>
                                 </a>
                                 <a href="<?= Url::to('/public/profile/' . $item->customer->id)?>" class="green_btn">
                                     <span class="green_btn_txt"><?= \Yii::t('app', 'Смотреть профиль')?></span>

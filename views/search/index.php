@@ -40,7 +40,11 @@ $current = false;
                     <a href="<?= Url::to('/public/profile/' . $user->id)?>" class="title_link"><?= $user->fullName?></a>
                     <span class="item_hint"><?= $user->age?> <?= \Yii::t('app', 'лет')?>, <?= $user->city->area->country->translation->name?>, <?= $user->city->translation->name?></span>
                     <a href="<?= Url::to('/public/profile/' . $user->id)?>" class="recent_search_img">
-                        <img src="/uploads/<?= $user->id?>/<?= $user->mainImage->file?>" alt="">
+                        <?php if (!empty($user->mainImage)):?>
+                            <img src="/uploads/<?= $user->id?>/<?= $user->mainImage->file?>" alt="">
+                        <?php else:?>
+                            <img src="/img/no-img-<?= $user->sex?>.jpg" alt="">
+                        <?php endif;?>
                         <span class="photos_number_link"><?= count($user->images)?></span>
                     </a>
                     <span class="item_hint"><?= \Yii::t('app', 'Интересы')?></span>
@@ -72,7 +76,11 @@ $current = false;
                         <?php endif;?>
                     </span>
                     <a href="<?= Url::to('/public/profile/' . $element->customer->id)?>" class="recent_search_img">
-                        <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                        <?php if (!empty($element->customer->mainImage)):?>
+                            <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                        <?php else:?>
+                            <img src="/img/no-img-<?= $element->customer->sex?>.jpg" alt="">
+                        <?php endif;?>
                         <span class="photos_number_link"></span>
                     </a>
                     <div class="recent_search_txt">

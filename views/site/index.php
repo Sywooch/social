@@ -56,7 +56,11 @@ use yii\helpers\Html;
                     <a href="<?= Url::to('/public/ads/' . $element->id)?>" class="title_link"><?= $element->title ?></a>
                     <span class="item_hint"><?= $element->city->area->country->translation->name?>, <?= $element->city->translation->name?></span>
                     <a href="<?= Url::to('/public/profile/' . $element->customer->id)?>" class="recent_search_img">
-                        <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                        <?php if (!empty($element->customer->mainImage)):?>
+                            <img src="/uploads/<?= $element->customer->id?>/<?= $element->customer->mainImage->file?>" alt="">
+                        <?php else:?>
+                            <img src="/img/no-img-<?= $element->customer->sex?>.jpg" alt="">
+                        <?php endif;?>
                         <span class="photos_number_link"></span>
                     </a>
                     <div class="recent_search_txt">

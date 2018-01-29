@@ -66,7 +66,11 @@ use yii\helpers\Url;
                             <div class="company_participants_links">
                                 <?php foreach ($item->participants as $participant):?>
                                     <a href="<?= Url::to('/public/profile/' . $participant->id)?>" class="company_participant_it">
+                                    <?php if (!empty($participant->mainImage)):?>
                                         <img src="/uploads/<?= $participant->id?>/<?= $participant->mainImage->file?>" alt="">
+                                    <?php else:?>
+                                        <img src="/img/no-img-<?= $participant->sex?>.jpg" alt="">
+                                    <?php endif;?>
                                     </a>
                                 <?php endforeach;?>
                             </div>
