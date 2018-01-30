@@ -4,6 +4,8 @@
  */
 namespace app\controllers;
 
+use app\components\Mailer;
+use app\components\Registry;
 use app\models\AdsParticipant;
 use app\models\Area;
 use app\models\City;
@@ -12,10 +14,12 @@ use app\models\Country;
 use app\models\CustomerFriend;
 use app\models\CustomerImage;
 use app\models\Interest;
+use app\models\RestoreForm;
 use Yii;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\helpers\BaseFileHelper;
+use yii\widgets\ActiveForm;
 
 class AjaxController extends AbstractController
 {
@@ -42,6 +46,38 @@ class AjaxController extends AbstractController
         $this->_post = Yii::$app->request->post();
 
         Yii::$app->response->format = Response::FORMAT_JSON;
+    }
+
+    public function actionRestoreValidation()
+    {
+        $model = new RestoreForm();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $errors = ActiveForm::validate($model);
+            end($errors);
+
+            return ['restoreform-captcha' => array_shift($errors)];
+        }
+    }
+
+    public function actionRestore()
+    {
+        $model = new RestoreForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $customer = $model->passwordRestore();
+
+            Mailer::sendMail([
+               'from' => Yii::$app->params['adminEmail'],
+               'fromName' => Yii::$app->params['adminEmail'],
+               'to' => $customer->email,
+               'subject' => Yii::$app->params['mailSubject']['restore'],
+               'body' => $this->renderPartial('templates/restore', ['password' => $customer->newPassword]),
+            ]);
+
+            return ['email' => $customer->email];
+        }
     }
 
     public function actionGetJsonList()

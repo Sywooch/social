@@ -17,6 +17,18 @@ return [
         'keywords' => '',
         'description' => '',
     ],
+    'isSMTP' => false,
+    'mailSubject' => [
+        'restore' => 'password restore'
+    ],
+    'smtp' => [
+        'Host' => 'iqreserve.ru',
+        'SMTPAuth' => true,
+        'Username' => 'admin@valo.cloud',
+        'Password' => 'IB8RmkknOw',
+        'SMTPSecure' => 'tls',
+        'Port' => 587,
+    ],
     'social' => [
         'youtube' => [
             'link' => 'https://www.youtube.com/',

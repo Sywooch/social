@@ -30,6 +30,8 @@ class Customer extends \yii\db\ActiveRecord
 
     public $passwordConfirm;
 
+    public $newPassword;
+
     /**
      * @inheritdoc
      */
@@ -189,6 +191,15 @@ class Customer extends \yii\db\ActiveRecord
     public function validatePassword($password)
     {
         return $this->password === md5($password);
+    }
+
+    public function passwordReset()
+    {
+        $this->newPassword = uniqid();
+        $this->password = md5($this->newPassword);
+        $this->save(false);
+
+        return $this;
     }
 
     /**

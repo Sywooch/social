@@ -1,3 +1,18 @@
+$('[action="/ajax/restore"]').on('beforeSubmit', function () {
+    var form = $(this);
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'post',
+        data: form.serialize(),
+        dataType: 'json'
+    }).done(function(response) {
+        $('.restore-customer-email').text(response.email);
+        $('.popup_password_main').hide();
+        $('.popup_password_result').fadeToggle(400);
+    });
+   return false;
+});
 // Выбор языков
 $('.language-selector').on('change', function () {
     var element = $(this),

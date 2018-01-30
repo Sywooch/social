@@ -2,6 +2,8 @@
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+
+$restoreModel = new \app\models\RestoreForm();
 ?>
 <?php if (!empty($this->params['user'])):?>
 <header class="logged_header">
@@ -45,39 +47,42 @@ use yii\helpers\Html;
                 <button class="head_form_link"><?= \Yii::t('app', 'Забыли пароль')?>?</button>
                 <div class="popup_password popup_password_main">
                     <h4><?= \Yii::t('app', 'Напоминание пароля')?></h4>
-                    <form>
+                    <?php $form = ActiveForm::begin([
+                        'action' => '/ajax/restore',
+                        'enableAjaxValidation' => true,
+                        'validationUrl' => '/ajax/restore-validation',
+                        'options' => ['class'=>'row', 'style' => 'display: initial;'],
+                        'fieldConfig' => [
+                            'template' => '{input}{error}',
+                            'errorOptions' => ['tag'=>'span', 'class' => 'error text-danger'],
+                            'labelOptions' => ['class' => ''],
+                            'inputOptions' => ['class' => 'white_input'],
+                            'options' => [
+                                'tag'=>'span'
+                            ],
+                        ],
+                    ]); ?>
                         <div class="pass_line">
-                            <input type="email" class="typical_input_bordered" placeholder="Ваш E-mail" />
-                            <span class="blue_btn close_password popup_pass_mist_pull"><?= \Yii::t('app', 'Отправить')?></span>
+                            <?= $form->field($restoreModel, 'email', ['template' => '{input}'])
+                                ->textInput([
+                                        'placeholder' => \Yii::t('app', 'Ваш E-mail'),
+                                        'type' => 'email',
+                                        'class' => 'typical_input_bordered',
+                                ]) ?>
+                            <?= Html::submitButton(\Yii::t('app', 'Отправить'), ['class' => 'blue_btn']) ?>
                         </div>
-                        <div class="capcha_line">
-                                     <span class="capcha_img">
-                                         <img src="/img/capcha.jpg" alt="">
-                                     </span>
-                            <input type="text" class="typical_input_bordered" />
-                        </div>
-                    </form>
-                    <button class="close_btn close_password"><i class="flaticon-close"></i></button>
-                </div>
-                <div class="popup_password popup_password_mistake">
-                    <h4><?= \Yii::t('app', 'Напоминание пароля')?></h4>
-                    <form>
-                        <div class="pass_line">
-                            <input type="email" class="typical_input_bordered" value="vasja@yand" />
-                            <span class="blue_btn close_password popup_pass_res_pull"><?= \Yii::t('app', 'Отправить')?></span>
-                        </div>
-                        <div class="capcha_line">
-                                     <span class="capcha_img">
-                                         <img src="/img/capcha.jpg" alt="">
-                                     </span>
-                            <input type="text" class="typical_input_bordered" />
-                        </div>
-                        <p class="form_mistake_txt"><?= \Yii::t('app', 'Пользователь с таким E-mail не найден')?></p>
-                    </form>
+                        <?= $form->field($restoreModel, 'captcha', ['template' => '<div class="capcha_line">{input}</div><p class="form_mistake_txt">{error}</p>'])->widget(\yii\captcha\Captcha::className(),
+                                [
+                                    'template' => '<span class="capcha_img"><a class="refreshcaptcha" href="javascript:void(0)">{image}</a></span>{input}',
+                                    'options' => ['class' => 'typical_input_bordered']
+                                ]
+                            )
+                        ->label(false); ?>
+                    <?php ActiveForm::end(); ?>
                     <button class="close_btn close_password"><i class="flaticon-close"></i></button>
                 </div>
                 <div class="popup_password popup_password_result">
-                    <h4><?= \Yii::t('app', 'Пароль успешно отправлен на')?>  vasja@yandex.ru</h4>
+                    <h4><?= \Yii::t('app', 'Пароль успешно отправлен на')?>  <span class="restore-customer-email"></span></h4>
                     <span class="blue_btn close_password"><?= \Yii::t('app', 'ОК')?></span>
                     <button class="close_btn close_password"><i class="flaticon-close"></i></button>
                 </div>

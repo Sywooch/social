@@ -36,7 +36,9 @@ $searchForm = new \app\models\SearchForm();
                 <a href="javascript:void(0)" class="white_tag" data-id="<?= $interest->id?>"><?= $interest->translation->name?></a>
             <?php endforeach;?>
 
+            <?php if (count($interests) > \Yii::$app->params['mainInterestsElements']):?>
             <button class="white_tags_pull" type="button"><?= \Yii::t('app', 'Еще ')?><?= count($interests) - \Yii::$app->params['mainInterestsElements']?></button>
+            <?php endif;?>
             <div class="tags_block_hidden">
                 <div class="tags_block_hidden_wrap">
                     <?php foreach ($interests as $key => $interest):?>
