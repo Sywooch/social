@@ -57,7 +57,12 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return $this->hasOne(CategoryTranslation::className(), ['sourceID' => 'id'])
+        $translation = $this->hasOne(CategoryTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['category_translation.language' => \Yii::$app->language]);
+
+        if (empty($translation->name))
+            $translation = $this->hasOne(CategoryTranslation::className(), ['sourceID' => 'id']);
+
+        return $translation;
     }
 }

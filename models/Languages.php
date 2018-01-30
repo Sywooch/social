@@ -51,7 +51,13 @@ class Languages extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return $this->hasOne(LanguagesTranslation::className(), ['sourceID' => 'id'])
+        $translation = $this->hasOne(LanguagesTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['languages_translation.language' => \Yii::$app->language]);
+
+        if (empty($translation->name))
+            $translation = $this->hasOne(LanguagesTranslation::className(), ['sourceID' => 'id']);
+
+        return $translation;
+
     }
 }

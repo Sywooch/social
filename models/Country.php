@@ -48,8 +48,13 @@ class Country extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return $this->hasOne(CountryTranslation::className(), ['sourceID' => 'id'])
+        $translation = $this->hasOne(CountryTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['country_translation.language' => \Yii::$app->language]);
+
+        if (empty($translation->name))
+            $translation = $this->hasOne(CountryTranslation::className(), ['sourceID' => 'id']);
+
+        return $translation;
     }
 
     /**

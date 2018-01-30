@@ -59,8 +59,14 @@ class Area extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return $this->hasOne(AreaTranslation::className(), ['sourceID' => 'id'])
+        $translation = $this->hasOne(AreaTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['area_translation.language' => \Yii::$app->language]);
+
+
+        if (empty($translation->name))
+            $translation = $this->hasOne(AreaTranslation::className(), ['sourceID' => 'id']);
+
+        return $translation;
     }
 
     /**

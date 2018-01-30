@@ -61,8 +61,13 @@ class Interest extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return $this->hasOne(InterestTranslation::className(), ['sourceID' => 'id'])
+        $translation = $this->hasOne(InterestTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['interest_translation.language' => \Yii::$app->language]);
+
+        if (empty($translation->name))
+            $translation = $this->hasOne(InterestTranslation::className(), ['sourceID' => 'id']);
+
+        return $translation;
     }
 
     /**

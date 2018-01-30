@@ -50,8 +50,13 @@ class City extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        return $this->hasOne(CityTranslation::className(), ['sourceID' => 'id'])
+        $translation = $this->hasOne(CityTranslation::className(), ['sourceID' => 'id'])
             ->andOnCondition(['city_translation.language' => \Yii::$app->language]);
+
+        if (empty($translation->name))
+            $translation = $this->hasOne(CityTranslation::className(), ['sourceID' => 'id']);
+
+        return $translation;
     }
 
     /**
