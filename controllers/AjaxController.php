@@ -16,6 +16,7 @@ use app\models\CustomerFriend;
 use app\models\CustomerImage;
 use app\models\Interest;
 use app\models\RestoreForm;
+use app\models\SupportForm;
 use Yii;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -49,6 +50,15 @@ class AjaxController extends AbstractController
         Yii::$app->response->format = Response::FORMAT_JSON;
     }
 
+    public function actionSupportValidation()
+    {
+        $model = new SupportForm();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            return ActiveForm::validate($model);
+        }
+    }
+
     /**
      * Валидация формы восстановления
      *
@@ -78,6 +88,24 @@ class AjaxController extends AbstractController
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
             return ActiveForm::validate($model);
+        }
+    }
+
+    public function actionSupport()
+    {
+        $model = new SupportForm();
+        if ($model->load(Yii::$app->request->post())) {
+            Mailer::sendMail([
+                'from' => $model->email,
+                'fromName' => $model->name,
+                'to' => Yii::$app->params['adminEmail'],
+                'subject' => Yii::$app->params['mailSubject']['support'],
+                'body' => $this->renderPartial('templates/support', ['model' => $model]),
+            ]);
+
+            \Yii::$app->session->setFlash('messageSend', true);
+
+            return [];
         }
     }
 

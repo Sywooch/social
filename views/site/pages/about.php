@@ -1,10 +1,17 @@
+<?php
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
+$supportModel = new \app\models\SupportForm();
+?>
 <?= $this->render('//site/block/search', []); ?>
 
 <section class="main_container light_bg">
     <div class="container">
         <div class="title_block clearfix">
             <h1><?= \Yii::t('app', 'О нас')?></h1>
-            <a href="#" class="title_mail"><?= \Yii::t('app', 'Написать письмо')?></a>
+            <a href="#support-form" class="title_mail"><?= \Yii::t('app', 'Написать письмо')?></a>
         </div>
         <div class="txt_b_img">
             <img src="/img/about.jpg" alt="">
@@ -19,22 +26,42 @@
                 </article>
             </div>
             <div class="question_form">
-                <h4><?= \Yii::t('app', 'Напишите нам')?></h4>
-                <form>
-                    <input type="text" class="typical_input_bordered" placeholder="<?= \Yii::t('app', 'Имя')?>" />
-                    <input type="email" class="typical_input_bordered" placeholder="E-mail" />
-                    <textarea class="typical_input_bordered" placeholder="<?= \Yii::t('app', 'Текст сообщения')?>"></textarea>
-                    <div class="capcha_line">
-                                    <span class="capcha_img">
-                                        <img src="/img/capcha.jpg" alt="">
-                                    </span>
-                        <input type="text" class="typical_input_bordered" />
+                <?php if (\Yii::$app->session->hasFlash('messageSend')):?>
+                    <div class="announcement_topline">
+                        <h3><?= \Yii::t('app', 'Сообщение отправлено')?>!</h3>
                     </div>
+                <?php else:?>
+                <h4><?= \Yii::t('app', 'Напишите нам')?></h4>
+                <?php $form = ActiveForm::begin([
+                    'action' => '/ajax/support',
+                    'enableAjaxValidation' => true,
+                    'validationUrl' => '/ajax/support-validation',
+                    'options' => ['name' => 'support-form', 'class'=>'row', 'style' => 'display: initial;'],
+                    'fieldConfig' => [
+                        'template' => '{input}{error}',
+                        'errorOptions' => ['tag'=>'span', 'class' => 'error text-danger'],
+                        'labelOptions' => ['class' => ''],
+                        'inputOptions' => ['class' => 'white_input'],
+                        'options' => [
+                            'tag'=>'span'
+                        ],
+                    ],
+                ]); ?>
+                    <?= $form->field($supportModel, 'name')->textInput(['class' => 'typical_input_bordered', 'placeholder' => \Yii::t('app', 'Имя')]) ?>
+                    <?= $form->field($supportModel, 'email')->textInput(['class' => 'typical_input_bordered', 'placeholder' => \Yii::t('app', 'E-mail')]) ?>
+                    <?= $form->field($supportModel, 'text')->textArea(['class' => 'typical_input_bordered', 'placeholder' => \Yii::t('app', 'Текст сообщения')]) ?>
+                    <?= $form->field($supportModel, 'captcha', ['template' => '<div class="capcha_line">{input}</div><p class="form_mistake_txt">{error}</p>'])->widget(\yii\captcha\Captcha::className(),
+                        [
+                            'template' => '<span class="capcha_img"><a class="refreshcaptcha" href="javascript:void(0)">{image}</a></span>{input}',
+                            'options' => ['class' => 'typical_input_bordered']
+                        ]
+                    )
+                    ->label(false); ?>
                     <div class="green_btn">
                         <input type="submit" class="green_btn_txt" value="<?= \Yii::t('app', 'Отправить')?>"/>
                     </div>
-
-                </form>
+                <?php ActiveForm::end(); ?>
+                <?php endif;?>
             </div>
         </div>
     </div>

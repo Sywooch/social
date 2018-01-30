@@ -50,9 +50,9 @@ $contactModel = new \app\models\ContactForm();
         <div class="copyright_foot">
             <h3>2015 © Scanpard</h3>
             <nav class="nav_foot">
-                <li><a href="#"><?= \Yii::t('app', 'О нас')?></a></li>
-                <li><a href="#"><?= \Yii::t('app', 'Условия')?></a></li>
-                <li><a href="#"><?= \Yii::t('app', 'Помощь')?></a></li>
+                <li><a href="<?= Url::to('/page/about')?>"><?= \Yii::t('app', 'О нас')?></a></li>
+<!--                <li><a href="#">--><?//= \Yii::t('app', 'Условия')?><!--</a></li>-->
+<!--                <li><a href="#">--><?//= \Yii::t('app', 'Помощь')?><!--</a></li>-->
             </nav>
         </div>
     </div>

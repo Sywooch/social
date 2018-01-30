@@ -1,3 +1,18 @@
+// Форма сапорта
+$('[action="/ajax/support"]').on('beforeSubmit', function () {
+    var form = $(this);
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'post',
+        data: form.serialize(),
+        dataType: 'json'
+    }).done(function() {
+        location.reload();
+    });
+   return false;
+});
+
 // Форма Ваше мнение совет или критика
 $('[action="/ajax/contact"]').on('beforeSubmit', function () {
     var form = $(this);
