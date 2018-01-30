@@ -19,7 +19,8 @@ return [
     ],
     'isSMTP' => false,
     'mailSubject' => [
-        'restore' => 'password restore'
+        'restore' => 'password restore',
+        'contact' => 'contact form'
     ],
     'smtp' => [
         'Host' => 'iqreserve.ru',

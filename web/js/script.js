@@ -1,3 +1,19 @@
+// Форма Ваше мнение совет или критика
+$('[action="/ajax/contact"]').on('beforeSubmit', function () {
+    var form = $(this);
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'post',
+        data: form.serialize(),
+        dataType: 'json'
+    }).done(function(response) {
+        alert('ok');
+    });
+   return false;
+});
+
+// Форма восстановления пароля
 $('[action="/ajax/restore"]').on('beforeSubmit', function () {
     var form = $(this);
 
@@ -13,6 +29,7 @@ $('[action="/ajax/restore"]').on('beforeSubmit', function () {
     });
    return false;
 });
+
 // Выбор языков
 $('.language-selector').on('change', function () {
     var element = $(this),

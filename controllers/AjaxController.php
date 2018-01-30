@@ -10,6 +10,7 @@ use app\models\AdsParticipant;
 use app\models\Area;
 use app\models\City;
 use app\models\CompanyParticipant;
+use app\models\ContactForm;
 use app\models\Country;
 use app\models\CustomerFriend;
 use app\models\CustomerImage;
@@ -48,6 +49,11 @@ class AjaxController extends AbstractController
         Yii::$app->response->format = Response::FORMAT_JSON;
     }
 
+    /**
+     * Валидация формы восстановления
+     *
+     * @return array
+     */
     public function actionRestoreValidation()
     {
         $model = new RestoreForm();
@@ -61,6 +67,46 @@ class AjaxController extends AbstractController
         }
     }
 
+    /**
+     * Валидация формы контакта.
+     *
+     * @return array
+     */
+    public function actionContactValidation()
+    {
+        $model = new ContactForm();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            return ActiveForm::validate($model);
+        }
+    }
+
+    /**
+     * Отправка по контакту.
+     *
+     * @return array
+     */
+    public function actionContact()
+    {
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post())) {
+            Mailer::sendMail([
+                'from' => Yii::$app->params['adminEmail'],
+                'fromName' => Yii::$app->params['adminEmail'],
+                'to' => Yii::$app->params['adminEmail'],
+                'subject' => Yii::$app->params['mailSubject']['contact'],
+                'body' => $this->renderPartial('templates/contact', ['text' => $model->text]),
+            ]);
+
+            return [];
+        }
+    }
+
+    /**
+     * Восстановление пароля.
+     *
+     * @return array
+     */
     public function actionRestore()
     {
         $model = new RestoreForm();
