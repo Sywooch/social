@@ -67,6 +67,14 @@ class AbstractController extends Controller
      */
     public function init()
     {
+        if (empty(\Yii::$app->session->get('language')) && function_exists('geoip_country_code_by_name')) {
+            if (in_array(geoip_country_code_by_name($_SERVER['REMOTE_ADDR']), ['RU', 'UA'])) {
+                \Yii::$app->session->set('language', 'ru');
+            } else {
+                \Yii::$app->session->set('language', 'en');
+            }
+        }
+
         Registry::set('countryID', 3159, true);
 
         if (\Yii::$app->session->get('user')) {
