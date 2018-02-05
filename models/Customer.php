@@ -254,7 +254,7 @@ class Customer extends \yii\db\ActiveRecord
         $log->setAttributes([
             'customerID' => $this->id,
             'action' => $action,
-            'place' => $geoData['country_name'], $geoData['city'],
+            'place' => $geoData['country_name'] . ', ' . $geoData['city'],
             'ip' => $_SERVER['REMOTE_ADDR'],
         ],false);
 
