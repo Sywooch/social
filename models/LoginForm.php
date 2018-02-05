@@ -81,7 +81,10 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return  \Yii::$app->session->set('user', $this->getUser());
+            $user = $this->getUser();
+            $user->log('auth');
+
+            return  \Yii::$app->session->set('user', $user);
         }
         return false;
     }

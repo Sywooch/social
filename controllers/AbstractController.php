@@ -11,6 +11,7 @@ use app\models\CommonImages;
 use app\models\CompanyComment;
 use app\models\CompanyCommentAnswer;
 use app\models\CompanyCommentImage;
+use app\models\Customer;
 use app\models\InfoPage;
 use app\models\RecoverForm;
 use app\models\RegisterForm;
@@ -68,6 +69,8 @@ class AbstractController extends Controller
     public function init()
     {
         if (empty(\Yii::$app->session->get('language')) && function_exists('geoip_country_code_by_name')) {
+            Registry::set('geoData', geoip_record_by_name($_SERVER['REMOTE_ADDR']), true);
+
             if (in_array(geoip_country_code_by_name($_SERVER['REMOTE_ADDR']), ['RU', 'UA'])) {
                 \Yii::$app->session->set('language', 'ru');
             } else {
@@ -78,7 +81,9 @@ class AbstractController extends Controller
         Registry::set('countryID', 3159, true);
 
         if (\Yii::$app->session->get('user')) {
-            $this->user = \Yii::$app->session->get('user');
+            $this->user = Customer::findOne(\Yii::$app->session->get('user')->id);
+            $this->user->setDefaultsPrivate();
+
             Registry::set('user', $this->user, true);
         }
 

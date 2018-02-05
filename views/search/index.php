@@ -19,13 +19,13 @@ $current = false;
         <div class="container clearfix">
             <ul>
                 <?php if (!empty($users)):?>
-                    <li><a href="javascript:void(0)" class="tab <?php if (empty($current)) {echo 'current'; $current = 'users';}?>" data-page="users"><?= \Yii::t('app', 'Пользователи')?> (<?= count($users)?>)</a></li>
+                    <li><a href="javascript:void(0)" class="tab tab-search <?php if (empty($current)) {echo 'current'; $current = 'users';}?>" data-page="users"><?= \Yii::t('app', 'Пользователи')?> (<?= count($users)?>)</a></li>
                 <?php endif;?>
                 <?php if (!empty($ads)):?>
-                    <li><a href="javascript:void(0)" class="tab <?php if (empty($current)) {echo 'current'; $current = 'ads';}?>" data-page="ads"><?= \Yii::t('app', 'Объявления')?> (<?= count($ads)?>)</a></li>
+                    <li><a href="javascript:void(0)" class="tab tab-search <?php if (empty($current)) {echo 'current'; $current = 'ads';}?>" data-page="ads"><?= \Yii::t('app', 'Объявления')?> (<?= count($ads)?>)</a></li>
                 <?php endif;?>
                 <?php if (!empty($companies)):?>
-                    <li><a href="javascript:void(0)" class="tab <?php if (empty($current)) {echo 'current'; $current = 'company';}?>" data-page="company"><?= \Yii::t('app', 'Компании')?> (<?= count($companies)?>)</a></li>
+                    <li><a href="javascript:void(0)" class="tab tab-search <?php if (empty($current)) {echo 'current'; $current = 'company';}?>" data-page="company"><?= \Yii::t('app', 'Компании')?> (<?= count($companies)?>)</a></li>
                 <?php endif;?>
             </ul>
         </div>

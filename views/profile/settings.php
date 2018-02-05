@@ -17,7 +17,7 @@
                         <span class="tab current"><?= \Yii::t('app', 'Общие');?></span>
                         <span class="tab"><?= \Yii::t('app', 'Приватность');?></span>
                         <span class="tab"><?= \Yii::t('app', 'Безопасность');?></span>
-                        <span class="tab"><?= \Yii::t('app', 'Платежи');?></span>
+<!--                        <span class="tab">--><?//= \Yii::t('app', 'Платежи');?><!--</span>-->
                     </div>
                     <div class="profile_settings_tabs_content">
                         <div class="box visible">
@@ -138,101 +138,30 @@
                             <div class="profile_settings_tabs_title">
                                 <h4><?= \Yii::t('app', 'Настройки приватности')?></h4>
                             </div>
+                            <?php $form = ActiveForm::begin([
+                                'action' => '/ajax/private-settings',
+                                'enableAjaxValidation' => false,
+                                'options' => ['class'=>'row', 'style' => 'display: initial;'],
+                            ]); ?>
                             <table class="profile_settings_privacy">
                                 <tbody>
+                                <?php foreach (\app\components\Registry::get('user')->privateSettings as $name => $value):?>
                                 <tr>
-                                    <td><?= \Yii::t('app', 'Кто может просматривать мой профиль')?></td>
+                                    <td><?= $name ?></td>
                                     <td>
                                         <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
+                                            <select class="private-settings-selector" name="settings[]">
+                                                <?php foreach (\app\models\Customer::getPrivateOptions() as $key => $option):?>
+                                                    <option value="<?= $key?>" <?= ($key == $value) ? 'selected' : '' ?>><?= $option?></option>
+                                                <?php endforeach;?>
                                             </select>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>Кто может отправлять мне сообщения</td>
-                                    <td>
-                                        <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Кто может просматривать мои фото</td>
-                                    <td>
-                                        <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Кто может просматривать мои компании</td>
-                                    <td>
-                                        <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Кто может просматривать мои объявления</td>
-                                    <td>
-                                        <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Кто может комментировать мои фото</td>
-                                    <td>
-                                        <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Кто может комментировать мои записи</td>
-                                    <td>
-                                        <div class="privacy_select">
-                                            <select>
-                                                <option>Никто</option>
-                                                <option>Только друзья</option>
-                                                <option>Друзья друзей</option>
-                                                <option>Все</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <?php endforeach;?>
                                 </tbody>
                             </table>
+                            <?php ActiveForm::end(); ?>
                         </div>
                         <div class="box">
                             <div class="profile_settings_tabs_title">

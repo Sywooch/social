@@ -319,6 +319,15 @@ class AjaxController extends AbstractController
     }
 
     /**
+     * Сохраняет, настройки приватности.
+     */
+    public function actionPrivateSettings()
+    {
+        $this->user->privateParams = json_encode($this->_post['settings']);
+        $this->user->save(false);
+    }
+
+    /**
      * Выполняет загрузку картинки.
      *
      * @param $model

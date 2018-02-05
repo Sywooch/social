@@ -22,6 +22,7 @@ use Yii;
  * @property string  $authID           Идентификатор в соц. сетях.
  * @property string  $authMethod       Метод авторизации соц. сети.
  * @property string  $unsetMessage     unsetMessage.
+ * @property string  $privateParams     privateParams.
  *
  */
 class Customer extends \yii\db\ActiveRecord
@@ -31,6 +32,29 @@ class Customer extends \yii\db\ActiveRecord
     public $passwordConfirm;
 
     public $newPassword;
+
+    const PRIVATE_NO_ONE = 0;
+
+    const PRIVATE_ONLY_FRIENDS = 1;
+
+    const PRIVATE_ALL_FRIENDS = 2;
+
+    const PRIVATE_ALL = 3;
+
+    /**
+     * Значения приватных настрое по умолчанию.
+     *
+     * @var array
+     */
+    private $_defaultsPrivate = [
+        0 => self::PRIVATE_NO_ONE,
+        1 => self::PRIVATE_NO_ONE,
+        2 => self::PRIVATE_NO_ONE,
+        3 => self::PRIVATE_NO_ONE,
+        4 => self::PRIVATE_NO_ONE,
+        5 => self::PRIVATE_NO_ONE,
+        6 => self::PRIVATE_NO_ONE,
+    ];
 
     /**
      * @inheritdoc
@@ -47,7 +71,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['email', 'password', 'registrationIp'], 'required'],
-            [['unsetMessage'], 'safe'],
+            [['unsetMessage', 'privateParams'], 'safe'],
             [['isActive'], 'integer'],
             [['registrationTime', 'authID', 'authMethod', 'birthday', 'about'], 'safe'],
             [['email', 'fullName'], 'string', 'max' => 255],
@@ -218,6 +242,26 @@ class Customer extends \yii\db\ActiveRecord
     }
 
     /**
+     * Логирует действие.
+     *
+     * @param $action
+     */
+    public function log($action)
+    {
+        $geoData = Registry::get('geoData', ['country_name' => 'unknown', 'city' => 'unknown']);
+
+        $log = new CustomerLog();
+        $log->setAttributes([
+            'customerID' => $this->id,
+            'action' => $action,
+            'place' => $geoData['country_name'], $geoData['city'],
+            'ip' => $_SERVER['REMOTE_ADDR'],
+        ],false);
+
+        $log->save();
+    }
+
+    /**
      * Блокирует пользователя.
      */
     public static function unsetAccount($message)
@@ -249,5 +293,66 @@ class Customer extends \yii\db\ActiveRecord
         }
 
         return $query->all();
+    }
+
+    /**
+     * Устанавливает настройки приватности по умолчанию.
+     */
+    public function setDefaultsPrivate()
+    {
+        if (empty($this->privateParams)) {
+            $this->privateParams = json_encode($this->_defaultsPrivate);
+            $this->save(false);
+        }
+    }
+
+    /**
+     * Возвращает список личных настроек.
+     *
+     * @return array|null
+     */
+    public function getPrivateSettings()
+    {
+        $params = json_decode($this->privateParams);
+        $translates = array_flip($this->getSettingsTranslate());
+
+        foreach ($translates as $name => $value) {
+            $translates[$name] = $params[$value];
+        }
+
+        return $translates;
+    }
+
+    /**
+     * Возвращает переводы личных настроек.
+     *
+     * @return array
+     */
+    private function getSettingsTranslate()
+    {
+        return [
+            0 => \Yii::t('app', 'Кто может просматривать мой профиль'),
+            1 => \Yii::t('app', 'Кто может отправлять мне сообщения'),
+            2 => \Yii::t('app', 'Кто может просматривать мои фото'),
+            3 => \Yii::t('app', 'Кто может просматривать мои компании'),
+            4 => \Yii::t('app', 'Кто может просматривать мои объявления'),
+            5 => \Yii::t('app', 'Кто может комментировать мои фото'),
+            6 => \Yii::t('app', 'Кто может комментировать мои записи'),
+        ];
+    }
+
+    /**
+     * Возвращает переводы опций приватности.
+     *
+     * @return array
+     */
+    public static function getPrivateOptions()
+    {
+        return [
+            self::PRIVATE_NO_ONE => \Yii::t('app', 'Никто'),
+            self::PRIVATE_ONLY_FRIENDS => \Yii::t('app', 'Только друзья'),
+            self::PRIVATE_ALL_FRIENDS => \Yii::t('app', 'Друзья друзей'),
+            self::PRIVATE_ALL => \Yii::t('app', 'Все'),
+        ];
     }
 }

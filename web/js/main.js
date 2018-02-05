@@ -203,14 +203,14 @@
         });
         
         
-        $('div.tabs').on('click', 'span:not(.current)', function() {  
-            $(this).addClass('current').siblings().removeClass('current')  
-                .parents('div.profile_settings_tabs').find('div.box').eq($(this).index()).fadeIn(400).siblings('div.box').hide();  
+        $('div.tabs').on('click', 'span:not(.current)', function() {
+            console.log('click');
+            $(this).addClass('current').siblings().removeClass('current').parents('div.profile_settings_tabs').find('div.box').eq($(this).index()).fadeIn(400).siblings('div.box').hide();
         });
-        
-        $('div.tabs').on('click', 'span:not(.current)', function() {  
-            $(this).addClass('current').siblings().removeClass('current')  
-                .parents('div.participants_tabs').find('div.box').eq($(this).index()).fadeIn(400).siblings('div.box').hide();  
+
+        $('div.tabs').on('click', 'span:not(.current)', function() {
+            $(this).addClass('current').siblings().removeClass('current')
+                .parents('div.participants_tabs').find('div.box').eq($(this).index()).fadeIn(400).siblings('div.box').hide();
         });
         
         $('.profile_photo_item_visible').click(function(e){

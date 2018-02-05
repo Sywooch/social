@@ -9,7 +9,7 @@ use yii\helpers\Url;
             <?= $this->render('//profile/block/menu', []); ?>
             <div class="content">
                 <div class="title_block clearfix">
-                    <h1>Мои друзья</h1>
+                    <h1><?= \Yii::t('app', 'Мои друзья')?></h1>
                 </div>
                 <div class="index_message_content">
                     <div class="index_message_top">

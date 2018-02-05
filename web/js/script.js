@@ -1,3 +1,19 @@
+// Сохранение настроек приватности.
+$('.private-settings-selector').on('change', function () {
+    var form = $('[action="/ajax/private-settings"]');
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'post',
+        data: form.serialize(),
+        dataType: 'json'
+    }).done(function() {
+        // location.reload();
+    });
+
+    return false;
+});
+
 // Форма сапорта
 $('[action="/ajax/support"]').on('beforeSubmit', function () {
     var form = $(this);
@@ -10,7 +26,7 @@ $('[action="/ajax/support"]').on('beforeSubmit', function () {
     }).done(function() {
         location.reload();
     });
-   return false;
+    return false;
 });
 
 // Форма Ваше мнение совет или критика
@@ -220,7 +236,7 @@ $('.white_tag').on('click', function () {
 });
 
 // Смена вкладок поиска.
-$('.tab').on('click', function () {
+$('.tab-search').on('click', function () {
     $('.tab').removeClass('current');
     $(this).addClass('current');
 
