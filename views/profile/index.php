@@ -122,7 +122,7 @@
                                                             </span>
                                                 <div class="wall_post_links clearfix">
                                                     <div class="wall_post_links_left">
-                                                        <p><?= !empty($this->params['user']->mainImage) ? $this->params['user']->mainImage->date : ''?></p>
+                                                        <p><?= !empty($this->params['user']->mainImage) ? \Yii::$app->formatter->asDate($this->params['user']->mainImage->date, 'long') : ''?></p>
                                                     </div>
                                                     <div class="wall_post_links_likes">
                                                         <span><?= !empty($this->params['user']->mainImage) ? $this->params['user']->mainImage->likePoint : ''?></span>
