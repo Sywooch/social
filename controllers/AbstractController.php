@@ -68,6 +68,8 @@ class AbstractController extends Controller
      */
     public function init()
     {
+        Yii::$app->formatter->locale = 'ru-RU';
+
         if (function_exists('geoip_country_code_by_name')) {
             Registry::set('geoData', geoip_record_by_name($_SERVER['REMOTE_ADDR']), true);
 

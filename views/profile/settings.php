@@ -165,36 +165,26 @@
                         </div>
                         <div class="box">
                             <div class="profile_settings_tabs_title">
-                                <h4>История посещений</h4>
+                                <h4><?= \Yii::t('app', 'История посещений')?></h4>
                             </div>
                             <table class="profile_security_table">
                                 <thead>
                                 <tr>
-                                    <th>Действия</th>
-                                    <th>Время</th>
-                                    <th>Местоположение</th>
-                                    <th>IP адрес</th>
+                                    <th><?= \Yii::t('app', 'Действия')?></th>
+                                    <th><?= \Yii::t('app', 'Время')?></th>
+                                    <th><?= \Yii::t('app', 'Местоположение')?></th>
+                                    <th><?= \Yii::t('app', 'IP адрес')?></th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <?php foreach (\app\components\Registry::get('user')->log as $item):?>
                                 <tr>
-                                    <td>Авторизация</td>
-                                    <td>Вт, 18 апреля 18:55</td>
-                                    <td>Архангельск, Россия</td>
-                                    <td>83.125.188.125</td>
+                                    <td><?= $item->action?></td>
+                                    <td><?= \Yii::$app->formatter->asDate($item->time, 'full') ?></td>
+                                    <td><?= $item->place ?></td>
+                                    <td><?= $item->ip ?></td>
                                 </tr>
-                                <tr>
-                                    <td>Транзакция</td>
-                                    <td>Вс, 16 апреля 22:37</td>
-                                    <td>Архангельск, Россия</td>
-                                    <td>83.125.188.125</td>
-                                </tr>
-                                <tr>
-                                    <td>Сублимация</td>
-                                    <td>Ср, 12 апреля 14:46</td>
-                                    <td>Нью-Йорк, Китай</td>
-                                    <td>87.174.322.181</td>
-                                </tr>
+                                <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>

@@ -118,6 +118,14 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getLog()
+    {
+        return $this->hasMany(CustomerLog::className(), ['customerID' => 'id'])->orderBy('id DESC');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCompanies()
     {
         return $this->hasMany(Company::className(), ['customerID' => 'id']);
