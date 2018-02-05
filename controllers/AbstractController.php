@@ -12,6 +12,9 @@ use app\models\CompanyComment;
 use app\models\CompanyCommentAnswer;
 use app\models\CompanyCommentImage;
 use app\models\Customer;
+use app\models\CustomerComment;
+use app\models\CustomerCommentAnswer;
+use app\models\CustomerCommentImage;
 use app\models\InfoPage;
 use app\models\RecoverForm;
 use app\models\RegisterForm;
@@ -254,7 +257,7 @@ class AbstractController extends Controller
     /**
      * Добавление комментария компании.
      */
-    protected function commentListen($companyID)
+    protected function companyCommentListen($companyID)
     {
         $comment = new CompanyComment();
         $answer = new CompanyCommentAnswer();
@@ -287,6 +290,52 @@ class AbstractController extends Controller
                 $image->save();
 
                 $commentImage = new CompanyCommentImage();
+                $commentImage->attributes = [
+                    'commentID' => $comment->id,
+                    'imageID' => $image->id,
+                ];
+                $commentImage->save();
+            }
+        }
+    }
+
+    /**
+     * Добавление комментария пользователя.
+     *
+     * @param $customerID
+     */
+    protected function customerCommentListen($customerID)
+    {
+        $comment = new CustomerComment();
+        $answer = new CustomerCommentAnswer();
+
+        $comment->customerID = $customerID;
+        if ($answer->load(\Yii::$app->request->post()) && $answer->validate()) {
+            $answer->save();
+        }
+
+        if ($comment->load(\Yii::$app->request->post()) && $comment->validate()) {
+            $comment->save();
+
+            $appPath = '/uploads/custom/' . md5(date('Y-m-d', time()));
+            $path = Yii::getAlias('@webroot') . $appPath;
+            if (!is_dir($path)) {
+                BaseFileHelper::createDirectory($path);
+            }
+
+            $uploadPhotos = UploadedFile::getInstances($comment, 'image');
+
+            if (!empty($uploadPhotos)) {
+                foreach ($uploadPhotos as $file) {
+                    $photo = md5($file->baseName) . '.' . $file->extension;
+                    $file->saveAs($path . '/' . $photo);
+                }
+
+                $image = new CommonImages();
+                $image->file = $appPath . '/' . $photo;
+                $image->save();
+
+                $commentImage = new CustomerCommentImage();
                 $commentImage->attributes = [
                     'commentID' => $comment->id,
                     'imageID' => $image->id,

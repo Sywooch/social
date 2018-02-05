@@ -78,6 +78,8 @@ class PublicController extends AbstractController
         if (empty($item))
             throw new NotFoundHttpException();
 
+        $this->customerCommentListen($id);
+
         $model = new Messages();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             \Yii::$app->session->setFlash('messageSend', true);
@@ -126,7 +128,7 @@ class PublicController extends AbstractController
         if (empty($item))
             throw new NotFoundHttpException();
 
-        $this->commentListen($id);
+        $this->companyCommentListen($id);
 
         $query = CompanyComment::find()
             ->where(['companyID' => $id])
