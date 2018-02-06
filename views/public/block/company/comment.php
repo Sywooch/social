@@ -130,7 +130,7 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
 
                         <div class="wall_post_links clearfix">
                             <div class="wall_post_links_left">
-                                <p><?= $comment['date']?></p>
+                                <p><?= \Yii::$app->formatter->asDate($comment['date'], 'long')?></p>
                                 <a href="<?= Url::to('/public/profile/' . $comment['customerID'])?>" class="wall_post_author"><?= $comment['customer']['fullName']?></a>
                             </div>
                             <div class="wall_post_links_likes">
