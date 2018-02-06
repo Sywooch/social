@@ -114,7 +114,7 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
                                                 </div>
                                                 <div class="wall_post_links clearfix">
                                                     <div class="wall_post_links_left">
-                                                        <p><?= $comment['date']?></p>
+                                                        <p><?= \Yii::$app->formatter->asDate($comment['date'], 'long')?></p>
                                                     </div>
                                                     <div class="wall_post_links_likes">
                                                         <span><?= $comment['likePoint']?></span>
@@ -162,7 +162,7 @@ $lastPage = ceil($pages->totalCount / \Yii::$app->params['commentsOnPage']);
                                     <p><?= $answer['text']?></p>
                                     <div class="wall_post_links clearfix">
                                         <div class="wall_post_links_left">
-                                            <p><?= $answer['date']?></p>
+                                            <p><?= \Yii::$app->formatter->asDate($answer['date'], 'long')?></p>
                                         </div>
                                     </div>
                                 </div>
