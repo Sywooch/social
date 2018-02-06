@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\components\Registry;
 ?>
 <?php //= $this->render('//site/block/main-slider', ['slides' => $slides]); ?>
 <section class="main_page_container">
@@ -34,12 +35,12 @@ use yii\helpers\Html;
 <section class="recent_search_results light_bg">
     <div class="container">
         <div class="title_block clearfix">
-            <h2><?= \Yii::t('app', 'Сейчас ищут в')?> <?= $citySearch->translation->name?>:</h2>
+            <h2><?= \Yii::t('app', 'Сейчас ищут в')?> <?= Registry::get('citySearch')->translation->name?>:</h2>
             <div class="choose_city_block">
 
                 <div class="typycal_select">
-                    <select class="city-selector">
-                        <option value="<?= $citySearch->id?>"><?= $citySearch->area->country->translation->name?>, <?= $citySearch->translation->name?></option>
+                    <select class="city-selector main-search">
+                        <option value="<?= Registry::get('citySearch')->id?>"><?= Registry::get('citySearch')->area->country->translation->name?>, <?= Registry::get('citySearch')->translation->name?></option>
                         <?php foreach ((new \app\models\City())->getCountriesGroup() as $id => $item):?>
                             <option value="<?= $id?>"><?= $item?></option>
                         <?php endforeach;?>
@@ -84,8 +85,9 @@ use yii\helpers\Html;
             <?php if(!empty($this->params['user'])):?>
                 <a href="<?= Url::to('/profile/create-ads')?>" class="add_button"><?= \Yii::t('app', 'Добавить объявление')?></a>
             <?php endif;?>
-
-            <a href="<?= Url::to('/search/ads')?>" class="more_link"><?= \Yii::t('app', 'Еще')?> <?= $adsCount?> <?= \Yii::t('app', 'объявлений')?></a>
+            <?php if ($adsCount - count($ads) > 0):?>
+                <a href="<?= Url::to('/search/ads')?>" class="more_link"><?= \Yii::t('app', 'Еще')?> <?= $adsCount - count($ads)?> <?= \Yii::t('app', 'объявлений')?></a>
+            <?php endif;?>
         </div>
     </div>
 </section>
@@ -120,8 +122,12 @@ use yii\helpers\Html;
             <?php endif;?>
         </div>
         <div class="block_btm clearfix">
+        <?php if(!empty($this->params['user'])):?>
             <a href="<?= Url::to('/profile/create-company')?>" class="add_button"><?= \Yii::t('app', 'Создать компанию')?></a>
-            <a href="<?= Url::to('/search/company')?>" class="more_link"><?= \Yii::t('app', 'Еще')?> <?= $companiesCount?> <?= \Yii::t('app', 'компаний')?></a>
+        <?php endif;?>
+        <?php if ($companiesCount - count($companies) > 0):?>
+            <a href="<?= Url::to('/search/company')?>" class="more_link"><?= \Yii::t('app', 'Еще')?> <?= $companiesCount - count($companies)?> <?= \Yii::t('app', 'компаний')?></a>
+        <?php endif;?>
         </div>
     </div>
 </section>

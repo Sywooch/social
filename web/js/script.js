@@ -1,3 +1,8 @@
+$('.main-search').on('change', function () {
+    if ($(this).val() != 'else')
+        location.href = '?c=' + $(this).val();
+});
+
 // Сохранение настроек приватности.
 $('.private-settings-selector').on('change', function () {
     var form = $('[action="/ajax/private-settings"]');

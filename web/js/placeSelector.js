@@ -1,3 +1,5 @@
+var isMainSearch = false;
+
 var placeSelector = function () {
     this.getJsonList = function (country, area, city, search, callback) {
         $.ajax({
@@ -23,6 +25,13 @@ modalWindow = $('.main-selector');
 
 // Окошко выбора города.
 $('.city-selector').on('change', function () {
+    isMainSearch = !!$(this).hasClass('main-search');
+    console.log(isMainSearch);
+    // if ($(this).hasClass('main-search')) {
+    //
+    // }
+    //     isMainSearch = true;
+
     if ($(this).val() == 'else') {
         var selector = new placeSelector;
 
@@ -91,6 +100,12 @@ modalWindow.on('click', '.select-city', function () {
         }
 
     });
+
     $('select').trigger('refresh');
     $('.city_modal').arcticmodal('close');
+
+    if (isMainSearch) {
+        location.href = '?c=' + element.data('id');
+    }
+
 });

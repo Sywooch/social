@@ -127,22 +127,21 @@ class SiteController extends AbstractController
     public function actionIndex()
     {
         $adsQuery = Ads::find()->where('cityID = :cityID AND active = 1', [
-            ':cityID' => empty($this->user) ? self::DEFAULT_CITY : $this->user->cityID
+            ':cityID' => Registry::get('citySearch')->id
         ]);
 
         $ads = $adsQuery->limit(\Yii::$app->params['mainPageAdsCount'])->orderBy('sortDate desc')->all();
         $adsCount = $adsQuery->count();
 
         $companiesQuery = Company::find()->where('cityID = :cityID', [
-            ':cityID' => empty($this->user) ? self::DEFAULT_CITY : $this->user->cityID
+            ':cityID' => Registry::get('citySearch')->id
         ]);
         $companies = $companiesQuery->limit(\Yii::$app->params['mainPageCompanyCount'])->orderBy('sortDate desc')->all();
         $companiesCount = $companiesQuery->count();
 
         $interests = Interest::find()->all();
 
-        $citySearch = empty($this->user) ? City::findOne(self::DEFAULT_CITY) : $this->user->city;
-        return $this->render(Yii::$app->controller->action->id, compact('ads', 'companies', 'adsCount', 'companiesCount', 'interests', 'citySearch'));
+        return $this->render(Yii::$app->controller->action->id, compact('ads', 'companies', 'adsCount', 'companiesCount', 'interests'));
     }
 
     public function actionAds($id)

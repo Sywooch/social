@@ -1,4 +1,6 @@
 <?php
+use app\components\Registry;
+
 $searchForm = new \app\models\SearchForm();
 ?>
 <div class="main_page_btm">
@@ -63,7 +65,11 @@ $searchForm = new \app\models\SearchForm();
                     <div class="white_select">
                         <?= $form->field($searchForm, 'city')
                             ->dropDownList(
-                                \yii\helpers\ArrayHelper::merge((new \app\models\City())->getCountriesGroup(), ['else' => \Yii::t('app', 'Другой город...')]),
+                                \yii\helpers\ArrayHelper::merge(
+                                        [Registry::get('citySearch')->id => Registry::get('citySearch')->area->country->translation->name . ', ' . Registry::get('citySearch')->translation->name],
+                                        (new \app\models\City())->getCountriesGroup(),
+                                        ['else' => \Yii::t('app', 'Другой город...')]
+                                ),
                                     ['class' => 'city-selector',])
                             ->label(false);?>
                     </div>

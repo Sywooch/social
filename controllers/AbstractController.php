@@ -7,6 +7,7 @@
 namespace app\controllers;
 
 use app\components\Registry;
+use app\models\City;
 use app\models\CommonImages;
 use app\models\CompanyComment;
 use app\models\CompanyCommentAnswer;
@@ -118,8 +119,24 @@ class AbstractController extends Controller
         if (\Yii::$app->session->get('language')) {
             \Yii::$app->language = \Yii::$app->session->get('language');
         }
+
+        if (\Yii::$app->request->get('c')) {
+            \Yii::$app->session->set('defaultCity', \Yii::$app->request->get('c'));
+        }
+
+        $this->setSearchCity();
     }
 
+    private function setSearchCity()
+    {
+        if (empty($this->user)) {
+            $citySearch = City::findOne(\Yii::$app->session->get('defaultCity', self::DEFAULT_CITY));
+        } else {
+            $citySearch = City::findOne(\Yii::$app->session->get('defaultCity', $this->user->cityID));
+        }
+
+        Registry::set('citySearch', $citySearch, true);
+    }
     /**
      * Авторизация.
      *
