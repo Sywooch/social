@@ -86,4 +86,22 @@ class Interest extends \yii\db\ActiveRecord
     {
         return $this->hasMany(AdsInterests::className(), ['interestID' => 'id']);
     }
+
+    /**
+     * Подгружает данные необходимые для работы с обьявлением.
+     *
+     * @return array
+     */
+    public static function loadAdsData()
+    {
+        $interestCategories = InterestCategory::find()
+            ->joinWith(['translation','interests','interests.translation'])
+            ->asArray()->all();
+
+        InterestCategory::attachAdsCount($interestCategories);
+
+        $countriesGroup = (new City())->getCountriesGroup();
+
+        return [$interestCategories, $countriesGroup];
+    }
 }

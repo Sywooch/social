@@ -132,7 +132,7 @@ class Ads extends \yii\db\ActiveRecord
      *
      * @return array
      */
-    public function getSexTypes()
+    public static function getSexTypes()
     {
         return [
             'M' => 'Мужчина',
@@ -187,6 +187,18 @@ class Ads extends \yii\db\ActiveRecord
 
         if (!empty($params['interest'])) {
             $query->joinWith('interests')->andFilterWhere(['in','interest.id', $params['interest']]);
+        }
+
+        if (!empty($params['sex'])) {
+            $query->andFilterWhere(['=', 'sex', $params['sex']]);
+        }
+
+        if (!empty($params['date']) && $params['date'] == 1) {
+                $query->andFilterWhere(['like', 'date', $params['date_year'] . '-' . $params['date_month'] . '-' . $params['date_day']]);
+        }
+
+        if (!empty($params['sort'])) {
+                $query->orderBy($params['sort'] . ' desc');
         }
 
         return $query->all();

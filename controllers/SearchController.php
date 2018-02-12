@@ -5,12 +5,14 @@ namespace app\controllers;
 use app\models\Ads;
 use app\models\Company;
 use app\models\Customer;
+use app\models\Interest;
 use app\models\SearchForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 use \BW\Vkontakte as Vk;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 class SearchController extends AbstractController
@@ -70,7 +72,7 @@ class SearchController extends AbstractController
     public function actionIndex()
     {
         $post = \Yii::$app->request->post('SearchForm');
-//var_dump($post); exit;
+
         if (empty($post))
             throw new NotFoundHttpException();
 
@@ -91,7 +93,16 @@ class SearchController extends AbstractController
 
         $searchResult = $this->getSearchResults($post);
 
-        return $this->render(Yii::$app->controller->action->id, $searchResult);
+        list($interestCategoriesAds, $countriesGroup) = Interest::loadAdsData();
+
+        list($interestCategoriesCompany, $countriesGroup) = Company::loadCompanyData();
+
+        return $this->render(Yii::$app->controller->action->id,
+            ArrayHelper::merge(
+                ['interestCategoriesAds' => $interestCategoriesAds, 'interestCategoriesCompany' => $interestCategoriesCompany, 'countriesGroup' => $countriesGroup],
+                $searchResult
+            )
+        );
     }
 
     /**

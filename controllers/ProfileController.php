@@ -19,6 +19,7 @@ use app\models\CustomerComment;
 use app\models\CustomerCommentAnswer;
 use app\models\CustomerCommentImage;
 use app\models\CustomerImageComment;
+use app\models\Interest;
 use app\models\InterestCategory;
 use app\models\Messages;
 use Yii;
@@ -457,42 +458,6 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * Подгружает данные необходимые для работы с обьявлением.
-     *
-     * @return array
-     */
-    protected function loadAdsData()
-    {
-        $interestCategories = InterestCategory::find()
-            ->joinWith(['translation','interests','interests.translation'])
-            ->asArray()->all();
-
-        InterestCategory::attachAdsCount($interestCategories);
-
-        $countriesGroup = (new City())->getCountriesGroup();
-
-        return [$interestCategories, $countriesGroup];
-    }
-
-    /**
-     * Подгружает данные необходимые для работы с компаниями.
-     *
-     * @return array
-     */
-    protected function loadCompanyData()
-    {
-        $interestCategories = InterestCategory::find()
-            ->joinWith(['translation','interests','interests.translation'])
-            ->asArray()->all();
-
-        InterestCategory::attachCompanyCount($interestCategories);
-
-        $countriesGroup = (new City())->getCountriesGroup();
-
-        return [$interestCategories, $countriesGroup];
-    }
-
-    /**
      * Сохраняет обьявление.
      *
      * @param $model Ads
@@ -613,7 +578,7 @@ class ProfileController extends AbstractController
 
         $this->saveAds($model);
 
-        list($interestCategories, $countriesGroup) = $this->loadAdsData();
+        list($interestCategories, $countriesGroup) = Interest::loadAdsData();
 
         return $this->render(Yii::$app->controller->action->id, compact('model', 'interestCategories', 'countriesGroup'));
     }
@@ -662,7 +627,7 @@ class ProfileController extends AbstractController
         $createModel = new Company();
         $createModel->customerID = $this->user->id;
 
-        list($interestCategories, $countriesGroup) = $this->loadCompanyData();
+        list($interestCategories, $countriesGroup) = Company::loadCompanyData();
 
 //        if ($createModel->load(\Yii::$app->request->post())) {
 //            var_dump(\Yii::$app->request->post()); exit;

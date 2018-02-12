@@ -289,7 +289,7 @@ $postAds = \Yii::$app->request->post('Ads');
                             <div class="new_company_line">
                                 <h4><?= \Yii::t('app', 'С кем')?></h4>
                                 <ul class="typical_chbx_orange">
-                                    <?php foreach ($createModel->sexTypes as $key => $type):?>
+                                    <?php foreach (\app\models\Ads::getSexTypes() as $key => $type):?>
                                     <li>
                                         <label>
                                             <input type="radio" class="styler" name="Ads[sex]" value="<?= $key?>"
@@ -341,7 +341,7 @@ $postAds = \Yii::$app->request->post('Ads');
                                                 </div>
                                                 <div class="birth_date_coll birth_date_coll_year typical_scroll">
                                                     <ul class="birht_date_chbx">
-                                                        <?php for ($i = 1980; $i <= 2012; $i++):?>
+                                                        <?php for ($i = 1980; $i <= date('Y', time()); $i++):?>
                                                             <li>
                                                                 <label>
                                                                     <input type="radio" class="styler" name="date_year" value="<?= $i?>">

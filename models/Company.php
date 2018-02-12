@@ -172,4 +172,22 @@ class Company extends \yii\db\ActiveRecord
 
         return $query->all();
     }
+
+    /**
+     * Подгружает данные необходимые для работы с компаниями.
+     *
+     * @return array
+     */
+    public static function loadCompanyData()
+    {
+        $interestCategories = InterestCategory::find()
+            ->joinWith(['translation','interests','interests.translation'])
+            ->asArray()->all();
+
+        InterestCategory::attachCompanyCount($interestCategories);
+
+        $countriesGroup = (new City())->getCountriesGroup();
+
+        return [$interestCategories, $countriesGroup];
+    }
 }

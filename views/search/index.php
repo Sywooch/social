@@ -12,9 +12,9 @@ $current = false;
             <button class="hidden_filter_pull search_filter_pull"><?= \Yii::t('app', 'Расширенный фильтр')?></button>
         </div>
     </div>
-    <?= $this->render('//search/block/ads-filter', []); ?>
+    <?= $this->render('//search/block/ads-filter', ['interestCategories' => $interestCategoriesAds]); ?>
     <?= $this->render('//search/block/user-filter', []); ?>
-    <?= $this->render('//search/block/company-filter', []); ?>
+    <?= $this->render('//search/block/company-filter', ['interestCategories' => $interestCategoriesCompany]); ?>
     <div class="search_page_links">
         <div class="container clearfix">
             <ul>
