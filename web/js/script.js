@@ -1,3 +1,10 @@
+// Открывает нужный расширеный фильтр страницы поиска.
+$('.hidden_filter_pull').click(function(){
+    var currentPage = $('.search_page_links').find('.tab-search.current').data('page');
+    $(this).parents('.search_page').find('.search_page_filter.' + currentPage).slideToggle(400);
+    $(this).parents('.search_page').find('.hidden_filter_pull').toggleClass('hidden_filter_pull_is_open');
+});
+
 $('.main-search').on('change', function () {
     if ($(this).val() != 'else')
         location.href = '?c=' + $(this).val();

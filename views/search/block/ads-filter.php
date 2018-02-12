@@ -1,4 +1,4 @@
-<div class="search_page_filter">
+<div class="search_page_filter ads">
     <div class="search_page_filter_item">
         <div class="container">
             <div class="hidden_filter_item">

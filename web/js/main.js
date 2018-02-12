@@ -137,16 +137,16 @@
         });
 
         // pull
-        $('.hidden_filter_pull').click(function(){
-            $(this).parents('.hidden_filter_block').find('.hidden_filter').fadeToggle(400);  
-            $(this).parents('.hidden_filter_block').find('.hidden_filter_pull').toggleClass('hidden_filter_pull_is_open');
-        });
+        // $('.hidden_filter_pull').click(function(){
+        //     $(this).parents('.hidden_filter_block').find('.hidden_filter').fadeToggle(400);
+        //     $(this).parents('.hidden_filter_block').find('.hidden_filter_pull').toggleClass('hidden_filter_pull_is_open');
+        // });
         
         // pull
-        $('.hidden_filter_pull').click(function(){
-            $(this).parents('.search_page').find('.search_page_filter').slideToggle(400);  
-            $(this).parents('.search_page').find('.hidden_filter_pull').toggleClass('hidden_filter_pull_is_open');
-        });
+        // $('.hidden_filter_pull').click(function(){
+        //     $(this).parents('.search_page').find('.search_page_filter').slideToggle(400);
+        //     $(this).parents('.search_page').find('.hidden_filter_pull').toggleClass('hidden_filter_pull_is_open');
+        // });
         
         // pull
         $('.white_tags_pull').click(function(){

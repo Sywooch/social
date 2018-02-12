@@ -8,7 +8,7 @@ $current = false;
     <div class="search_page_top">
         <div class="container clearfix">
             <h1><?= \Yii::t('app', 'Вы искали')?>: <span><?= \Yii::$app->request->post('SearchForm')['text']?></span></h1>
-            <a href="#" class="add_button"><?= \Yii::t('app', 'Создать новое объяление')?></a>
+            <a href="javascript:void(0)" class="add_button"><?= \Yii::t('app', 'Создать новое объяление')?></a>
             <button class="hidden_filter_pull search_filter_pull"><?= \Yii::t('app', 'Расширенный фильтр')?></button>
         </div>
     </div>

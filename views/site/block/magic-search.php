@@ -82,7 +82,7 @@ $searchForm = new \app\models\SearchForm();
                 </li>
                 <li>
                     <label>
-                        <input type="radio" name="SearchForm[type]" value="company" class="styler">
+                        <input type="radio" name="SearchForm[type]" value="companies" class="styler">
                         <span><?= \Yii::t('app', 'Компания')?></span>
                     </label>
                 </li>

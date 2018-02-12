@@ -300,6 +300,18 @@ class Customer extends \yii\db\ActiveRecord
             $query->joinWith('interests')->andFilterWhere(['in','interest.id', $params['interest']]);
         }
 
+        if (!empty($params['sex'])) {
+            $query->andFilterWhere(['=', 'sex', $params['sex']]);
+        }
+
+        if (!empty($params['photo'])) {
+            $query->joinWith('mainImage', true, 'INNER JOIN');
+        }
+
+        if (!empty($params['elder'])) {
+            $query->andFilterWhere(['<', 'registrationTime', date('Y-m-d', strtotime("-1 year"))]);
+        }
+
         return $query->all();
     }
 

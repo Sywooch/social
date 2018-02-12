@@ -64,11 +64,13 @@ class SearchController extends AbstractController
      * Поиск заходит сюда, исходя из результата отображаем разные варианты поисковых страниц.
      *
      * @return string
+     *
+     * @throws NotFoundHttpException
      */
     public function actionIndex()
     {
         $post = \Yii::$app->request->post('SearchForm');
-
+//var_dump($post); exit;
         if (empty($post))
             throw new NotFoundHttpException();
 
@@ -107,19 +109,23 @@ class SearchController extends AbstractController
             'companies' => false,
         ];
 
+        if (is_array($params['type'])) {
+            foreach ($params['type'] as $type) {
+                $result[$type] = SearchForm::searchByParams($type, $params);
+            }
+//            var_dump($result); exit;
+            return $result;
+        }
+
         if ($params['type'] == SearchForm::ALL_TYPE) {
             $result ['users'] = Customer::searchByParams($params);
             $result ['ads'] = Ads::searchByParams($params);
             $result ['companies'] = Company::searchByParams($params);
+
+            return $result;
         }
 
-        if ($params['type'] == SearchForm::ADS_TYPE) {
-            $result ['ads'] = Ads::searchByParams($params);
-        }
-
-        if ($params['type'] == SearchForm::COMPANY_TYPE) {
-            $result ['companies'] = Company::searchByParams($params);
-        }
+        $result[$params['type']] = SearchForm::searchByParams($params['type'], $params);
 
         return $result;
     }
