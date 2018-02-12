@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
-
+use app\components\Registry;
 $registration = new \app\models\RegisterForm();
 ?>
 
@@ -98,7 +98,11 @@ $registration = new \app\models\RegisterForm();
 
                     <div class="typical_select_bordered">
                         <?= $form->field($registration, 'city')
-                            ->dropDownList(\yii\helpers\ArrayHelper::merge($countriesGroup, ['else' => \Yii::t('app', 'Другой город...')]), ['class' => 'city-selector'])
+                            ->dropDownList(\yii\helpers\ArrayHelper::merge(
+                                    [Registry::get('citySearch')->id => Registry::get('citySearch')->area->country->translation->name . ', ' . Registry::get('citySearch')->translation->name],
+                                    $countriesGroup,
+                                    ['else' => \Yii::t('app', 'Другой город...')]
+                            ), ['class' => 'city-selector'])
                             ->label(false);?>
                     </div>
 

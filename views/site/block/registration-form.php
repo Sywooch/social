@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use app\components\Registry;
 
 $registration = new \app\models\RegisterForm();
 ?>
@@ -12,7 +13,7 @@ $registration = new \app\models\RegisterForm();
         'options'=>['class'=>'row'],
         'fieldConfig' => [
             'template' => '{input}{error}',
-            'errorOptions' => ['class' => 'error text-danger'],
+            'errorOptions' => ['class' => 'form_mistake_txt', 'tag'=>'p', 'style' => 'text-align: center;'],
             'labelOptions' => ['class' => ''],
             'inputOptions' => ['class' => 'typical_input_bordered'],
             'options' => [
@@ -24,14 +25,19 @@ $registration = new \app\models\RegisterForm();
         <?= $form->field($registration, 'name')
             ->textInput([
                     'placeholder' => \Yii::t('app', 'Имя'),
-                    'class' => 'typical_input'
+                    'class' => 'typical_input',
+                    'autocomplete' => 'off'
             ])
             ->label(false) ?>
-        <?= $form->field($registration, 'email')->textInput(['placeholder' => \Yii::t('app', 'Эл.почта'),'class' => 'typical_input'])->label(false) ?>
-        <?= $form->field($registration, 'password')->passwordInput(['placeholder' => \Yii::t('app', 'Пароль'),'class' => 'typical_input'])->label(false) ?>
+        <?= $form->field($registration, 'email')->textInput(['placeholder' => \Yii::t('app', 'Эл.почта'),'class' => 'typical_input', 'autocomplete' => 'off'])->label(false) ?>
+        <?= $form->field($registration, 'password')->passwordInput(['placeholder' => \Yii::t('app', 'Пароль'),'class' => 'typical_input', 'autocomplete' => 'off'])->label(false) ?>
         <div class="typycal_select">
             <?= $form->field($registration, 'city')
-                ->dropDownList(\yii\helpers\ArrayHelper::merge((new \app\models\City())->getCountriesGroup(), ['else' => \Yii::t('app', 'Другой город...')]), ['class' => 'city-selector'])
+                ->dropDownList(\yii\helpers\ArrayHelper::merge(
+                        [Registry::get('citySearch')->id => Registry::get('citySearch')->area->country->translation->name . ', ' . Registry::get('citySearch')->translation->name],
+                        (new \app\models\City())->getCountriesGroup(),
+                        ['else' => \Yii::t('app', 'Другой город...')]
+                ), ['class' => 'city-selector'])
                 ->label(false);?>
         </div>
         <div class="typical_birth_date">

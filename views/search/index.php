@@ -7,7 +7,7 @@ $current = false;
 <section class="search_page">
     <div class="search_page_top">
         <div class="container clearfix">
-            <h1><?= \Yii::t('app', 'Вы искали')?>: <span>Поездка заграницу</span></h1>
+            <h1><?= \Yii::t('app', 'Вы искали')?>: <span><?= \Yii::$app->request->post('SearchForm')['text']?></span></h1>
             <a href="#" class="add_button"><?= \Yii::t('app', 'Создать новое объяление')?></a>
             <button class="hidden_filter_pull search_filter_pull"><?= \Yii::t('app', 'Расширенный фильтр')?></button>
         </div>
@@ -30,6 +30,9 @@ $current = false;
             </ul>
         </div>
     </div>
+    <?php if (empty($users) && empty($ads) && empty($companies)):?>
+        <h1><?= \Yii::t('app', 'Нет результатов')?></h1>
+    <?php endif;?>
     <?php if (!empty($users)):?>
     <div class="search_page_results users" <?= ($current != 'users') ? 'style="display: none;"' : ''?>>
         <div class="container">
