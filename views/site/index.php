@@ -7,9 +7,11 @@ use app\components\Registry;
 <section class="main_page_container">
     <div class="swiper-container swiper_main">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" style=" background: url(img/slide1.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
-            <div class="swiper-slide" style=" background: url(img/slide2.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
-            <div class="swiper-slide" style=" background: url(img/slide3.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
+            <div class="swiper-slide" style=" background: url(img/slider/pics1.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
+            <div class="swiper-slide" style=" background: url(img/slider/pics2.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
+            <div class="swiper-slide" style=" background: url(img/slider/pics3.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
+            <div class="swiper-slide" style=" background: url(img/slider/pics4.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
+            <div class="swiper-slide" style=" background: url(img/slider/pics5.jpg) no-repeat top center;-webkit-background-size: cover;background-size: cover;"></div>
         </div>
 
     </div>

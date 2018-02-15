@@ -25,6 +25,11 @@ AppAsset::register($this);
     <title><?= \Yii::$app->params['seo']['title']?></title>
     <meta name="keywords" content="<?= \Yii::$app->params['seo']['keywords']?>">
     <meta name="description" content="<?= \Yii::$app->params['seo']['description']?>">
+    <link rel="icon" type="image/png" href="/img/icon/16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/img/icon/32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/img/icon/96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/img/icon/144x144.png" sizes="144x144">
+    <link rel="icon" type="image/jpeg" href="/img/icon/152x152.jpg" sizes="152x152">
     <?php $this->head() ?>
 </head>
 
